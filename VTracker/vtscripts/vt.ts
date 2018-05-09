@@ -1,6 +1,7 @@
 ﻿let vt_guid = '';
 let cookieName = "visittrackercurrent";
 let oldCookieName = "visittrackerold";
+
 class VTStorage {
     name: string;
     permanentName: string;
