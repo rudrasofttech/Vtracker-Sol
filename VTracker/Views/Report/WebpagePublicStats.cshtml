@@ -1,0 +1,26 @@
+﻿@model VTracker.Models.WebageDisplayPublic
+
+@{
+    ViewBag.Title = "::Public Stats::";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<ul class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Visits in Last Hour
+        <span class="badge badge-primary badge-pill">@Model.VisitLastHour</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Visits in Last 24 Hours
+        <span class="badge badge-primary badge-pill">@Model.VisitToday</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Visits in Last Week
+        <span class="badge badge-primary badge-pill">@Model.VisitLastWeek</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Visits Till Date
+        <span class="badge badge-primary badge-pill">@Model.TotalVisits</span>
+    </li>
+</ul>
+
