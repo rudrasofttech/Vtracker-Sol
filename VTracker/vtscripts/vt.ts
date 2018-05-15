@@ -5,6 +5,7 @@ let oldCookieName = "visittrackerold";
 class VTStorage {
     name: string;
     permanentName: string;
+
     constructor(cname: string, pcname: string) {
         this.name = cname;
         this.permanentName = pcname;
@@ -47,7 +48,7 @@ class VTStorage {
         } else {
 
         }
-        
+
     }
 
     getCookie(cName: string) {
@@ -82,7 +83,7 @@ class VTStorage {
                     return null;
                 }
             }
-                
+
 
         } else {
             return null;
@@ -97,9 +98,9 @@ class VTStorage {
         if (this.localStorageSupported()) {
             localStorage.removeItem(this.permanentName);
         } else {
-            
+
         }
-        
+
     }
 
     eraseVolatile() {
@@ -117,12 +118,16 @@ class VisitTracker {
     cookie: VTStorage;
     d: Date;
     tick: number;
+    mousewheelevt: string;
+    sbnoted: boolean;
 
     constructor() {
+        this.sbnoted = false;
         this.tick = 0;
         this.d = new Date();
         this.xhr = new Image();
         this.url = vt_root + "rv/";
+        this.mousewheelevt = (/Firefox/i.test(navigator.userAgent)) ? "DOMMouseScroll" : "mousewheel";
         this.cookie = new VTStorage(cookieName, oldCookieName);
     }
 
@@ -149,6 +154,24 @@ class VisitTracker {
             clickimg.src = this.url + "rc/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href) + "&x=" + x + "&y=" + y + "&tag=" + tag + "&tagid=" + encodeURI(tagid);
             this.tick++;
         } catch{ }
+    }
+
+    windowBlur() {
+        var wbimg = new Image();
+        try {
+            wbimg.src = this.url + "wb/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href);
+            this.tick++;
+        }
+        catch{ }
+    }
+
+    windowFocus() {
+        var wbimg = new Image();
+        try {
+            wbimg.src = this.url + "wf/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href);
+            this.tick++;
+        }
+        catch{ }
     }
 
     firstRequest() {
@@ -214,6 +237,52 @@ class VisitTracker {
             //set permanent cookie to expire in 12 hours
             this.cookie.setPermanent(value);
         }
+    }
+
+    scroller(evt) {
+        //Guess the delta.
+        var delta = 0;
+        if (!evt) evt = window.event;
+        if (evt.wheelDelta) {
+            delta = evt.wheelDelta / 120;
+        } else if (evt.detail) {
+            delta = -evt.detail / 3;
+        }
+
+        var pageHeight = document.documentElement.offsetHeight,
+            windowHeight = window.innerHeight,
+            scrollPosition = window.scrollY || window.pageYOffset || document.body.scrollTop + (document.documentElement && document.documentElement.scrollTop || 0);
+
+        if ((pageHeight - 150) <= (windowHeight + scrollPosition)  && !this.sbnoted) {
+            var sbimg = new Image();
+            try {
+                sbimg.src = this.url + "sb/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href);
+                this.tick++;
+                this.sbnoted = true;
+            }
+            catch{ }
+        } else if ((pageHeight - 150) > (windowHeight + scrollPosition)) {
+            this.sbnoted = false;
+        }
+
+        
+        //var body = document.body,
+        //    html = document.documentElement;
+
+        //var height = Math.max(body.scrollHeight, body.offsetHeight,
+        //    html.clientHeight, html.scrollHeight, html.offsetHeight);
+        //var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        //if (scrollTop >= (height - 100) && !this.sbnoted) {
+        //    var sbimg = new Image();
+        //    try {
+        //        sbimg.src = this.url + "sb/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href);
+        //        this.tick++;
+        //        this.sbnoted = true;
+        //    }
+        //    catch{ }
+        //} else if (scrollTop < (height - 150)) {
+        //    this.sbnoted = false;
+        //}
     }
 
     getBrowserDetail() {
@@ -309,6 +378,23 @@ vtobj.xhr.onload = function () {
         }
         vtobj.documentWideClick(event.pageX, event.pageY, tag, tagid);
     });
+
+    window.addEventListener('blur', function (e) {
+        if (document.activeElement == document.querySelector('iframe')) {
+
+        } else {
+            vtobj.windowBlur();
+        }
+    });
+
+    window.addEventListener('focus', function (e) {
+        vtobj.windowFocus();
+    });
+
+    if (document.addEventListener) {
+        document.addEventListener(vtobj.mousewheelevt, function (e) { vtobj.scroller(e) }, false);
+    }
 };
 
 vtobj.firstRequest();
+

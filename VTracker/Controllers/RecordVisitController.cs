@@ -204,6 +204,17 @@ namespace VTracker.Controllers
             return base.File(Server.MapPath("~/content/trans.png"), "image/png");
         }
 
+        /// <summary>
+        /// Record Click
+        /// </summary>
+        /// <param name="id">ID to randomize request</param>
+        /// <param name="cc">Client Cookie</param>
+        /// <param name="path">Webpage path</param>
+        /// <param name="x">Mouse.PageX</param>
+        /// <param name="y">Mouse.PageY</param>
+        /// <param name="tag">Click tag name</param>
+        /// <param name="tagid">Click Tag ID</param>
+        /// <returns></returns>
         public ActionResult rc(string id, Guid cc, string path, int x, int y, string tag, string tagid)
         {
             Visit v = visitRepository.GetVisitByCC(cc);
@@ -239,12 +250,150 @@ namespace VTracker.Controllers
             }
             return base.File(Server.MapPath("~/content/trans.png"), "image/png");
         }
+
+        /// <summary>
+        /// Window Blurred
+        /// </summary>
+        /// <param name="id">ID to randomize request</param>
+        /// <param name="cc">Client Cookie</param>
+        /// <param name="path">Webpage path</param>
+        /// <returns></returns>
+        public ActionResult wb(string id, Guid cc, string path) {
+            Visit v = visitRepository.GetVisitByCC(cc);
+            VisitPage vp = null;
+            Webpage wp = null;
+            if (v != null)
+            {
+                v.LastPingDate = DateTime.Now;
+                visitRepository.UpdateVisit(v);
+                visitRepository.Save();
+
+                Uri u = new Uri(path);
+                wp = webpageRepository.GetWebpage(v.Website.ID, u.AbsolutePath.Trim(), u.Query.Trim());
+                if (wp != null)
+                {
+                    vp = visitRepository.GetLastVisitedPageofVisit(v.ID);
+
+                    if (vp != null && vp.webpage.ID == wp.ID)
+                    {
+                        VisitActivity vpa = new VisitActivity();
+                        vpa.Activity = ActivityName.WindowBlur;
+                        vpa.ClickTagId = "";
+                        vpa.ClickTagName = "";
+                        vpa.DateCreated = DateTime.Now;
+                        vpa.MouseClickX = null;
+                        vpa.MouseClickY = null;
+                        vpa.visit = v;
+                        vpa.visitpage = vp;
+                        visitRepository.InsertVisitPageActivity(vpa);
+                        visitRepository.Save();
+                    }
+                }
+            }
+            return base.File(Server.MapPath("~/content/trans.png"), "image/png");
+        }
+
+        /// <summary>
+        /// Window Focus
+        /// </summary>
+        /// <param name="id">ID to random request</param>
+        /// <param name="cc">Client Cookie</param>
+        /// <param name="path">Webpage path</param>
+        /// <returns></returns>
+        public ActionResult wf(string id, Guid cc, string path)
+        {
+            Visit v = visitRepository.GetVisitByCC(cc);
+            VisitPage vp = null;
+            Webpage wp = null;
+            if (v != null)
+            {
+                v.LastPingDate = DateTime.Now;
+                visitRepository.UpdateVisit(v);
+                visitRepository.Save();
+
+                Uri u = new Uri(path);
+                wp = webpageRepository.GetWebpage(v.Website.ID, u.AbsolutePath.Trim(), u.Query.Trim());
+                if (wp != null)
+                {
+                    vp = visitRepository.GetLastVisitedPageofVisit(v.ID);
+
+                    if (vp != null && vp.webpage.ID == wp.ID)
+                    {
+                        VisitActivity vpa = new VisitActivity();
+                        vpa.Activity = ActivityName.WindowFocus;
+                        vpa.ClickTagId = "";
+                        vpa.ClickTagName = "";
+                        vpa.DateCreated = DateTime.Now;
+                        vpa.MouseClickX = null;
+                        vpa.MouseClickY = null;
+                        vpa.visit = v;
+                        vpa.visitpage = vp;
+                        visitRepository.InsertVisitPageActivity(vpa);
+                        visitRepository.Save();
+                    }
+                }
+            }
+            return base.File(Server.MapPath("~/content/trans.png"), "image/png");
+        }
+
+        /// <summary>
+        /// Scroll Bottom of the page
+        /// </summary>
+        /// <param name="id">ID to random request</param>
+        /// <param name="cc">Client Cookie</param>
+        /// <param name="path">Webpage path</param>
+        /// <returns></returns>
+        public ActionResult sb(string id, Guid cc, string path)
+        {
+            Visit v = visitRepository.GetVisitByCC(cc);
+            VisitPage vp = null;
+            Webpage wp = null;
+            if (v != null)
+            {
+                v.LastPingDate = DateTime.Now;
+                visitRepository.UpdateVisit(v);
+                visitRepository.Save();
+
+                Uri u = new Uri(path);
+                wp = webpageRepository.GetWebpage(v.Website.ID, u.AbsolutePath.Trim(), u.Query.Trim());
+                if (wp != null)
+                {
+                    vp = visitRepository.GetLastVisitedPageofVisit(v.ID);
+
+                    if (vp != null && vp.webpage.ID == wp.ID)
+                    {
+                        VisitActivity vpa = new VisitActivity();
+                        vpa.Activity = ActivityName.ScrollBottom;
+                        vpa.ClickTagId = "";
+                        vpa.ClickTagName = "";
+                        vpa.DateCreated = DateTime.Now;
+                        vpa.MouseClickX = null;
+                        vpa.MouseClickY = null;
+                        vpa.visit = v;
+                        vpa.visitpage = vp;
+                        visitRepository.InsertVisitPageActivity(vpa);
+                        visitRepository.Save();
+                    }
+                }
+            }
+            return base.File(Server.MapPath("~/content/trans.png"), "image/png");
+
+        }
+
+        /// <summary>
+        /// Get Javascript to start recording
+        /// </summary>
+        /// <param name="id">Website ID</param>
+        /// <returns></returns>
         public JavaScriptResult getjs(int id)
         {
             Website w = websiteRepository.GetWebsiteByID(id);
             if (w != null)
             {
                 bool load = false;
+                //check if the script should be loaded,
+                //If referer URL is from same website than 
+                //only load the script
                 if (Request.UrlReferrer != null)
                 {
                     if (Request.UrlReferrer.Host.ToLower() == w.Name.ToLower() || Request.UrlReferrer.Host.ToLower().EndsWith(string.Format(".{0}", w.Name.ToLower())))

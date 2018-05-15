@@ -104,10 +104,12 @@ var VTStorage = /** @class */ (function () {
 }());
 var VisitTracker = /** @class */ (function () {
     function VisitTracker() {
+        this.sbnoted = false;
         this.tick = 0;
         this.d = new Date();
         this.xhr = new Image();
         this.url = vt_root + "rv/";
+        this.mousewheelevt = (/Firefox/i.test(navigator.userAgent)) ? "DOMMouseScroll" : "mousewheel";
         this.cookie = new VTStorage(cookieName, oldCookieName);
     }
     VisitTracker.prototype.sendPulse = function () {
@@ -126,6 +128,22 @@ var VisitTracker = /** @class */ (function () {
         var clickimg = new Image();
         try {
             clickimg.src = this.url + "rc/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href) + "&x=" + x + "&y=" + y + "&tag=" + tag + "&tagid=" + encodeURI(tagid);
+            this.tick++;
+        }
+        catch (_a) { }
+    };
+    VisitTracker.prototype.windowBlur = function () {
+        var wbimg = new Image();
+        try {
+            wbimg.src = this.url + "wb/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href);
+            this.tick++;
+        }
+        catch (_a) { }
+    };
+    VisitTracker.prototype.windowFocus = function () {
+        var wbimg = new Image();
+        try {
+            wbimg.src = this.url + "wf/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href);
             this.tick++;
         }
         catch (_a) { }
@@ -183,6 +201,33 @@ var VisitTracker = /** @class */ (function () {
         else {
             //set permanent cookie to expire in 12 hours
             this.cookie.setPermanent(value);
+        }
+    };
+    VisitTracker.prototype.scroller = function (evt) {
+        //Guess the delta.
+        var delta = 0;
+        if (!evt)
+            evt = window.event;
+        if (evt.wheelDelta) {
+            delta = evt.wheelDelta / 120;
+        }
+        else if (evt.detail) {
+            delta = -evt.detail / 3;
+        }
+        var pageHeight = document.documentElement.offsetHeight,
+            windowHeight = window.innerHeight,
+            scrollPosition = window.scrollY || window.pageYOffset || document.body.scrollTop + (document.documentElement && document.documentElement.scrollTop || 0);
+
+        if ((pageHeight - 250) <= (windowHeight + scrollPosition) && !this.sbnoted) {
+            var sbimg = new Image();
+            try {
+                sbimg.src = this.url + "sb/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href);
+                this.tick++;
+                this.sbnoted = true;
+            }
+            catch{ }
+        } else if ((pageHeight - 250) > (windowHeight + scrollPosition)) {
+            this.sbnoted = false;
         }
     };
     VisitTracker.prototype.getBrowserDetail = function () {
@@ -274,5 +319,18 @@ vtobj.xhr.onload = function () {
         }
         vtobj.documentWideClick(event.pageX, event.pageY, tag, tagid);
     });
+    window.addEventListener('blur', function (e) {
+        if (document.activeElement == document.querySelector('iframe')) {
+        }
+        else {
+            vtobj.windowBlur();
+        }
+    });
+    window.addEventListener('focus', function (e) {
+        vtobj.windowFocus();
+    });
+    if (document.addEventListener) {
+        document.addEventListener(vtobj.mousewheelevt, function (e) { vtobj.scroller(e); }, false);
+    }
 };
 vtobj.firstRequest();

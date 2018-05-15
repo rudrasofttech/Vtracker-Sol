@@ -16,7 +16,10 @@ namespace VTracker.Models
 
     public enum ActivityName
     {
-        Click = 1
+        Click = 1,
+        WindowBlur = 2,
+        WindowFocus = 3,
+        ScrollBottom = 4
     }
 
     public class Website
