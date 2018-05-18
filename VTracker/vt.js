@@ -105,6 +105,8 @@ var VTStorage = /** @class */ (function () {
 var VisitTracker = /** @class */ (function () {
     function VisitTracker() {
         this.sbnoted = false;
+        //this.windowFocused = true;
+        this.focusedSeconds = 0;
         this.tick = 0;
         this.d = new Date();
         this.xhr = new Image();
@@ -133,17 +135,21 @@ var VisitTracker = /** @class */ (function () {
         catch (_a) { }
     };
     VisitTracker.prototype.windowBlur = function () {
+        //this.windowFocused = false;
         var wbimg = new Image();
         try {
-            wbimg.src = this.url + "wb/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href);
+            wbimg.src = this.url + "wf/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href) + "&s=" + this.focusedSeconds;
+            this.focusedSeconds = 0;
             this.tick++;
         }
         catch (_a) { }
     };
     VisitTracker.prototype.windowFocus = function () {
+        //this.windowFocused = true;
         var wbimg = new Image();
         try {
-            wbimg.src = this.url + "wf/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href);
+            wbimg.src = this.url + "wb/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href) + "&s=" + this.focusedSeconds;
+            this.focusedSeconds = 0;
             this.tick++;
         }
         catch (_a) { }
@@ -214,21 +220,35 @@ var VisitTracker = /** @class */ (function () {
         else if (evt.detail) {
             delta = -evt.detail / 3;
         }
-        var pageHeight = document.documentElement.offsetHeight,
-            windowHeight = window.innerHeight,
-            scrollPosition = window.scrollY || window.pageYOffset || document.body.scrollTop + (document.documentElement && document.documentElement.scrollTop || 0);
-
-        if ((pageHeight - 250) <= (windowHeight + scrollPosition) && !this.sbnoted) {
+        var pageHeight = document.documentElement.offsetHeight, windowHeight = window.innerHeight, scrollPosition = window.scrollY || window.pageYOffset || document.body.scrollTop + (document.documentElement && document.documentElement.scrollTop || 0);
+        if ((pageHeight - 150) <= (windowHeight + scrollPosition) && !this.sbnoted) {
             var sbimg = new Image();
             try {
                 sbimg.src = this.url + "sb/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href);
                 this.tick++;
                 this.sbnoted = true;
             }
-            catch{ }
-        } else if ((pageHeight - 250) > (windowHeight + scrollPosition)) {
+            catch (_a) { }
+        }
+        else if ((pageHeight - 150) > (windowHeight + scrollPosition)) {
             this.sbnoted = false;
         }
+        //var body = document.body,
+        //    html = document.documentElement;
+        //var height = Math.max(body.scrollHeight, body.offsetHeight,
+        //    html.clientHeight, html.scrollHeight, html.offsetHeight);
+        //var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        //if (scrollTop >= (height - 100) && !this.sbnoted) {
+        //    var sbimg = new Image();
+        //    try {
+        //        sbimg.src = this.url + "sb/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href);
+        //        this.tick++;
+        //        this.sbnoted = true;
+        //    }
+        //    catch{ }
+        //} else if (scrollTop < (height - 150)) {
+        //    this.sbnoted = false;
+        //}
     };
     VisitTracker.prototype.getBrowserDetail = function () {
         var nVer = navigator.appVersion;
@@ -309,6 +329,7 @@ vtobj.xhr.onload = function () {
         vtobj.tick++;
         vtobj.sendPulse();
     }, 5000);
+    setInterval(function () { vtobj.focusedSeconds += 1; }, 1000);
     document.addEventListener("click", function (event) {
         var tag = "", tagid = "";
         if (event.target !== null) {

@@ -258,7 +258,7 @@ namespace VTracker.Controllers
         /// <param name="cc">Client Cookie</param>
         /// <param name="path">Webpage path</param>
         /// <returns></returns>
-        public ActionResult wb(string id, Guid cc, string path) {
+        public ActionResult wb(string id, Guid cc, string path, int s) {
             Visit v = visitRepository.GetVisitByCC(cc);
             VisitPage vp = null;
             Webpage wp = null;
@@ -284,6 +284,7 @@ namespace VTracker.Controllers
                         vpa.MouseClickX = null;
                         vpa.MouseClickY = null;
                         vpa.visit = v;
+                        vpa.SecondsPassed = s;
                         vpa.visitpage = vp;
                         visitRepository.InsertVisitPageActivity(vpa);
                         visitRepository.Save();
@@ -300,7 +301,7 @@ namespace VTracker.Controllers
         /// <param name="cc">Client Cookie</param>
         /// <param name="path">Webpage path</param>
         /// <returns></returns>
-        public ActionResult wf(string id, Guid cc, string path)
+        public ActionResult wf(string id, Guid cc, string path, int s)
         {
             Visit v = visitRepository.GetVisitByCC(cc);
             VisitPage vp = null;
@@ -327,6 +328,7 @@ namespace VTracker.Controllers
                         vpa.MouseClickX = null;
                         vpa.MouseClickY = null;
                         vpa.visit = v;
+                        vpa.SecondsPassed = s;
                         vpa.visitpage = vp;
                         visitRepository.InsertVisitPageActivity(vpa);
                         visitRepository.Save();

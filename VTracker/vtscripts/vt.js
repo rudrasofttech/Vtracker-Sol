@@ -105,6 +105,8 @@ var VTStorage = /** @class */ (function () {
 var VisitTracker = /** @class */ (function () {
     function VisitTracker() {
         this.sbnoted = false;
+        //this.windowFocused = true;
+        this.focusedSeconds = 0;
         this.tick = 0;
         this.d = new Date();
         this.xhr = new Image();
@@ -133,17 +135,21 @@ var VisitTracker = /** @class */ (function () {
         catch (_a) { }
     };
     VisitTracker.prototype.windowBlur = function () {
+        //this.windowFocused = false;
         var wbimg = new Image();
         try {
-            wbimg.src = this.url + "wb/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href);
+            wbimg.src = this.url + "wf/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href) + "&s=" + this.focusedSeconds;
+            this.focusedSeconds = 0;
             this.tick++;
         }
         catch (_a) { }
     };
     VisitTracker.prototype.windowFocus = function () {
+        //this.windowFocused = true;
         var wbimg = new Image();
         try {
-            wbimg.src = this.url + "wf/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href);
+            wbimg.src = this.url + "wb/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href) + "&s=" + this.focusedSeconds;
+            this.focusedSeconds = 0;
             this.tick++;
         }
         catch (_a) { }
@@ -316,6 +322,7 @@ vtobj.xhr.onload = function () {
         vtobj.tick++;
         vtobj.sendPulse();
     }, 5000);
+    setInterval(function () { vtobj.focusedSeconds += 1; }, 1000);
     document.addEventListener("click", function (event) {
         var tag = "", tagid = "";
         if (event.target !== null) {
