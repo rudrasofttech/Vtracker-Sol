@@ -123,7 +123,7 @@ namespace VTracker.Models
         [MaxLength(200)]
         public string ClickTagId { get; set; }
 
-        public int SecondsPassed { get; set; }
+        public int? SecondsPassed { get; set; }
     }
 
     public class VisitTrackerContext : DbContext

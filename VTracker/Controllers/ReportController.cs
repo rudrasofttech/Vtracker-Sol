@@ -47,9 +47,9 @@ namespace VTracker.Controllers
             return Content(count.ToString());
         }
 
-        [OutputCache(Duration = 180, VaryByParam = "path")]
+        //[OutputCache(Duration = 60, VaryByParam = "path")]
         public ActionResult WebpagePublicStats(int id, string path) {
-            WebageDisplayPublic wdp = new WebageDisplayPublic();
+            WebpageDisplayPublic wdp = new WebpageDisplayPublic();
 
             Website w = websiteRepository.GetWebsiteByID(id);
             if (w != null)
@@ -58,18 +58,90 @@ namespace VTracker.Controllers
                 Webpage wp = webpageRepository.GetWebpage(w.ID, u.AbsolutePath.Trim(), u.Query.Trim());
                 if (wp != null)
                 {
-                    var visits = visitRepository.GetVisitsByWebpage(wp.ID);
-                    visits = visits.Where(t => t.LastPingDate.Subtract(t.DateCreated).Seconds >= Utility.PulseInterval);
+                    var visits = visitRepository.GetVisitsByWebpage(wp.ID).Distinct();
+                    //visits = visits.Where(t => t.LastPingDate.Subtract(t.DateCreated).Seconds >= Utility.PulseInterval);
                     wdp.Path = path;
-                    
-                    wdp.VisitLast30Days = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-30)).Count();
-                    wdp.VisitLastHour = visits.Where(t => t.DateCreated >= DateTime.Now.AddMinutes(-60)).Count();
-                    wdp.VisitLastWeek = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-7)).Count();
-                    wdp.VisitToday = visits.Where(t => t.DateCreated >= DateTime.Now.AddHours(-24)).Count();
-                    wdp.TotalVisits = visits.Count();
+
+                    wdp.VisitCountLast30Days = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-30)).Count();
+                    wdp.VisitCountLastHour = visits.Where(t => t.DateCreated >= DateTime.Now.AddMinutes(-60)).Count();
+                    wdp.VisitCountLastWeek = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-7)).Count();
+                    wdp.VisitCountToday = visits.Where(t => t.DateCreated >= DateTime.Now.AddHours(-1 * DateTime.Now.Hour)).Count();
+                    wdp.TotalVisitCount = visits.Count();
+
+                    //visit last hour
+                    var vlh = visits.Where(t => t.DateCreated >= DateTime.Now.AddMinutes(-60)).ToList();
+                    DateTime past60min = DateTime.Now.AddMinutes(-60);
+                    DateTime current = DateTime.Now;
+                    while(past60min <= current)
+                    {
+                        VisitCountChartPoint p = new VisitCountChartPoint();
+                        p.X = past60min.ToString("hh:mm tt");
+                        p.Y = vlh.Where(t => t.DateCreated >= past60min && t.DateCreated < past60min.AddMinutes(10)
+                        ).Count();
+                        wdp.VisitsLastHour.Add(p);
+                        past60min = past60min.AddMinutes(10);
+                    }
+
+                    //visit today
+                    var vt = visits.Where(t => t.DateCreated >= DateTime.Now.AddHours(-1 * DateTime.Now.Hour)).ToList();
+                    DateTime daystart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                    current = DateTime.Now;
+                    while(daystart <= current)
+                    {
+                        VisitCountChartPoint p = new VisitCountChartPoint();
+                        p.X = daystart.ToString("hh:mm tt");
+                        p.Y = vt.Where(t => t.DateCreated >= daystart &&
+                        t.DateCreated <= daystart.AddHours(1)).Count();
+                        wdp.VisitsToday.Add(p);
+
+                        daystart = daystart.AddHours(1);
+                    }
+
+                    ////visit last seven days
+                    var vw = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-7)).ToList();
+                    daystart = new DateTime(DateTime.Now.AddDays(-7).Year, DateTime.Now.AddDays(-7).Month, DateTime.Now.AddDays(-7).Day);
+                    current = DateTime.Now;
+                    while(daystart <= current)
+                    {
+                        VisitCountChartPoint p = new VisitCountChartPoint();
+                        p.X = daystart.ToString("M/d");
+                        p.Y = vw.Where(t => t.DateCreated.Year == daystart.Year && t.DateCreated.Month == daystart.Month && t.DateCreated.Day == daystart.Day).Count();
+                        wdp.VisitsLastWeek.Add(p);
+
+                        daystart = daystart.AddDays(1);
+                    }
+
+                    //visit this month
+                    var vm = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-30)).ToList();
+                    daystart = new DateTime(DateTime.Now.AddDays(-30).Year, DateTime.Now.AddDays(-30).Month, DateTime.Now.AddDays(-30).Day);
+                    current = DateTime.Now;
+                    while (daystart <= current)
+                    {
+                        VisitCountChartPoint p = new VisitCountChartPoint();
+                        p.X = daystart.ToString("M/d");
+                        p.Y = vm.Where(t => t.DateCreated.Year == daystart.Year && t.DateCreated.Month == daystart.Month && t.DateCreated.Day == daystart.Day).Count();
+                        wdp.VisitsLastMonth.Add(p);
+
+                        daystart = daystart.AddDays(1);
+                    }
+
+                    //visit this month
+                    //var vto = visits.ToList();
+                    //daystart = vto.Count > 0 ? vto[0].DateCreated.AddDays(-1) : DateTime.Now;
+                    //current = DateTime.Now;
+                    //while (daystart <= current)
+                    //{
+                    //    VisitCountChartPoint p = new VisitCountChartPoint();
+                    //    p.X = daystart.ToString("M/d");
+                    //    p.Y = vm.Where(t => t.DateCreated.Year == daystart.Year && t.DateCreated.Month == daystart.Month && t.DateCreated.Day == daystart.Day).Count();
+                    //    wdp.VisitsLastMonth.Add(p);
+
+                    //    daystart = daystart.AddDays(1);
+                    //}
                 }
             }
             return View(wdp);
         }
+
     }
 }

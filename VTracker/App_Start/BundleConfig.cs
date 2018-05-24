@@ -17,11 +17,17 @@ namespace VTracker
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/bootstrap.min.js",
+                      "~/Scripts/jquery-1.10.2.js",
+                      "~/Scripts/bootstrap-checkbox-radio.js",
+                      "~/Scripts/chartist.min.js",
+                      "~/Scripts/bootstrap-notify.js",
+                      "~/Scripts/paper-dashboard.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.min.css",
+                      "~/Content/animate.min.css",
+                      "~/Content/paper-dashboard.css",
                       "~/Content/Site.css"));
         }
     }

@@ -118,7 +118,7 @@ namespace VTracker.DAL
 
         public IEnumerable<Visit> GetVisitsByWebpage(int webpageId)
         {
-            return context.VisitPages.Where(t => t.webpage.ID == webpageId).Select(t => t.visit).Distinct();
+            return context.VisitPages.Where(t => t.webpage.ID == webpageId).OrderBy(t => t.DateCreated).Select(t => t.visit).Distinct();
         }
         #region IDisposable Support
         private bool disposed = false;
