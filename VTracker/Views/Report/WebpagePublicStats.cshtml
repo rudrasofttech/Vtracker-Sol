@@ -2,16 +2,16 @@
 @model VTracker.Models.WebpageDisplayPublic
 
 @using System.Text;
+@using VTracker.Models;
 
 @{
     ViewBag.Title = "::Public Stats::";
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 
-    string xvaluelasthour = "", yvaluelasthour = "", xvaluetoday = "", yvaluetoday = "",
-        xvalueweek = "", yvalueweek = "", xvaluemonth = "", yvaluemonth = "";
+    string xvaluevisit = "", yvaluevisit = "",browserlabel = "", browserpoint = "";
     StringBuilder builder = new StringBuilder();
     StringBuilder buildery = new StringBuilder();
-    foreach (var point in Model.VisitsLastHour)
+    foreach (var point in Model.VisitsData)
     {
         builder.Append("'");
         builder.Append(point.X);
@@ -21,141 +21,78 @@
         buildery.Append(",");
     }
 
-    xvaluelasthour = builder.ToString().TrimEnd(",".ToCharArray());
-    yvaluelasthour = buildery.ToString().TrimEnd(",".ToCharArray());
+    xvaluevisit = builder.ToString().TrimEnd(",".ToCharArray());
+    yvaluevisit = buildery.ToString().TrimEnd(",".ToCharArray());
 
     builder.Clear();
     buildery.Clear();
 
-    foreach (var point in Model.VisitsToday)
+    foreach (var point in Model.BrowserData)
     {
         builder.Append("'");
-        builder.Append(point.X);
+        builder.Append(point.Label);
         builder.Append("',");
 
-        buildery.Append(point.Y);
+        buildery.Append(point.Percentage);
         buildery.Append(",");
     }
 
-    xvaluetoday = builder.ToString().TrimEnd(",".ToCharArray());
-    yvaluetoday = buildery.ToString().TrimEnd(",".ToCharArray());
+    browserlabel = builder.ToString().TrimEnd(",".ToCharArray());
+    browserpoint = buildery.ToString().TrimEnd(",".ToCharArray());
 
     builder.Clear();
     buildery.Clear();
 
-    foreach (var point in Model.VisitsLastMonth)
-    {
-        builder.Append("'");
-        builder.Append(point.X);
-        builder.Append("',");
-
-        buildery.Append(point.Y);
-        buildery.Append(",");
-    }
-
-    xvaluemonth = builder.ToString().TrimEnd(",".ToCharArray());
-    yvaluemonth = buildery.ToString().TrimEnd(",".ToCharArray());
 }
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar bar1"></span>
+                <span class="icon-bar bar2"></span>
+                <span class="icon-bar bar3"></span>
+            </button>
+            <a class="navbar-brand" href="#">Dashboard</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="ti-bell"></i>
+                        <p>Date Range</p>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="@Url.Content(Utility.GetWebpagePublicStatsURL(Model.WebsiteId, Server.UrlEncode(Model.Path), ReportDateRangeType.LastHour))">Last Hour</a></li>
+                        <li><a href="@Url.Content(Utility.GetWebpagePublicStatsURL(Model.WebsiteId, Server.UrlEncode(Model.Path), ReportDateRangeType.Today))">Today</a></li>
+                        <li><a href="@Url.Content(Utility.GetWebpagePublicStatsURL(Model.WebsiteId, Server.UrlEncode(Model.Path), ReportDateRangeType.Last7Days))">Last 7 Days</a></li>
+                        <li><a href="@Url.Content(Utility.GetWebpagePublicStatsURL(Model.WebsiteId, Server.UrlEncode(Model.Path), ReportDateRangeType.Last15Days))">Last 15 Days</a></li>
+                        <li><a href="@Url.Content(Utility.GetWebpagePublicStatsURL(Model.WebsiteId, Server.UrlEncode(Model.Path), ReportDateRangeType.Last30Days))">Last 30 Days</a></li>
+                        <li><a href="@Url.Content(Utility.GetWebpagePublicStatsURL(Model.WebsiteId, Server.UrlEncode(Model.Path), ReportDateRangeType.Last3Months))">Last 3 Months</a></li>
+                        <li><a href="@Url.Content(Utility.GetWebpagePublicStatsURL(Model.WebsiteId, Server.UrlEncode(Model.Path), ReportDateRangeType.Last6Months))">Last 6 Months</a></li>
+                        <li><a href="@Url.Content(Utility.GetWebpagePublicStatsURL(Model.WebsiteId, Server.UrlEncode(Model.Path), ReportDateRangeType.Last12Months))">Last 12 Months</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+</nav>
 <div class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-md-12" style="max-height:420px;">
                 <div class="card">
-                    <div class="content">
-                        <div class="row">
-                            <div class="col-xs-5">
-                                <div class="icon-big icon-warning text-center">
-                                    <i class="ti-pin-alt"></i>
-                                </div>
-                            </div>
-                            <div class="col-xs-7">
-                                <div class="numbers">
-                                    <p>Active</p>
-                                    @Model.VisitCountLastHour
-                                </div>
-                            </div>
-                        </div>
-                        <div class="footer">
-                            <hr />
-                            <div class="stats">
-                                <i class="ti-reload"></i> Updated now
-                            </div>
-                        </div>
+                    <div class="header">
+                        <h4 class="title">@Model.VisitCount Visits</h4>
+                        <p class="category">In @Model.VisitChartDescription</p>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="card">
                     <div class="content">
-                        <div class="row">
-                            <div class="col-xs-5">
-                                <div class="icon-big icon-warning text-center">
-                                    <i class="ti-pin-alt"></i>
-                                </div>
-                            </div>
-                            <div class="col-xs-7">
-                                <div class="numbers">
-                                    <p>Today</p>
-                                    @Model.VisitCountToday
-                                </div>
-                            </div>
-                        </div>
-                        <div class="footer">
-                            <hr />
-                            <div class="stats">
-                                <i class="ti-calendar"></i> 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="card">
-                    <div class="content">
-                        <div class="row">
-                            <div class="col-xs-5">
-                                <div class="icon-big icon-success text-center">
-                                    <i class="ti-pin-alt"></i>
-                                </div>
-                            </div>
-                            <div class="col-xs-7">
-                                <div class="numbers">
-                                    <p>7 Days</p>
-                                    @Model.VisitCountLastWeek
-                                </div>
-                            </div>
-                        </div>
-                        <div class="footer">
-                            <hr />
-                            <div class="stats">
-                                <i class="ti-timer"></i> 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="card">
-                    <div class="content">
-                        <div class="row">
-                            <div class="col-xs-5">
-                                <div class="icon-big icon-info text-center">
-                                    <i class="ti-pin-alt"></i>
-                                </div>
-                            </div>
-                            <div class="col-xs-7">
-                                <div class="numbers">
-                                    <p>30 Days</p>
-                                    @Model.VisitCountLast30Days
-                                </div>
-                            </div>
-                        </div>
-                        <div class="footer">
-                            <hr />
-                            <div class="stats">
-                                <i class="ti-reload"></i> Updated now
-                            </div>
-                        </div>
+                        <div id="chartVisit" class="ct-chart ct-perfect-fourth"></div>
                     </div>
                 </div>
             </div>
@@ -164,46 +101,11 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="header">
-                        <h4 class="title">Last Hour</h4>
-                        <p class="category">Visits in last one hour</p>
+                        <h4 class="title">Browsers</h4>
+                        <p class="category">In @Model.VisitChartDescription</p>
                     </div>
                     <div class="content">
-                        <div id="chartLastHour" class="ct-chart ct-perfect-fourth"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="header">
-                        <h4 class="title">Today</h4>
-                        <p class="category">Visits Today</p>
-                    </div>
-                    <div class="content">
-                        <div id="chartToday" class="ct-chart ct-perfect-fourth"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="header">
-                        <h4 class="title">7 Days</h4>
-                        <p class="category">Visits in last 7 days</p>
-                    </div>
-                    <div class="content">
-                        <div id="chartWeek" class="ct-chart ct-perfect-fourth"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="header">
-                        <h4 class="title">30 Days</h4>
-                        <p class="category">Visits in last 30 days</p>
-                    </div>
-                    <div class="content">
-                        <div id="chartMonth" class="ct-chart ct-perfect-fourth"></div>
+                        <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
                     </div>
                 </div>
             </div>
@@ -215,51 +117,23 @@
 @section Scripts{
     <script>
 
-        var dataLastHour = {
-            labels: [ @Html.Raw(xvaluelasthour) ],
+        var dataVisits = {
+            labels: [ @Html.Raw(xvaluevisit) ],
             series: [
-                [@Html.Raw(yvaluelasthour)]
+                [@Html.Raw(yvaluevisit)]
             ]
         };
 
-        var dataToday = {
-            labels: [ @Html.Raw(xvaluetoday) ],
-            series: [
-                [@Html.Raw(yvaluetoday)]
-            ]
-        };
 
-        var dataWeek = {
-            labels: [ @Html.Raw(xvalueweek) ],
-            series: [
-                [@Html.Raw(yvalueweek)]
-            ]
-        };
-
-        var dataMonth = {
-            labels: [ @Html.Raw(xvaluemonth) ],
-            series: [
-                [@Html.Raw(yvaluemonth)]
-            ]
-        };
-
-        var optionsLH = {
-            lineSmooth: false,
-            low: 0,
-           // high: 1000,
-            showArea: true,
-            height: "245px",
+        var options = {
+            seriesBarDistance: 10,
             axisX: {
-                showGrid: false,
+                showGrid: false
             },
+            height: "245px",
             axisY: {
                 onlyInteger: true
-            },
-            lineSmooth: Chartist.Interpolation.simple({
-                divisor: 3
-            }),
-            showLine: true,
-            showPoint: false,
+            }
         };
 
         var responsiveLH = [
@@ -272,14 +146,34 @@
             }]
         ];
 
-        Chartist.Line('#chartLastHour', dataLastHour, optionsLH, responsiveLH);
+        Chartist.Line('#chartVisit', dataVisits, options, responsiveLH);
 
-        Chartist.Line('#chartToday', dataToday, optionsLH, responsiveLH);
+        var dataPreferences = {
+            labels: [@Html.Raw(browserlabel)],
+            series: [@Html.Raw(browserpoint)]
+        };
+        
+        var optionsPreferences = {
+            labelInterpolationFnc: function (value) {
+                return value[0]
+            }
+        };
+        var responsiveOptionsPie = [
+            ['screen and (min-width: 640px)', {
+                chartPadding: 30,
+                labelOffset: 100,
+                labelDirection: 'explode',
+                labelInterpolationFnc: function (value) {
+                    return value;
+                }
+            }],
+            ['screen and (min-width: 1024px)', {
+                labelOffset: 80,
+                chartPadding: 20
+            }]
+        ];
 
-        //chartWeek
-        Chartist.Line('#chartWeek', dataWeek, optionsLH, responsiveLH);
+         new Chartist.Pie('#chartPreferences', dataPreferences, optionsPreferences, responsiveOptionsPie);
 
-        //chartMonth
-        Chartist.Line('#chartMonth', dataMonth, optionsLH, responsiveLH);
     </script>
 }
