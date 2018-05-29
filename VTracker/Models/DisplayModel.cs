@@ -36,6 +36,9 @@ namespace VTracker.Models
         {
             VisitsData = new List<VisitCountChartPoint>();
             BrowserData = new List<PieChartPoint>();
+            RefererList = new List<RefererData>();
+            NewVisitsData = new List<VisitCountChartPoint>();
+            ReturnVisitsData = new List<VisitCountChartPoint>();
         }
         public int WebsiteId { get; set; }
         public string Path { get; set; }
@@ -47,8 +50,11 @@ namespace VTracker.Models
         //public int TotalVisitCount { get; set; }
         public int VisitCount { get; set; }
         public List<VisitCountChartPoint> VisitsData { get; set; }
+        public List<VisitCountChartPoint> NewVisitsData { get; set; }
+        public List<VisitCountChartPoint> ReturnVisitsData { get; set; }
         public List<PieChartPoint> BrowserData { get; set; }
         public string VisitChartDescription { get; set; }
+        public List<RefererData> RefererList { get; set; }
 
     }
 
@@ -62,5 +68,11 @@ namespace VTracker.Models
     {
         public string Label { get; set; }
         public int Percentage { get; set; }
+    }
+
+    public class RefererData
+    {
+        public string Referer { get; set; }
+        public int Count { get; set; }
     }
 }

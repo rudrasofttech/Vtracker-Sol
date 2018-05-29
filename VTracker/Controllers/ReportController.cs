@@ -77,10 +77,24 @@ namespace VTracker.Controllers
                                 p.Y = vt.Where(t => t.DateCreated >= daystart &&
                                 t.DateCreated <= daystart.AddHours(1)).Count();
                                 wdp.VisitsData.Add(p);
+
+                                VisitCountChartPoint np = new VisitCountChartPoint();
+                                np.X = daystart.ToString("h:m tt");
+                                np.Y = vt.Where(t => t.DateCreated >= daystart &&
+                                t.DateCreated <= daystart.AddHours(1) && t.LastVisitID.HasValue == false).Count();
+                                wdp.NewVisitsData.Add(np);
+
+                                VisitCountChartPoint rp = new VisitCountChartPoint();
+                                rp.X = daystart.ToString("h:m tt");
+                                rp.Y = vt.Where(t => t.DateCreated >= daystart &&
+                                t.DateCreated <= daystart.AddHours(1) && t.LastVisitID.HasValue == true).Count();
+                                wdp.ReturnVisitsData.Add(rp);
+
                                 daystart = daystart.AddHours(1);
                             }
                             wdp.VisitChartDescription = "Today";
                             wdp.BrowserData.AddRange(GetBrowserUsage(vt));
+                            wdp.RefererList.AddRange(vt.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
                         case ReportDateRangeType.LastHour:
                             var vlh = visits.Where(t => t.DateCreated >= DateTime.Now.AddMinutes(-60)).ToList();
@@ -92,10 +106,22 @@ namespace VTracker.Controllers
                                 p.X = past60min.ToString("h:m tt");
                                 p.Y = vlh.Where(t => t.DateCreated >= past60min && t.DateCreated < past60min.AddMinutes(5)).Count();
                                 wdp.VisitsData.Add(p);
+
+                                VisitCountChartPoint np = new VisitCountChartPoint();
+                                np.X = past60min.ToString("h:m tt");
+                                np.Y = vlh.Where(t => t.DateCreated >= past60min && t.DateCreated < past60min.AddMinutes(5) && t.LastVisitID.HasValue == false).Count();
+                                wdp.NewVisitsData.Add(np);
+
+                                VisitCountChartPoint rp = new VisitCountChartPoint();
+                                rp.X = past60min.ToString("h:m tt");
+                                rp.Y = vlh.Where(t => t.DateCreated >= past60min && t.DateCreated < past60min.AddMinutes(5) && t.LastVisitID.HasValue == true).Count();
+                                wdp.ReturnVisitsData.Add(rp);
+
                                 past60min = past60min.AddMinutes(5);
                             }
                             wdp.VisitChartDescription = "Last 60 Minutes";
                             wdp.BrowserData.AddRange(GetBrowserUsage(vlh));
+                            wdp.RefererList.AddRange(vlh.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
                         case ReportDateRangeType.Last7Days:
                             var vw = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-7)).ToList();
@@ -104,13 +130,25 @@ namespace VTracker.Controllers
                             while (daystart <= current)
                             {
                                 VisitCountChartPoint p = new VisitCountChartPoint();
-                                p.X = daystart.ToString("MMM/d");
+                                p.X = daystart.ToString("MM/d");
                                 p.Y = vw.Where(t => t.DateCreated.Year == daystart.Year && t.DateCreated.Month == daystart.Month && t.DateCreated.Day == daystart.Day).Count();
                                 wdp.VisitsData.Add(p);
+
+                                VisitCountChartPoint np = new VisitCountChartPoint();
+                                np.X = daystart.ToString("MM/d");
+                                np.Y = vw.Where(t => t.DateCreated.Year == daystart.Year && t.DateCreated.Month == daystart.Month && t.DateCreated.Day == daystart.Day && t.LastVisitID.HasValue == false).Count();
+                                wdp.NewVisitsData.Add(np);
+
+                                VisitCountChartPoint rp = new VisitCountChartPoint();
+                                rp.X = daystart.ToString("MM/d");
+                                rp.Y = vw.Where(t => t.DateCreated.Year == daystart.Year && t.DateCreated.Month == daystart.Month && t.DateCreated.Day == daystart.Day && t.LastVisitID.HasValue == true).Count();
+                                wdp.ReturnVisitsData.Add(rp);
+
                                 daystart = daystart.AddDays(1);
                             }
                             wdp.VisitChartDescription = "Last 7 Days";
                             wdp.BrowserData.AddRange(GetBrowserUsage(vw));
+                            wdp.RefererList.AddRange(vw.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
                         case ReportDateRangeType.Last6Months:
                             var vm = visits.Where(t => t.DateCreated >= DateTime.Now.AddMonths(-6)).ToList();
@@ -124,10 +162,21 @@ namespace VTracker.Controllers
                                 p.Y = vm.Where(t => t.DateCreated >= daystart && t.DateCreated < daystart.AddDays(15)).Count();
                                 wdp.VisitsData.Add(p);
 
+                                VisitCountChartPoint np = new VisitCountChartPoint();
+                                np.X = daystart.AddDays(15).ToString("y-M-d");
+                                np.Y = vm.Where(t => t.DateCreated >= daystart && t.DateCreated < daystart.AddDays(15) && t.LastVisitID.HasValue == false).Count();
+                                wdp.NewVisitsData.Add(np);
+
+                                VisitCountChartPoint rp = new VisitCountChartPoint();
+                                rp.X = daystart.AddDays(15).ToString("y-M-d");
+                                rp.Y = vm.Where(t => t.DateCreated >= daystart && t.DateCreated < daystart.AddDays(15) && t.LastVisitID.HasValue == true).Count();
+                                wdp.ReturnVisitsData.Add(rp);
+
                                 daystart = daystart.AddDays(15);
                             }
                             wdp.VisitChartDescription = "Last 6 Months";
                             wdp.BrowserData.AddRange(GetBrowserUsage(vm));
+                            wdp.RefererList.AddRange(vm.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
                         case ReportDateRangeType.Last3Months:
                             var v3m = visits.Where(t => t.DateCreated >= DateTime.Now.AddMonths(-3)).ToList();
@@ -141,10 +190,21 @@ namespace VTracker.Controllers
                                 p.Y = v3m.Where(t => t.DateCreated >= daystart && t.DateCreated < daystart.AddDays(15)).Count();
                                 wdp.VisitsData.Add(p);
 
+                                VisitCountChartPoint np = new VisitCountChartPoint();
+                                np.X = daystart.AddDays(15).ToString("y-M-d");
+                                np.Y = v3m.Where(t => t.DateCreated >= daystart && t.DateCreated < daystart.AddDays(15) && t.LastVisitID.HasValue == false).Count();
+                                wdp.NewVisitsData.Add(np);
+
+                                VisitCountChartPoint rp = new VisitCountChartPoint();
+                                rp.X = daystart.AddDays(15).ToString("y-M-d");
+                                rp.Y = v3m.Where(t => t.DateCreated >= daystart && t.DateCreated < daystart.AddDays(15) && t.LastVisitID.HasValue == true).Count();
+                                wdp.ReturnVisitsData.Add(rp);
+
                                 daystart = daystart.AddDays(15);
                             }
                             wdp.VisitChartDescription = "Last 3 Months";
                             wdp.BrowserData.AddRange(GetBrowserUsage(v3m));
+                            wdp.RefererList.AddRange(v3m.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
                         case ReportDateRangeType.Last30Days:
                             var v30d = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-30)).ToList();
@@ -153,13 +213,25 @@ namespace VTracker.Controllers
                             while (daystart <= current)
                             {
                                 VisitCountChartPoint p = new VisitCountChartPoint();
-                                p.X = daystart.ToString("MMM/d");
+                                p.X = daystart.ToString("MM/d");
                                 p.Y = v30d.Where(t => t.DateCreated.Year == daystart.Year && t.DateCreated.Month == daystart.Month && t.DateCreated.Day == daystart.Day).Count();
                                 wdp.VisitsData.Add(p);
+
+                                VisitCountChartPoint np = new VisitCountChartPoint();
+                                np.X = daystart.ToString("MM/d");
+                                np.Y = v30d.Where(t => t.DateCreated.Year == daystart.Year && t.DateCreated.Month == daystart.Month && t.DateCreated.Day == daystart.Day && t.LastVisitID.HasValue == false).Count();
+                                wdp.NewVisitsData.Add(np);
+
+                                VisitCountChartPoint rp = new VisitCountChartPoint();
+                                rp.X = daystart.ToString("MM/d");
+                                rp.Y = v30d.Where(t => t.DateCreated.Year == daystart.Year && t.DateCreated.Month == daystart.Month && t.DateCreated.Day == daystart.Day && t.LastVisitID.HasValue == true).Count();
+                                wdp.ReturnVisitsData.Add(rp);
+
                                 daystart = daystart.AddDays(1);
                             }
                             wdp.VisitChartDescription = "Last 30 Days";
                             wdp.BrowserData.AddRange(GetBrowserUsage(v30d));
+                            wdp.RefererList.AddRange(v30d.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
                         case ReportDateRangeType.Last15Days:
                             
@@ -169,13 +241,25 @@ namespace VTracker.Controllers
                             while (daystart <= current)
                             {
                                 VisitCountChartPoint p = new VisitCountChartPoint();
-                                p.X = daystart.ToString("MMM/d");
+                                p.X = daystart.ToString("MM/d");
                                 p.Y = v15d.Where(t => t.DateCreated.Year == daystart.Year && t.DateCreated.Month == daystart.Month && t.DateCreated.Day == daystart.Day).Count();
                                 wdp.VisitsData.Add(p);
+
+                                VisitCountChartPoint np = new VisitCountChartPoint();
+                                np.X = daystart.ToString("MM/d");
+                                np.Y = v15d.Where(t => t.DateCreated.Year == daystart.Year && t.DateCreated.Month == daystart.Month && t.DateCreated.Day == daystart.Day && t.LastVisitID.HasValue == false).Count();
+                                wdp.NewVisitsData.Add(np);
+
+                                VisitCountChartPoint rp = new VisitCountChartPoint();
+                                rp.X = daystart.ToString("MM/d");
+                                rp.Y = v15d.Where(t => t.DateCreated.Year == daystart.Year && t.DateCreated.Month == daystart.Month && t.DateCreated.Day == daystart.Day && t.LastVisitID.HasValue == true).Count();
+                                wdp.ReturnVisitsData.Add(rp);
+
                                 daystart = daystart.AddDays(1);
                             }
                             wdp.VisitChartDescription = "Last 15 Days";
                             wdp.BrowserData.AddRange(GetBrowserUsage(v15d));
+                            wdp.RefererList.AddRange(v15d.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
                         case ReportDateRangeType.Last12Months:
                             var v12m = visits.Where(t => t.DateCreated >= DateTime.Now.AddMonths(-12)).ToList();
@@ -189,20 +273,23 @@ namespace VTracker.Controllers
                                 p.Y = v12m.Where(t => t.DateCreated.Year == daystart.Year && t.DateCreated.Month == daystart.Month).Count();
                                 wdp.VisitsData.Add(p);
 
+                                VisitCountChartPoint np = new VisitCountChartPoint();
+                                np.X = daystart.ToString("y MMM");
+                                np.Y = v12m.Where(t => t.DateCreated.Year == daystart.Year && t.DateCreated.Month == daystart.Month && t.LastVisitID.HasValue == false).Count();
+                                wdp.NewVisitsData.Add(np);
+
+                                VisitCountChartPoint rp = new VisitCountChartPoint();
+                                rp.X = daystart.ToString("y MMM");
+                                rp.Y = v12m.Where(t => t.DateCreated.Year == daystart.Year && t.DateCreated.Month == daystart.Month && t.LastVisitID.HasValue == true).Count();
+                                wdp.ReturnVisitsData.Add(rp);
+
                                 daystart = daystart.AddMonths(1);
                             }
                             wdp.VisitChartDescription = "Last 12 Months";
                             wdp.BrowserData.AddRange(GetBrowserUsage(v12m));
+                            wdp.RefererList.AddRange(v12m.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
                     }
-                    //visits = visits.Where(t => t.LastPingDate.Subtract(t.DateCreated).Seconds >= Utility.PulseInterval);
-                    
-                    //wdp.VisitCountLast30Days = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-30)).Count();
-                    //wdp.VisitCountLastHour = visits.Where(t => t.DateCreated >= DateTime.Now.AddMinutes(-60)).Count();
-                    //wdp.VisitCountLastWeek = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-7)).Count();
-                    //wdp.VisitCountToday = visits.Where(t => t.DateCreated >= DateTime.Now.AddHours(-1 * DateTime.Now.Hour)).Count();
-                    //wdp.TotalVisitCount = visits.Count();
-
                 }
             }
             return View(wdp);

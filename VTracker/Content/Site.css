@@ -5,3 +5,13 @@
 #chartMonth .ct-labels foreignObject:nth-child(odd) .ct-label.ct-horizontal {
     display: none;
 }
+
+.browserdata td {
+    
+    max-width: 80%;
+}
+
+    .browserdata td > div {
+        overflow-wrap: break-word;
+        max-width:100%;
+    }

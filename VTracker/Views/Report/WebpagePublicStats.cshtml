@@ -8,7 +8,7 @@
     ViewBag.Title = "::Public Stats::";
     Layout = "~/Views/Shared/_PublicLayout.cshtml";
 
-    string xvaluevisit = "", yvaluevisit = "",browserlabel = "", browserpoint = "";
+    string xvaluevisit = "", yvaluevisit = "", yreturnvaluevisit = "", ynewvaluevisit = "", browserlabel = "", browserpoint = "";
     StringBuilder builder = new StringBuilder();
     StringBuilder buildery = new StringBuilder();
     foreach (var point in Model.VisitsData)
@@ -23,9 +23,22 @@
 
     xvaluevisit = builder.ToString().TrimEnd(",".ToCharArray());
     yvaluevisit = buildery.ToString().TrimEnd(",".ToCharArray());
-
     builder.Clear();
     buildery.Clear();
+
+    foreach (var point in Model.ReturnVisitsData)
+    {
+        buildery.Append(point.Y);
+        buildery.Append(",");
+    }
+    yreturnvaluevisit = buildery.ToString().TrimEnd(",".ToCharArray());
+    buildery.Clear();
+    foreach (var point in Model.NewVisitsData)
+    {
+        buildery.Append(point.Y);
+        buildery.Append(",");
+    }
+    ynewvaluevisit = buildery.ToString().TrimEnd(",".ToCharArray());
 
     foreach (var point in Model.BrowserData)
     {
@@ -85,7 +98,7 @@
 <div class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12" style="max-height:420px;">
+            <div class="col-md-12" style="max-height:460px;">
                 <div class="card">
                     <div class="header">
                         <h4 class="title">@Model.VisitCount Visits</h4>
@@ -93,12 +106,19 @@
                     </div>
                     <div class="content">
                         <div id="chartVisit" class="ct-chart ct-perfect-fourth"></div>
+                        <div class="footer">
+                            <div class="chart-legend">
+                                <i class="fa fa-circle text-info"></i> All
+                                <i class="fa fa-circle text-danger"></i> Return
+                                <i class="fa fa-circle text-warning"></i> New
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6" style="max-height:460px;">
                 <div class="card">
                     <div class="header">
                         <h4 class="title">Browsers</h4>
@@ -106,6 +126,58 @@
                     </div>
                     <div class="content">
                         <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Visit Referer</h4>
+                        <p class="category">In @Model.VisitChartDescription</p>
+                    </div>
+
+                    <div class="content table-responsive table-full-width">
+                        <table class="table table-striped browserdata">
+                            <thead>
+                                <tr>
+                                    <th>Referer</th>
+                                    <th>Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (RefererData item in Model.RefererList.OrderByDescending(t=> t.Count))
+                                {
+                                    <tr>
+                                        @if (string.IsNullOrEmpty(item.Referer))
+                                        {
+                                            <td>None</td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                @if (Server.UrlDecode(item.Referer).IndexOf("?") > -1)
+                                                {
+                                                    <span>
+                                                        @Html.Raw(Server.UrlDecode(item.Referer).Substring(0, Server.UrlDecode(item.Referer).IndexOf("?")))
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span>
+                                                        @Html.Raw(Server.UrlDecode(item.Referer))
+                                                    </span>
+                                                }
+                                            </td>
+                                        }
+                                        <td>@item.Count</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
                     </div>
                 </div>
             </div>
@@ -120,7 +192,9 @@
         var dataVisits = {
             labels: [ @Html.Raw(xvaluevisit) ],
             series: [
-                [@Html.Raw(yvaluevisit)]
+                [@Html.Raw(yvaluevisit)],
+                [@Html.Raw(ynewvaluevisit)],
+                [@Html.Raw(yreturnvaluevisit)]
             ]
         };
 
@@ -152,7 +226,7 @@
             labels: [@Html.Raw(browserlabel)],
             series: [@Html.Raw(browserpoint)]
         };
-        
+
         var optionsPreferences = {
             labelInterpolationFnc: function (value) {
                 return value[0]
