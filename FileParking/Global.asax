@@ -13,7 +13,7 @@
     {
         routes.Ignore("{resource}.axd/{*pathInfo}");
         routes.Ignore("{resource}.ashx/{*pathInfo}");
-        //routes.Ignore("{pages}.aspx/{*pathInfo}");
+        routes.Ignore("{pages}.aspx/{*pathInfo}");
 
         ////Direct URL
         //routes.MapPageRoute("LogoutPage", "logout", "~/logout.aspx");
@@ -41,6 +41,7 @@
         //routes.MapPageRoute("unsubscribe", "account/unsubscribe", "~/account/unsubscribe.aspx");
         //routes.MapPageRoute("viewemail", "account/email/{id}", "~/account/email.aspx");
 
+        routes.MapPageRoute("UploadPage", "simpleupload", "~/simpleupload.aspx");
         ////Any Damn Thing Catch Here
         routes.MapPageRoute("DefaultPageRoute", string.Empty, "~/default.aspx");
         //routes.MapPageRoute("CustomPageRoute", "{*pagename}", "~/custompage.aspx");

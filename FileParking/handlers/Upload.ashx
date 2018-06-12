@@ -14,7 +14,7 @@ public class Upload : IHttpHandler
 {
 
     #region Fields
-
+    private Member CurrentMember = null;
     private readonly JavaScriptSerializer _javaScriptSerializer = new JavaScriptSerializer();
     private DriveManager DM;
     #endregion
@@ -30,30 +30,34 @@ public class Upload : IHttpHandler
         get
         {
 
-            return Token;
+            if (Token)
+            {
+                return CurrentMember.Folder;
+            }
+            return "";
             //return HttpContext.Current.Request.QueryString["storageFolder"];
         }
     }
 
-    public string Token
+    public bool Token
     {
         get
         {
             if (HttpContext.Current.Request.QueryString["token"] != null)
             {
-                Member m = MemberManager.GetUserByToken(new Guid(HttpContext.Current.Request.QueryString["token"].Trim()));
-                if (m != null)
+                CurrentMember = MemberManager.GetUserByToken(new Guid(HttpContext.Current.Request.QueryString["token"].Trim()));
+                if (CurrentMember != null)
                 {
-                    return m.Folder;
+                    return true;
                 }
                 else
                 {
-                    return string.Empty;
+                    return false;
                 }
             }
             else
             {
-                return string.Empty;
+                return false;
             }
         }
     }
@@ -82,14 +86,11 @@ public class Upload : IHttpHandler
     {
         context.Response.AddHeader("Pragma", "no-cache");
         context.Response.AddHeader("Cache-Control", "private, no-cache");
-        //if (context.Request.IsAuthenticated)
-        //{
-        //    CurrentUser = MemberManager.GetUser(context.User.Identity.Name);
-        //}
-        //else
-        //{
-        //    context.Response.End();
-        //}
+        if (!Token)
+        {
+            context.Response.End();
+        }
+
 
         DM = new DriveManager(new Member(), HttpContext.Current.Server.MapPath("~"), string.Format("{0}/{1}", Utility.SiteURL, ""));
 
@@ -150,14 +151,15 @@ public class Upload : IHttpHandler
     private void ListCurrentFiles(HttpContext context)
     {
 
-        FileStatus[] statuses =
-            (from file in new DirectoryInfo(context.Server.MapPath("~/" + StorageFolder)).GetFiles("*", SearchOption.TopDirectoryOnly)
-             where !file.Attributes.HasFlag(FileAttributes.Hidden)
-             select new FileStatus(file, StorageFolder)).ToArray();
-        string jsonObj = _javaScriptSerializer.Serialize(statuses);
+        //FileStatus[] statuses =
+        //    (from file in new DirectoryInfo(context.Server.MapPath("~/" + StorageFolder)).GetFiles("*", SearchOption.TopDirectoryOnly)
+        //     where !file.Attributes.HasFlag(FileAttributes.Hidden)
+        //     select new FileStatus(file, StorageFolder)).ToArray();
+        //string jsonObj = _javaScriptSerializer.Serialize(statuses);
         context.Response.AddHeader("Content-Disposition", "inline; filename=\"files.json\"");
         context.Response.ContentType = "application/json";
-        context.Response.Write(jsonObj);
+        context.Response.Write("");
+        //context.Response.Write(jsonObj);
     }
 
     private void SendFileInfo(HttpContext context)

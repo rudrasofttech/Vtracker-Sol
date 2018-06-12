@@ -12,10 +12,12 @@
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,300,700' rel='stylesheet' type='text/css' />
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet" />
     <link href="css/custom.css" rel="stylesheet" />
+    <link href="css/bootstrap-image-gallery.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/jquery.fileupload-ui.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
+<body id="mainapp">
     <div class="container-fluid">
-        <div class="row-fluid" id="loginfrm">
+        <div class="row-fluid view1" id="loginfrm">
             <div class="span4 offset4">
                 <div class="alert fade">
                 </div>
@@ -31,6 +33,9 @@
                     <button type="button" id="signinbtn" class="btn btn-primary step2" onclick="app.loginFrm.validateUser()">Sign In</button>
                 </div>
             </div>
+        </div>
+        <div class="row-fluid view1" id="uploadfrm">
+            
         </div>
     </div>
 

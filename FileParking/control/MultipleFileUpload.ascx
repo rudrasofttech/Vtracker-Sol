@@ -4,7 +4,7 @@
     <div id="fileupload">
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="row-fluid fileupload-buttonbar">
-            <div class="span7">
+            <div class="span5">
                 <!-- The fileinput-button span is used to style the file input field as button -->
                 <span class="btn btn-action fileinput-button"><i class="icon-plus"></i><span>Add files...</span>
                     <!--Enable selecting a complete folder structure, this is currently only supported by Google Chrome-->

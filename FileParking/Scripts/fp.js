@@ -8,15 +8,14 @@ var UserIdentity = /** @class */ (function () {
     return UserIdentity;
 }());
 var LoginForm = /** @class */ (function () {
-    function LoginForm() {
+    function LoginForm(_mainappdom) {
         this.url = "handlers/userhandler.ashx";
         this.emailTextBox = "emailtxt";
         this.otpTextBox = "otptxt";
         this.signInbtn = "signinbtn";
         this.formDom = $("#loginfrm");
+        this.mainappdom = _mainappdom;
     }
-    LoginForm.prototype.bind = function () {
-    };
     LoginForm.prototype.setUser = function () {
         var email = $("#" + this.emailTextBox).val();
         var instance = this;
@@ -31,16 +30,13 @@ var LoginForm = /** @class */ (function () {
         })
             .fail(function () {
                 Message.Display("Something went wrong! Try again.", "error");
-                console.log("Unable to create a user");
             });
-        //.always(function () {
-        //    console.log("complete");
-        //});
     };
     LoginForm.prototype.validateUser = function () {
         if (user != null) {
             var email = $("#" + this.emailTextBox).val();
             var otp = $("#" + this.otpTextBox).val();
+            var instance = this;
             var jqxhr = $.getJSON(this.url, { email: email, otp: otp, a: "validate" }, function () {
                 console.log("success");
             })
@@ -48,10 +44,15 @@ var LoginForm = /** @class */ (function () {
                     if (data.success) {
                         user.isValidated = data.isValidated;
                         user.token = data.token;
+                        instance.mainappdom.trigger("uservalidated", this.mainappdom);
+                        instance.formDom.hide();
+                    }
+                    else {
+                        Message.Display("Incorrect OTP! Try again.", "error");
                     }
                 })
                 .fail(function () {
-                    console.log("Unable to validate the user");
+                    Message.Display("Something went wrong! Try again.", "error");
                 });
         }
         else {
@@ -61,33 +62,57 @@ var LoginForm = /** @class */ (function () {
     };
     return LoginForm;
 }());
+var FileUploadForm = /** @class */ (function () {
+    function FileUploadForm(_mainappdom) {
+        this.uploadfrmdom = $("#uploadfrm");
+        this.mainappdom = _mainappdom;
+    }
+    FileUploadForm.prototype.loadForm = function () {
+        var instance = this;
+        var jqxhr = $.get("simpleupload", { token: user.token }, function () {
+            console.log("success");
+        }).done(function (data) {
+            instance.uploadfrmdom.html(data);
+        }).fail(function () {
+            Message.Display("Something went wrong! Try again.", "error");
+        });
+    };
+    return FileUploadForm;
+}());
 var Message = /** @class */ (function () {
     function Message() {
     }
     Message.Display = function (msg, type) {
         if ($("#loginfrm").is(':visible')) {
-            $("#loginfrm .msg").removeClass("alert-error alert-success alert-info");
+            var context = $("#loginfrm");
+            context.find(".alert").removeClass("alert-error alert-success alert-info");
             if (type == "error") {
-                $("#loginfrm .alert").addClass("alert-error");
+                context.find(".alert").addClass("alert-error");
             }
             else if (type == "success") {
-                $("#loginfrm .alert").addClass("alert-success");
+                context.find(".alert").addClass("alert-success");
             }
             else if (type == "info") {
-                $("#loginfrm .alert").addClass("alert-info");
+                context.find(".alert").addClass("alert-info");
             }
-            $("#loginfrm .alert").html(msg).show();
-            setTimeout(function () { $("#loginfrm .alert").html("").hide(); }, 5000);
+            context.find(".alert").html(msg).show().css("opacity", "1");
+            setTimeout(function () { context.find(".alert").html("").hide(); }, 5000);
         }
     };
     return Message;
 }());
 var MainApp = /** @class */ (function () {
     function MainApp() {
-        this.loginFrm = new LoginForm();
+        this.mainappdom = $("#mainapp");
+        this.uploadFrm = null;
+        this.loginFrm = new LoginForm(this.mainappdom);
     }
     MainApp.prototype.bind = function () {
-        this.loginFrm.bind();
+        this.mainappdom.on("uservalidated", this.onUserValidated);
+    };
+    MainApp.prototype.onUserValidated = function (event, _mainappdom) {
+        this.uploadFrm = new FileUploadForm(_mainappdom);
+        this.uploadFrm.loadForm();
     };
     return MainApp;
 }());
