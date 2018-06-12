@@ -38,7 +38,7 @@ namespace FileParking.Models
         {
             get
             {
-                return "~/userdata";
+                return "userdata";
             }
         }
 

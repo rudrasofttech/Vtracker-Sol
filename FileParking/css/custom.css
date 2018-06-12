@@ -1,12 +1,4 @@
-﻿.scrollbararea { clear: both; margin: 20px 0 10px; }
-.scrollbararea .viewport { overflow: hidden; position: relative; }
-.scrollbararea .overview { list-style: none; position: absolute; left: 0; top: 0; }
-.scrollbararea .thumb .end,
-.scrollbararea .thumb { background-color: #003D5D; }
-.scrollbararea .scrollbar { position: relative; float: right; width: 15px; }
-.scrollbararea .track { background-color: #D8EEFD; height: 100%; width:13px; position: relative; padding: 0 1px; }
-.scrollbararea .thumb { height: 20px; width: 13px; cursor: pointer; overflow: hidden; position: absolute; top: 0; }
-.scrollbararea .thumb .end { overflow: hidden; height: 5px; width: 13px; }
-.scrollbararea .disable{ display: none; }
-
-.validate{ color: Red;}
+﻿#otppanel,
+#signinbtn {
+    display: none;
+}

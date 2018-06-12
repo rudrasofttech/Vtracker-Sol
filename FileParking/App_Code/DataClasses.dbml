@@ -33,23 +33,6 @@
       <Association Name="Member_Recipient" Member="Member" ThisKey="MemberID" OtherKey="Id" Type="Member" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Member" Member="Members">
-    <Type Name="Member">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Email" Type="System.String" DbType="NVarChar(250) NOT NULL" CanBeNull="false" />
-      <Column Name="Password" Type="System.String" DbType="NVarChar(250) NOT NULL" CanBeNull="false" />
-      <Column Name="FirstName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="LastName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="Folder" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
-      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="Status" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
-      <Column Name="PublicID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
-      <Association Name="Member_Transfer" Member="Transfers" ThisKey="Id" OtherKey="MemberID" Type="Transfer" />
-      <Association Name="Member_ParkedFile" Member="ParkedFiles" ThisKey="Id" OtherKey="MemberID" Type="ParkedFile" />
-      <Association Name="Member_Recipient" Member="Recipients" ThisKey="Id" OtherKey="MemberID" Type="Recipient" />
-    </Type>
-  </Table>
   <Table Name="dbo.EmailMessage" Member="EmailMessages">
     <Type Name="EmailMessage">
       <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -68,6 +51,25 @@
       <Column Name="ToName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
       <Column Name="FromName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
       <Column Name="LastAttempt" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Member" Member="Members">
+    <Type Name="Member">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="NVarChar(250) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(250) NOT NULL" CanBeNull="false" />
+      <Column Name="FirstName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="LastName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Folder" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="PublicID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="AuthToken" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="TokenCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Member_Transfer" Member="Transfers" ThisKey="Id" OtherKey="MemberID" Type="Transfer" />
+      <Association Name="Member_ParkedFile" Member="ParkedFiles" ThisKey="Id" OtherKey="MemberID" Type="ParkedFile" />
+      <Association Name="Member_Recipient" Member="Recipients" ThisKey="Id" OtherKey="MemberID" Type="Recipient" />
     </Type>
   </Table>
 </Database>

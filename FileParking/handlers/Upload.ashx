@@ -29,7 +29,32 @@ public class Upload : IHttpHandler
     {
         get
         {
-            return HttpContext.Current.Request.QueryString["storageFolder"];
+
+            return Token;
+            //return HttpContext.Current.Request.QueryString["storageFolder"];
+        }
+    }
+
+    public string Token
+    {
+        get
+        {
+            if (HttpContext.Current.Request.QueryString["token"] != null)
+            {
+                Member m = MemberManager.GetUserByToken(new Guid(HttpContext.Current.Request.QueryString["token"].Trim()));
+                if (m != null)
+                {
+                    return m.Folder;
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
     }
 

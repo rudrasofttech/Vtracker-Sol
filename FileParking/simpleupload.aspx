@@ -5,18 +5,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.2.min.js" type="text/javascript"></script>
-    <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <link href="bootstrap/css/custom.css" rel="stylesheet" type="text/css" />
-    <link href="bootstrap/css/bootstrap-image-gallery.min.css"
+    <script src="js/site/bootstrap.min.js" type="text/javascript"></script>
+    <link href="css/custom.css" rel="stylesheet" type="text/css" />
+    <link href="css/bootstrap-image-gallery.min.css"
         rel="stylesheet" type="text/css" />
-    <link href="bootstrap/css/jquery.fileupload-ui.css"
+    <link href="css/jquery.fileupload-ui.css"
         rel="stylesheet" type="text/css" />
 </head>
 <body>

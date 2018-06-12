@@ -28,17 +28,17 @@ namespace FileParking.Models
 
         public static string GetSignupEmail(string password) {
             string msg = Utility.SignupEmail.Replace("[otp]", password);
-            string emailtemplate = Utility.EmailSkeleton.Replace("[message]", msg);
-            emailtemplate = emailtemplate.Replace("[noreply]", noreply).Replace("[sitename]", Utility.SiteName).Replace("[prolink]", Utility.Prolink);
-            return emailtemplate;
+            //string emailtemplate = Utility.EmailSkeleton.Replace("[message]", msg);
+            //emailtemplate = emailtemplate.Replace("[noreply]", noreply).Replace("[sitename]", Utility.SiteName).Replace("[prolink]", Utility.Prolink);
+            return msg;
         }
 
         public static string GetOTPEmail(string password)
         {
             string msg = Utility.OTPEmail.Replace("[otp]", password);
-            string emailtemplate = Utility.EmailSkeleton.Replace("[message]", msg);
-            emailtemplate = emailtemplate.Replace("[noreply]", noreply).Replace("[sitename]", Utility.SiteName).Replace("[prolink]", Utility.Prolink);
-            return emailtemplate;
+            //string emailtemplate = Utility.EmailSkeleton.Replace("[message]", msg);
+            //emailtemplate = emailtemplate.Replace("[noreply]", noreply).Replace("[sitename]", Utility.SiteName).Replace("[prolink]", Utility.Prolink);
+            return msg;
         }
 
         public static bool SendMail(String fromAddress, String toAddress, String senderName, String recieverName, String body, String subject, EmailMessageType messageType, string emailGroup)

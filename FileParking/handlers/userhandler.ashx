@@ -8,6 +8,7 @@ public class userhandler : IHttpHandler
 {
 
     public HttpContext Context { get; set; }
+
     public string Action
     {
         get
@@ -60,9 +61,10 @@ public class userhandler : IHttpHandler
             }
             else
             {
+                Guid publicId = Guid.NewGuid();
+                string folder = string.Format("{0}/{1}", Utility.SiteDriveFolderPath, Guid.NewGuid().ToString().ToLower());
 
-
-                if (MemberManager.CreateUser(email, pass, "", ""))
+                if (MemberManager.CreateUser(email, pass, "", "", folder, publicId))
                 {
                     m = MemberManager.GetUser(email);
                     EmailManager.SendMail(EmailManager.noreply, email, "", "", EmailManager.GetSignupEmail(pass),
@@ -72,13 +74,13 @@ public class userhandler : IHttpHandler
                 }
                 else
                 {
-                    return js.Serialize(new { });
+                    return js.Serialize(new { success = false, message = "Unable to register this email. Please try again." });
                 }
             }
         }
         else
         {
-            return js.Serialize(new { });
+            return js.Serialize(new { success = false, message = "No email provided." });
         }
 
     }
@@ -93,16 +95,24 @@ public class userhandler : IHttpHandler
             Member m = MemberManager.ValidateUser(email, otp);
             if (m != null)
             {
-                return js.Serialize(new { email = m.Email, id = m.PublicID, isValidated = true, success = true });
+
+                string userFolderAbsolute = Context.Server.MapPath(string.Format("~/{0}", m.Folder));
+                //check if user directory exist
+                if (!System.IO.Directory.Exists(userFolderAbsolute))
+                {
+                    //create user directory
+                    System.IO.Directory.CreateDirectory(userFolderAbsolute);
+                }
+                return js.Serialize(new { email = m.Email, id = m.PublicID, isValidated = true, token = m.AuthToken.HasValue ? m.AuthToken.Value.ToString() : "", success = true });
             }
             else
             {
-                return js.Serialize(new { success = false });
+                return js.Serialize(new { success = false, message = "Unable to validate the account." });
             }
         }
         else
         {
-            return js.Serialize(new { success = false });
+            return js.Serialize(new { success = false, message = "No Email Provided." });
         }
 
     }

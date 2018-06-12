@@ -27,38 +27,38 @@
         <classShapeMoniker Id="5bfdb621-5d9b-4d55-824a-157a72df3df2" />
       </nodes>
     </associationConnector>
-    <classShape Id="ff9b9e64-d91b-43ec-9c21-74eedee7709b" absoluteBounds="0.5, 3.625, 2, 2.7324039713541666">
-      <DataClassMoniker Name="/FileParkingDataContext/Member" />
-      <nestedChildShapes>
-        <elementListCompartment Id="bb1dddd3-2917-41e9-aef0-479db3ebbfca" absoluteBounds="0.51500000000000012, 4.085, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
-    <associationConnector edgePoints="[(2.5 : 4.60179768880208); (6.25 : 4.60179768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
-      <AssociationMoniker Name="/FileParkingDataContext/Member/Member_Transfer" />
-      <nodes>
-        <classShapeMoniker Id="ff9b9e64-d91b-43ec-9c21-74eedee7709b" />
-        <classShapeMoniker Id="5bfdb621-5d9b-4d55-824a-157a72df3df2" />
-      </nodes>
-    </associationConnector>
-    <associationConnector edgePoints="[(2.5 : 5.67870198567708); (3.5 : 5.67870198567708)]" fixedFrom="Algorithm" fixedTo="Algorithm">
-      <AssociationMoniker Name="/FileParkingDataContext/Member/Member_ParkedFile" />
-      <nodes>
-        <classShapeMoniker Id="ff9b9e64-d91b-43ec-9c21-74eedee7709b" />
-        <classShapeMoniker Id="36ab06ef-c365-4bc2-aa28-becd5405b209" />
-      </nodes>
-    </associationConnector>
-    <associationConnector edgePoints="[(2.5 : 3.91429768880208); (3.5 : 3.91429768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
-      <AssociationMoniker Name="/FileParkingDataContext/Member/Member_Recipient" />
-      <nodes>
-        <classShapeMoniker Id="ff9b9e64-d91b-43ec-9c21-74eedee7709b" />
-        <classShapeMoniker Id="822dac1b-6b86-4bd7-b557-355972981d28" />
-      </nodes>
-    </associationConnector>
     <classShape Id="6e1978f6-bdd7-4047-95e2-6351c91145e8" absoluteBounds="6.25, 6, 2, 3.8862125651041666">
       <DataClassMoniker Name="/FileParkingDataContext/EmailMessage" />
       <nestedChildShapes>
         <elementListCompartment Id="bdb9bb37-0dcb-4bc4-be11-46f520b0d0ae" absoluteBounds="6.265, 6.46, 1.9700000000000002, 3.3262125651041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
+    <classShape Id="1531aae8-6f76-41ad-9de6-2e40cd29f54d" absoluteBounds="0.875, 3.875, 2, 3.1170068359375">
+      <DataClassMoniker Name="/FileParkingDataContext/Member" />
+      <nestedChildShapes>
+        <elementListCompartment Id="41c61495-9115-449a-8104-4c176ead9503" absoluteBounds="0.89, 4.335, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.875 : 4.60179768880208); (6.25 : 4.60179768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/FileParkingDataContext/Member/Member_Transfer" />
+      <nodes>
+        <classShapeMoniker Id="1531aae8-6f76-41ad-9de6-2e40cd29f54d" />
+        <classShapeMoniker Id="5bfdb621-5d9b-4d55-824a-157a72df3df2" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.875 : 5.88544840494792); (3.5 : 5.88544840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/FileParkingDataContext/Member/Member_ParkedFile" />
+      <nodes>
+        <classShapeMoniker Id="1531aae8-6f76-41ad-9de6-2e40cd29f54d" />
+        <classShapeMoniker Id="36ab06ef-c365-4bc2-aa28-becd5405b209" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(1.875 : 3.875); (1.875 : 3.2499995); (3.5 : 3.2499995)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/FileParkingDataContext/Member/Member_Recipient" />
+      <nodes>
+        <classShapeMoniker Id="1531aae8-6f76-41ad-9de6-2e40cd29f54d" />
+        <classShapeMoniker Id="822dac1b-6b86-4bd7-b557-355972981d28" />
+      </nodes>
+    </associationConnector>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

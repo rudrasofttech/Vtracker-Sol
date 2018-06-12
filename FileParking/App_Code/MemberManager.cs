@@ -17,6 +17,9 @@ namespace FileParking.Models
                     if (m != null)
                     {
                         m.Status = (byte)GeneralStatusType.Active;
+                        Guid token = Guid.NewGuid();
+                        m.AuthToken = token;
+                        m.TokenCreated = DateTime.UtcNow;
                         dc.SubmitChanges();
                         return m;
                     }
@@ -41,13 +44,13 @@ namespace FileParking.Models
                     var m = (from t in dc.Members where t.Email == email select t).SingleOrDefault();
                     m.FirstName = name;
                     m.LastName = lastname;
-                    m.DateModified = DateTime.Now;
+                    m.DateModified = DateTime.UtcNow;
                     m.Status = (byte)status;
                     dc.SubmitChanges();
                     return true;
                 }
             }
-            catch 
+            catch
             {
                 throw;
             }
@@ -62,7 +65,7 @@ namespace FileParking.Models
                     var m = (from t in dc.Members where t.Id == id select t).SingleOrDefault();
                     m.Status = (byte)GeneralStatusType.Deleted;
                     dc.SubmitChanges();
-                    
+
                 }
             }
             catch (Exception ex)
@@ -118,6 +121,45 @@ namespace FileParking.Models
             }
         }
 
+        public static Member GetUserByToken(Guid token)
+        {
+            Member m = CacheManager.Get<Member>(string.Format("token-{0}", token.ToString()));
+
+            if (m == null)
+            {
+                using (FileParkingDataContext dc = new FileParkingDataContext())
+                {
+                    m = dc.Members.Where(t => t.AuthToken == token).SingleOrDefault();
+                    if (m != null)
+                    {
+                        //check if token is not older than 12 hours
+                        if (m.TokenCreated.HasValue && m.TokenCreated.Value.AddHours(12) >= DateTime.UtcNow)
+                        {
+                            CacheManager.AddSliding(string.Format("token-{0}", token.ToString()), m, 240);
+                            return m;
+                        }
+                        else { return null; }
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            else
+            {
+                if (m.TokenCreated.HasValue && m.TokenCreated.Value.AddHours(12) >= DateTime.UtcNow)
+                {
+                    return m;
+                }
+                else
+                {
+                    CacheManager.Remove(string.Format("token-{0}", token.ToString()));
+                    return null;
+                }
+            }
+        }
+
         public static List<Member> GetMemberList()
         {
             try
@@ -162,7 +204,7 @@ namespace FileParking.Models
             }
         }
 
-        public static bool CreateUser(string username, string password, string firstName, string lastName)
+        public static bool CreateUser(string username, string password, string firstName, string lastName, string folder, Guid publicId)
         {
             try
             {
@@ -188,7 +230,8 @@ namespace FileParking.Models
                     m.Password = password;
                     m.Status = (byte)GeneralStatusType.Inactive;
                     m.LastName = lastName;
-                    m.PublicID = Guid.NewGuid();
+                    m.PublicID = publicId;
+                    m.Folder = folder;
                     dc.Members.InsertOnSubmit(m);
                     dc.SubmitChanges();
                     return true;
