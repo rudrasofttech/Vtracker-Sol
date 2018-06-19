@@ -1,74 +1,82 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="simpleupload.aspx.cs" Inherits="simpleupload" %>
 
 <!-- The file upload form used as target for the file upload widget -->
-    <div id="fileupload">
-        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-        <div class="row-fluid fileupload-buttonbar">
-            <div class="span5">
-                <!-- The fileinput-button span is used to style the file input field as button -->
-                <span class="btn btn-action fileinput-button"><i class="icon-plus"></i><span>Add files...</span>
-                    <!--Enable selecting a complete folder structure, this is currently only supported by Google Chrome-->
-                    <input type="file" name="files[]" multiple />
-                </span>
-                <button type="submit" class="btn btn-action start">
-                    <i class="icon-upload"></i><span>Start</span>
-                </button>
-                <button type="reset" class="btn btn-action cancel">
-                    <i class="icon-ban-circle"></i><span>Cancel</span>
-                </button>
-            </div>
-            <!-- The global progress information -->
-            <div class="span5 fileupload-progress fade">
-                <!-- The global progress bar -->
-                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0"
-                    aria-valuemax="100">
-                    <div class="bar" style="width: 0%;">
-                    </div>
-                </div>
-                <!-- The extended global progress information -->
-                <div class="progress-extended">
-                    &nbsp;</div>
-            </div>
+<div id="fileupload">
+    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+    <div class="row-fluid fileupload-buttonbar">
+        <div class="span12">
+            <!-- The fileinput-button span is used to style the file input field as button -->
+            <span class="btn btn-action fileinput-button"><i class="icon-plus"></i><span>Add files...</span>
+                <!--Enable selecting a complete folder structure, this is currently only supported by Google Chrome-->
+                <input type="file" name="files[]" multiple />
+            </span>
+            <button type="submit" class="btn btn-action start">
+                <i class="icon-upload"></i><span>Start</span>
+            </button>
+            <button type="reset" class="btn btn-action cancel">
+                <i class="icon-ban-circle"></i><span>Cancel</span>
+            </button>
         </div>
-        <div class="fileupload-loading">
-        </div>
-        <div id="dropzone" class="fade well">
-            Drop files here</div>
-        <br />
-        <table role="presentation" class="table table-striped">
-            <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
-            </tbody>
-        </table>
     </div>
+    <div class="row-fluid">
+        <!-- The global progress information -->
+        <div class="span12 fileupload-progress fade">
+            <!-- The global progress bar -->
+            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0"
+                aria-valuemax="100">
+                <div class="bar" style="width: 0%;">
+                </div>
+            </div>
+            <!-- The extended global progress information -->
+            <div class="progress-extended">
+                &nbsp;
+            </div>
+        </div>
+    </div>
+    <div class="fileupload-loading">
+    </div>
+    <!--<div id="dropzone" class="fade well">
+            Drop files here</div>-->
+    <br />
+    <table role="presentation" class="table">
+        <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
+        </tbody>
+    </table>
+</div>
 
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
-        <td class="preview"><span></span></td>
-        <td class="name"><span>{%=file.name%}</span></td>
-        <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-        {% if (file.error) { %}
-            <td class="error" colspan="2"><span class="label label-important">
-            {%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
-        {% } else if (o.files.valid && !i) { %}
-            <td>
-                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
-            </td>
-            <td class="start">{% if (!o.options.autoUpload) { %}
-                <button class="btn btn-action">
-                    <i class="icon-upload"></i>
-                    <span>{%=locale.fileupload.start%}</span>
-                </button>
-            {% } %}</td>
-        {% } else { %}
-            <td colspan="2"></td>
-        {% } %}
-        <td class="cancel">{% if (!i) { %}
-            <button class="btn btn-action">
-                <i class="icon-ban-circle"></i>
-                <span>{%=locale.fileupload.cancel%}</span>
-            </button>
-        {% } %}</td>
+        <td>
+            <div class="row-fluid">
+                <div class="span9 name"> <span>{%=file.name%}</span> <span>{%=o.formatFileSize(file.size)%}</span></div>
+                <div class="span3">
+                {% if (o.files.valid && !i) { %}
+                    <div class="start"><button class="btn btn-action">
+                        <i class="icon-upload"></i>
+                    </button></div>
+                {% } %}
+                {% if (!i) { %}
+                    <div class="cancel"><button class="btn btn-action">
+                        <i class="icon-ban-circle"></i>
+                    </button></div>
+                {% } %}
+                </div>
+            </div>
+            {% if (file.error) { %}
+            <div class="row-fluid">
+                <div class="span12 error">
+                    <span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}
+                </div>
+            </div>
+            {% } else if (o.files.valid && !i) { %}
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
+                </div>
+            </div>
+            {% } %}
+        </td>
     </tr>
 {% } %}
 </script>
@@ -141,47 +149,47 @@
         // Options
         //
         var maxChunkSize = parseInt('<%= MaxChunkSize %>'),
-        enableChunkedUploads = '<%= EnableChunkedUploads %>'.toLowerCase() === 'true' && navigator.userAgent.indexOf('Opera') == -1,
-        resume = enableChunkedUploads && '<%= Resume %>'.toLowerCase() === 'true',
-        handler = 'handlers/Upload.ashx?token=' + '<%= Token  %>' + '&maxChunkSize=' + maxChunkSize + '&resume=' + resume,
-        acceptFileTypes = new RegExp('(\.|\/)(' + '<%= AcceptFileTypes %>' + ')', 'i'),
-        sequentialUploads = '<%= SequentialUploads %>'.toLowerCase() === 'true',
-        autoRetry = '<%= AutoRetry %>'.toLowerCase() === 'true',
-        maxRetries = parseInt('<%= MaxRetries %>'),
-        retryTimeout = parseInt('<%= RetryTimeout %>'), // in Milliseconds!
-        limitConcurrentUploads = parseInt('<%= LimitConcurrentUploads %>'),
-        forceIframeTransport = '<%= ForceIframeTransport %>'.toLowerCase() === 'true',
-        autoUpload = '<%= AutoUpload %>'.toLowerCase() === 'true',
-        maxNumberOfFiles = parseInt('<%= MaxNumberOfFiles %>'),
-        maxFileSize = parseInt('<%= MaxFileSize %>'),
-        minFileSize = parseInt('<%= MinFileSize %>'),
-        previewAsCanvas = '<%= PreviewAsCanvas %>'.toLowerCase() === 'true',
+            enableChunkedUploads = '<%= EnableChunkedUploads %>'.toLowerCase() === 'true' && navigator.userAgent.indexOf('Opera') == -1,
+            resume = enableChunkedUploads && '<%= Resume %>'.toLowerCase() === 'true',
+            handler = 'handlers/Upload.ashx?token=' + '<%= Token  %>' + '&maxChunkSize=' + maxChunkSize + '&resume=' + resume,
+            acceptFileTypes = new RegExp('(\.|\/)(' + '<%= AcceptFileTypes %>' + ')', 'i'),
+            sequentialUploads = '<%= SequentialUploads %>'.toLowerCase() === 'true',
+            autoRetry = '<%= AutoRetry %>'.toLowerCase() === 'true',
+            maxRetries = parseInt('<%= MaxRetries %>'),
+            retryTimeout = parseInt('<%= RetryTimeout %>'), // in Milliseconds!
+            limitConcurrentUploads = parseInt('<%= LimitConcurrentUploads %>'),
+            forceIframeTransport = '<%= ForceIframeTransport %>'.toLowerCase() === 'true',
+            autoUpload = '<%= AutoUpload %>'.toLowerCase() === 'true',
+            maxNumberOfFiles = parseInt('<%= MaxNumberOfFiles %>'),
+            maxFileSize = parseInt('<%= MaxFileSize %>'),
+            minFileSize = parseInt('<%= MinFileSize %>'),
+            previewAsCanvas = '<%= PreviewAsCanvas %>'.toLowerCase() === 'true',
 
-        //
-        // Events
-        //
-        fileuploadadd = '<%= OnFileUploadAdd %>',
-        fileuploadsubmit = '<%= OnFileUploadSubmit %>',
-        fileuploadsend = '<%= OnFileUploadSend %>',
-        fileuploaddone = '<%= OnFileUploadDone %>',
-        fileuploadfail = '<%= OnFileUploadFail %>',
-        fileuploadalways = '<%= OnFileUploadAlways %>',
-        fileuploadprogress = '<%= OnFileUploadProgress %>',
-        fileuploadprogressall = '<%= OnFileUploadProgressAll %>',
-        fileuploadstart = '<%= OnFileUploadStart %>',
-        fileuploadstop = '<%= OnFileUploadStop %>',
-        fileuploadchange = '<%= OnFileUploadChange %>',
-        fileuploadpaste = '<%= OnFileUploadPaste %>',
-        fileuploaddrop = '<%= OnFileUploadDrop %>',
-        fileuploaddragover = '<%= OnFileUploadDragOver %>',
-        fileuploaddestroy = '<%= OnFileUploadDestroy %>',
-        fileuploaddestroyed = '<%= OnFileUploadDestroyed %>',
-        fileuploadadded = '<%= OnFileUploadAdded %>',
-        fileuploadsent = '<%= OnFileUploadSent %>',
-        fileuploadcompleted = '<%= OnFileUploadCompleted %>',
-        fileuploadfailed = '<%= OnFileUploadFailed %>',
-        fileuploadstarted = '<%= OnFileUploadStarted %>',
-        fileuploadstopped = '<%= OnFileUploadStopped %>';
+            //
+            // Events
+            //
+            fileuploadadd = '<%= OnFileUploadAdd %>',
+            fileuploadsubmit = '<%= OnFileUploadSubmit %>',
+            fileuploadsend = '<%= OnFileUploadSend %>',
+            fileuploaddone = '<%= OnFileUploadDone %>',
+            fileuploadfail = '<%= OnFileUploadFail %>',
+            fileuploadalways = '<%= OnFileUploadAlways %>',
+            fileuploadprogress = '<%= OnFileUploadProgress %>',
+            fileuploadprogressall = '<%= OnFileUploadProgressAll %>',
+            fileuploadstart = '<%= OnFileUploadStart %>',
+            fileuploadstop = '<%= OnFileUploadStop %>',
+            fileuploadchange = '<%= OnFileUploadChange %>',
+            fileuploadpaste = '<%= OnFileUploadPaste %>',
+            fileuploaddrop = '<%= OnFileUploadDrop %>',
+            fileuploaddragover = '<%= OnFileUploadDragOver %>',
+            fileuploaddestroy = '<%= OnFileUploadDestroy %>',
+            fileuploaddestroyed = '<%= OnFileUploadDestroyed %>',
+            fileuploadadded = '<%= OnFileUploadAdded %>',
+            fileuploadsent = '<%= OnFileUploadSent %>',
+            fileuploadcompleted = '<%= OnFileUploadCompleted %>',
+            fileuploadfailed = '<%= OnFileUploadFailed %>',
+            fileuploadstarted = '<%= OnFileUploadStarted %>',
+            fileuploadstopped = '<%= OnFileUploadStopped %>';
 
         //
         // Initialize the jQuery File Upload widget
@@ -239,22 +247,22 @@
                         retryTimeout: retryTimeout, // Milliseconds!
                         fail: function (e, data) {
                             var fu = $(this).data('fileupload'),
-                        retries = data.context.data('retries') || 0,
-                        retry = function () {
-                            $.getJSON(handler, { f: data.files[0].name })
-                                .done(function (file) {
-                                    data.uploadedBytes = file && file.size;
-                                    // clear the previous data
-                                    data.data = null;
-                                    data.submit();
-                                })
-                                .fail(function () {
-                                    fu._trigger('fail', e, data);
-                                });
-                        };
+                                retries = data.context.data('retries') || 0,
+                                retry = function () {
+                                    $.getJSON(handler, { f: data.files[0].name })
+                                        .done(function (file) {
+                                            data.uploadedBytes = file && file.size;
+                                            // clear the previous data
+                                            data.data = null;
+                                            data.submit();
+                                        })
+                                        .fail(function () {
+                                            fu._trigger('fail', e, data);
+                                        });
+                                };
                             if (data.errorThrown !== 'abort' &&
-                            data.errorThrown !== 'uploadedBytes' &&
-                            retries < fu.options.maxRetries) {
+                                data.errorThrown !== 'uploadedBytes' &&
+                                retries < fu.options.maxRetries) {
                                 //alert(retries);
                                 retries++;
                                 data.context.data('retries', retries);
@@ -286,10 +294,10 @@
         // Enable iframe cross-domain access via redirect option
         //
         $('#fileupload').fileupload(
-                    'option',
-                    'redirect',
-                    window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s')
-            );
+            'option',
+            'redirect',
+            window.location.href.replace(/\/[^\/]*$/, '/cors/result.html?%s')
+        );
 
         //
         // Load existing files
@@ -299,7 +307,7 @@
             $.getJSON(handler, function (result) {
                 if (result && result.length) {
                     $(that).fileupload('option', 'done')
-                .call(that, null, { result: result });
+                        .call(that, null, { result: result });
                 }
             });
         });
@@ -311,9 +319,13 @@
         $('#fileupload')
             .bind('fileuploadadd', function (e, data) {
                 typeof window[fileuploadadd] == 'function' && window[fileuploadadd](e, data);
+                console.log(e);
+                console.log(data);
+                alert("fileuploadadd");
             })
             .bind('fileuploadsubmit', function (e, data) {
                 typeof window[fileuploadsubmit] == 'function' && window[fileuploadsubmit](e, data);
+                alert("fileuploadsubmit");
             })
             .bind('fileuploadsend', function (e, data) {
                 typeof window[fileuploadsend] == 'function' && window[fileuploadsend](e, data);

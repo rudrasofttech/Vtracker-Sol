@@ -29,21 +29,21 @@ public partial class FileParkingDataContext : System.Data.Linq.DataContext
 	
   #region Extensibility Method Definitions
   partial void OnCreated();
-  partial void InsertTransfer(Transfer instance);
-  partial void UpdateTransfer(Transfer instance);
-  partial void DeleteTransfer(Transfer instance);
-  partial void InsertParkedFile(ParkedFile instance);
-  partial void UpdateParkedFile(ParkedFile instance);
-  partial void DeleteParkedFile(ParkedFile instance);
-  partial void InsertRecipient(Recipient instance);
-  partial void UpdateRecipient(Recipient instance);
-  partial void DeleteRecipient(Recipient instance);
+  partial void InsertDownloadLink(DownloadLink instance);
+  partial void UpdateDownloadLink(DownloadLink instance);
+  partial void DeleteDownloadLink(DownloadLink instance);
+  partial void InsertPlan(Plan instance);
+  partial void UpdatePlan(Plan instance);
+  partial void DeletePlan(Plan instance);
   partial void InsertEmailMessage(EmailMessage instance);
   partial void UpdateEmailMessage(EmailMessage instance);
   partial void DeleteEmailMessage(EmailMessage instance);
   partial void InsertMember(Member instance);
   partial void UpdateMember(Member instance);
   partial void DeleteMember(Member instance);
+  partial void InsertMemberPlan(MemberPlan instance);
+  partial void UpdateMemberPlan(MemberPlan instance);
+  partial void DeleteMemberPlan(MemberPlan instance);
   #endregion
 	
 	public FileParkingDataContext() : 
@@ -76,27 +76,19 @@ public partial class FileParkingDataContext : System.Data.Linq.DataContext
 		OnCreated();
 	}
 	
-	public System.Data.Linq.Table<Transfer> Transfers
+	public System.Data.Linq.Table<DownloadLink> DownloadLinks
 	{
 		get
 		{
-			return this.GetTable<Transfer>();
+			return this.GetTable<DownloadLink>();
 		}
 	}
 	
-	public System.Data.Linq.Table<ParkedFile> ParkedFiles
+	public System.Data.Linq.Table<Plan> Plans
 	{
 		get
 		{
-			return this.GetTable<ParkedFile>();
-		}
-	}
-	
-	public System.Data.Linq.Table<Recipient> Recipients
-	{
-		get
-		{
-			return this.GetTable<Recipient>();
+			return this.GetTable<Plan>();
 		}
 	}
 	
@@ -115,311 +107,31 @@ public partial class FileParkingDataContext : System.Data.Linq.DataContext
 			return this.GetTable<Member>();
 		}
 	}
-}
-
-[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Transfer")]
-public partial class Transfer : INotifyPropertyChanging, INotifyPropertyChanged
-{
 	
-	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-	
-	private int _Id;
-	
-	private string _Message;
-	
-	private string _Subject;
-	
-	private int _MemberID;
-	
-	private int _RecipientID;
-	
-	private System.DateTime _DateCreated;
-	
-	private System.Nullable<System.DateTime> _DateRead;
-	
-	private EntityRef<Recipient> _Recipient;
-	
-	private EntityRef<Member> _Member;
-	
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnMessageChanging(string value);
-    partial void OnMessageChanged();
-    partial void OnSubjectChanging(string value);
-    partial void OnSubjectChanged();
-    partial void OnMemberIDChanging(int value);
-    partial void OnMemberIDChanged();
-    partial void OnRecipientIDChanging(int value);
-    partial void OnRecipientIDChanged();
-    partial void OnDateCreatedChanging(System.DateTime value);
-    partial void OnDateCreatedChanged();
-    partial void OnDateReadChanging(System.Nullable<System.DateTime> value);
-    partial void OnDateReadChanged();
-    #endregion
-	
-	public Transfer()
-	{
-		this._Recipient = default(EntityRef<Recipient>);
-		this._Member = default(EntityRef<Member>);
-		OnCreated();
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-	public int Id
+	public System.Data.Linq.Table<MemberPlan> MemberPlans
 	{
 		get
 		{
-			return this._Id;
-		}
-		set
-		{
-			if ((this._Id != value))
-			{
-				this.OnIdChanging(value);
-				this.SendPropertyChanging();
-				this._Id = value;
-				this.SendPropertyChanged("Id");
-				this.OnIdChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Message", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
-	public string Message
-	{
-		get
-		{
-			return this._Message;
-		}
-		set
-		{
-			if ((this._Message != value))
-			{
-				this.OnMessageChanging(value);
-				this.SendPropertyChanging();
-				this._Message = value;
-				this.SendPropertyChanged("Message");
-				this.OnMessageChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Subject", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
-	public string Subject
-	{
-		get
-		{
-			return this._Subject;
-		}
-		set
-		{
-			if ((this._Subject != value))
-			{
-				this.OnSubjectChanging(value);
-				this.SendPropertyChanging();
-				this._Subject = value;
-				this.SendPropertyChanged("Subject");
-				this.OnSubjectChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MemberID", DbType="Int NOT NULL")]
-	public int MemberID
-	{
-		get
-		{
-			return this._MemberID;
-		}
-		set
-		{
-			if ((this._MemberID != value))
-			{
-				if (this._Member.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnMemberIDChanging(value);
-				this.SendPropertyChanging();
-				this._MemberID = value;
-				this.SendPropertyChanged("MemberID");
-				this.OnMemberIDChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RecipientID", DbType="Int NOT NULL")]
-	public int RecipientID
-	{
-		get
-		{
-			return this._RecipientID;
-		}
-		set
-		{
-			if ((this._RecipientID != value))
-			{
-				if (this._Recipient.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnRecipientIDChanging(value);
-				this.SendPropertyChanging();
-				this._RecipientID = value;
-				this.SendPropertyChanged("RecipientID");
-				this.OnRecipientIDChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime NOT NULL")]
-	public System.DateTime DateCreated
-	{
-		get
-		{
-			return this._DateCreated;
-		}
-		set
-		{
-			if ((this._DateCreated != value))
-			{
-				this.OnDateCreatedChanging(value);
-				this.SendPropertyChanging();
-				this._DateCreated = value;
-				this.SendPropertyChanged("DateCreated");
-				this.OnDateCreatedChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateRead", DbType="DateTime")]
-	public System.Nullable<System.DateTime> DateRead
-	{
-		get
-		{
-			return this._DateRead;
-		}
-		set
-		{
-			if ((this._DateRead != value))
-			{
-				this.OnDateReadChanging(value);
-				this.SendPropertyChanging();
-				this._DateRead = value;
-				this.SendPropertyChanged("DateRead");
-				this.OnDateReadChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Recipient_Transfer", Storage="_Recipient", ThisKey="RecipientID", OtherKey="Id", IsForeignKey=true)]
-	public Recipient Recipient
-	{
-		get
-		{
-			return this._Recipient.Entity;
-		}
-		set
-		{
-			Recipient previousValue = this._Recipient.Entity;
-			if (((previousValue != value) 
-						|| (this._Recipient.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._Recipient.Entity = null;
-					previousValue.Transfers.Remove(this);
-				}
-				this._Recipient.Entity = value;
-				if ((value != null))
-				{
-					value.Transfers.Add(this);
-					this._RecipientID = value.Id;
-				}
-				else
-				{
-					this._RecipientID = default(int);
-				}
-				this.SendPropertyChanged("Recipient");
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_Transfer", Storage="_Member", ThisKey="MemberID", OtherKey="Id", IsForeignKey=true)]
-	public Member Member
-	{
-		get
-		{
-			return this._Member.Entity;
-		}
-		set
-		{
-			Member previousValue = this._Member.Entity;
-			if (((previousValue != value) 
-						|| (this._Member.HasLoadedOrAssignedValue == false)))
-			{
-				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._Member.Entity = null;
-					previousValue.Transfers.Remove(this);
-				}
-				this._Member.Entity = value;
-				if ((value != null))
-				{
-					value.Transfers.Add(this);
-					this._MemberID = value.Id;
-				}
-				else
-				{
-					this._MemberID = default(int);
-				}
-				this.SendPropertyChanged("Member");
-			}
-		}
-	}
-	
-	public event PropertyChangingEventHandler PropertyChanging;
-	
-	public event PropertyChangedEventHandler PropertyChanged;
-	
-	protected virtual void SendPropertyChanging()
-	{
-		if ((this.PropertyChanging != null))
-		{
-			this.PropertyChanging(this, emptyChangingEventArgs);
-		}
-	}
-	
-	protected virtual void SendPropertyChanged(String propertyName)
-	{
-		if ((this.PropertyChanged != null))
-		{
-			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			return this.GetTable<MemberPlan>();
 		}
 	}
 }
 
-[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ParkedFile")]
-public partial class ParkedFile : INotifyPropertyChanging, INotifyPropertyChanged
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.DownloadLink")]
+public partial class DownloadLink : INotifyPropertyChanging, INotifyPropertyChanged
 {
 	
 	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 	
 	private System.Guid _Id;
 	
-	private string _FileName;
+	private int _MemberID;
 	
 	private System.DateTime _DateCreated;
 	
-	private System.DateTime _ExpiryDate;
+	private string _FileName;
 	
-	private int _MemberID;
+	private string _Password;
 	
 	private EntityRef<Member> _Member;
 	
@@ -429,17 +141,17 @@ public partial class ParkedFile : INotifyPropertyChanging, INotifyPropertyChange
     partial void OnCreated();
     partial void OnIdChanging(System.Guid value);
     partial void OnIdChanged();
-    partial void OnFileNameChanging(string value);
-    partial void OnFileNameChanged();
-    partial void OnDateCreatedChanging(System.DateTime value);
-    partial void OnDateCreatedChanged();
-    partial void OnExpiryDateChanging(System.DateTime value);
-    partial void OnExpiryDateChanged();
     partial void OnMemberIDChanging(int value);
     partial void OnMemberIDChanged();
+    partial void OnDateCreatedChanging(System.DateTime value);
+    partial void OnDateCreatedChanged();
+    partial void OnFileNameChanging(string value);
+    partial void OnFileNameChanged();
+    partial void OnPasswordChanging(string value);
+    partial void OnPasswordChanged();
     #endregion
 	
-	public ParkedFile()
+	public DownloadLink()
 	{
 		this._Member = default(EntityRef<Member>);
 		OnCreated();
@@ -465,66 +177,6 @@ public partial class ParkedFile : INotifyPropertyChanging, INotifyPropertyChange
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FileName", DbType="NVarChar(1000) NOT NULL", CanBeNull=false)]
-	public string FileName
-	{
-		get
-		{
-			return this._FileName;
-		}
-		set
-		{
-			if ((this._FileName != value))
-			{
-				this.OnFileNameChanging(value);
-				this.SendPropertyChanging();
-				this._FileName = value;
-				this.SendPropertyChanged("FileName");
-				this.OnFileNameChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime NOT NULL")]
-	public System.DateTime DateCreated
-	{
-		get
-		{
-			return this._DateCreated;
-		}
-		set
-		{
-			if ((this._DateCreated != value))
-			{
-				this.OnDateCreatedChanging(value);
-				this.SendPropertyChanging();
-				this._DateCreated = value;
-				this.SendPropertyChanged("DateCreated");
-				this.OnDateCreatedChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExpiryDate", DbType="DateTime NOT NULL")]
-	public System.DateTime ExpiryDate
-	{
-		get
-		{
-			return this._ExpiryDate;
-		}
-		set
-		{
-			if ((this._ExpiryDate != value))
-			{
-				this.OnExpiryDateChanging(value);
-				this.SendPropertyChanging();
-				this._ExpiryDate = value;
-				this.SendPropertyChanged("ExpiryDate");
-				this.OnExpiryDateChanged();
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MemberID", DbType="Int NOT NULL")]
 	public int MemberID
 	{
@@ -549,7 +201,67 @@ public partial class ParkedFile : INotifyPropertyChanging, INotifyPropertyChange
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_ParkedFile", Storage="_Member", ThisKey="MemberID", OtherKey="Id", IsForeignKey=true)]
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="Date NOT NULL")]
+	public System.DateTime DateCreated
+	{
+		get
+		{
+			return this._DateCreated;
+		}
+		set
+		{
+			if ((this._DateCreated != value))
+			{
+				this.OnDateCreatedChanging(value);
+				this.SendPropertyChanging();
+				this._DateCreated = value;
+				this.SendPropertyChanged("DateCreated");
+				this.OnDateCreatedChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FileName", DbType="NVarChar(500) NOT NULL", CanBeNull=false)]
+	public string FileName
+	{
+		get
+		{
+			return this._FileName;
+		}
+		set
+		{
+			if ((this._FileName != value))
+			{
+				this.OnFileNameChanging(value);
+				this.SendPropertyChanging();
+				this._FileName = value;
+				this.SendPropertyChanged("FileName");
+				this.OnFileNameChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Password", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+	public string Password
+	{
+		get
+		{
+			return this._Password;
+		}
+		set
+		{
+			if ((this._Password != value))
+			{
+				this.OnPasswordChanging(value);
+				this.SendPropertyChanging();
+				this._Password = value;
+				this.SendPropertyChanged("Password");
+				this.OnPasswordChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_DownloadLink", Storage="_Member", ThisKey="MemberID", OtherKey="Id", IsForeignKey=true)]
 	public Member Member
 	{
 		get
@@ -566,12 +278,12 @@ public partial class ParkedFile : INotifyPropertyChanging, INotifyPropertyChange
 				if ((previousValue != null))
 				{
 					this._Member.Entity = null;
-					previousValue.ParkedFiles.Remove(this);
+					previousValue.DownloadLinks.Remove(this);
 				}
 				this._Member.Entity = value;
 				if ((value != null))
 				{
-					value.ParkedFiles.Add(this);
+					value.DownloadLinks.Add(this);
 					this._MemberID = value.Id;
 				}
 				else
@@ -604,66 +316,64 @@ public partial class ParkedFile : INotifyPropertyChanging, INotifyPropertyChange
 	}
 }
 
-[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Recipient")]
-public partial class Recipient : INotifyPropertyChanging, INotifyPropertyChanged
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[Plan]")]
+public partial class Plan : INotifyPropertyChanging, INotifyPropertyChanged
 {
 	
 	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 	
-	private int _Id;
+	private System.Guid _ID;
 	
 	private string _Name;
 	
-	private string _Email;
+	private int _Term;
 	
-	private int _MemberID;
+	private decimal _Price;
 	
-	private EntitySet<Transfer> _Transfers;
-	
-	private EntityRef<Member> _Member;
+	private int _Limit;
 	
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
+    partial void OnIDChanging(System.Guid value);
+    partial void OnIDChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
-    partial void OnEmailChanging(string value);
-    partial void OnEmailChanged();
-    partial void OnMemberIDChanging(int value);
-    partial void OnMemberIDChanged();
+    partial void OnTermChanging(int value);
+    partial void OnTermChanged();
+    partial void OnPriceChanging(decimal value);
+    partial void OnPriceChanged();
+    partial void OnLimitChanging(int value);
+    partial void OnLimitChanged();
     #endregion
 	
-	public Recipient()
+	public Plan()
 	{
-		this._Transfers = new EntitySet<Transfer>(new Action<Transfer>(this.attach_Transfers), new Action<Transfer>(this.detach_Transfers));
-		this._Member = default(EntityRef<Member>);
 		OnCreated();
 	}
 	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-	public int Id
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+	public System.Guid ID
 	{
 		get
 		{
-			return this._Id;
+			return this._ID;
 		}
 		set
 		{
-			if ((this._Id != value))
+			if ((this._ID != value))
 			{
-				this.OnIdChanging(value);
+				this.OnIDChanging(value);
 				this.SendPropertyChanging();
-				this._Id = value;
-				this.SendPropertyChanged("Id");
-				this.OnIdChanged();
+				this._ID = value;
+				this.SendPropertyChanged("ID");
+				this.OnIDChanged();
 			}
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(200) NOT NULL", CanBeNull=false)]
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
 	public string Name
 	{
 		get
@@ -683,93 +393,62 @@ public partial class Recipient : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Email", DbType="NVarChar(250) NOT NULL", CanBeNull=false)]
-	public string Email
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Term", DbType="Int NOT NULL")]
+	public int Term
 	{
 		get
 		{
-			return this._Email;
+			return this._Term;
 		}
 		set
 		{
-			if ((this._Email != value))
+			if ((this._Term != value))
 			{
-				this.OnEmailChanging(value);
+				this.OnTermChanging(value);
 				this.SendPropertyChanging();
-				this._Email = value;
-				this.SendPropertyChanged("Email");
-				this.OnEmailChanged();
+				this._Term = value;
+				this.SendPropertyChanged("Term");
+				this.OnTermChanged();
 			}
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MemberID", DbType="Int NOT NULL")]
-	public int MemberID
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Price", DbType="Money NOT NULL")]
+	public decimal Price
 	{
 		get
 		{
-			return this._MemberID;
+			return this._Price;
 		}
 		set
 		{
-			if ((this._MemberID != value))
+			if ((this._Price != value))
 			{
-				if (this._Member.HasLoadedOrAssignedValue)
-				{
-					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-				}
-				this.OnMemberIDChanging(value);
+				this.OnPriceChanging(value);
 				this.SendPropertyChanging();
-				this._MemberID = value;
-				this.SendPropertyChanged("MemberID");
-				this.OnMemberIDChanged();
+				this._Price = value;
+				this.SendPropertyChanged("Price");
+				this.OnPriceChanged();
 			}
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Recipient_Transfer", Storage="_Transfers", ThisKey="Id", OtherKey="RecipientID")]
-	public EntitySet<Transfer> Transfers
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Limit", DbType="Int NOT NULL")]
+	public int Limit
 	{
 		get
 		{
-			return this._Transfers;
+			return this._Limit;
 		}
 		set
 		{
-			this._Transfers.Assign(value);
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_Recipient", Storage="_Member", ThisKey="MemberID", OtherKey="Id", IsForeignKey=true)]
-	public Member Member
-	{
-		get
-		{
-			return this._Member.Entity;
-		}
-		set
-		{
-			Member previousValue = this._Member.Entity;
-			if (((previousValue != value) 
-						|| (this._Member.HasLoadedOrAssignedValue == false)))
+			if ((this._Limit != value))
 			{
+				this.OnLimitChanging(value);
 				this.SendPropertyChanging();
-				if ((previousValue != null))
-				{
-					this._Member.Entity = null;
-					previousValue.Recipients.Remove(this);
-				}
-				this._Member.Entity = value;
-				if ((value != null))
-				{
-					value.Recipients.Add(this);
-					this._MemberID = value.Id;
-				}
-				else
-				{
-					this._MemberID = default(int);
-				}
-				this.SendPropertyChanged("Member");
+				this._Limit = value;
+				this.SendPropertyChanged("Limit");
+				this.OnLimitChanged();
 			}
 		}
 	}
@@ -792,18 +471,6 @@ public partial class Recipient : INotifyPropertyChanging, INotifyPropertyChanged
 		{
 			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
-	}
-	
-	private void attach_Transfers(Transfer entity)
-	{
-		this.SendPropertyChanging();
-		entity.Recipient = this;
-	}
-	
-	private void detach_Transfers(Transfer entity)
-	{
-		this.SendPropertyChanging();
-		entity.Recipient = null;
 	}
 }
 
@@ -845,6 +512,10 @@ public partial class EmailMessage : INotifyPropertyChanging, INotifyPropertyChan
 	
 	private System.DateTime _LastAttempt;
 	
+	private int _MemberID;
+	
+	private EntityRef<Member> _Member;
+	
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -881,10 +552,13 @@ public partial class EmailMessage : INotifyPropertyChanging, INotifyPropertyChan
     partial void OnFromNameChanged();
     partial void OnLastAttemptChanging(System.DateTime value);
     partial void OnLastAttemptChanged();
+    partial void OnMemberIDChanging(int value);
+    partial void OnMemberIDChanged();
     #endregion
 	
 	public EmailMessage()
 	{
+		this._Member = default(EntityRef<Member>);
 		OnCreated();
 	}
 	
@@ -1208,6 +882,64 @@ public partial class EmailMessage : INotifyPropertyChanging, INotifyPropertyChan
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MemberID", DbType="Int NOT NULL")]
+	public int MemberID
+	{
+		get
+		{
+			return this._MemberID;
+		}
+		set
+		{
+			if ((this._MemberID != value))
+			{
+				if (this._Member.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnMemberIDChanging(value);
+				this.SendPropertyChanging();
+				this._MemberID = value;
+				this.SendPropertyChanged("MemberID");
+				this.OnMemberIDChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_EmailMessage", Storage="_Member", ThisKey="MemberID", OtherKey="Id", IsForeignKey=true)]
+	public Member Member
+	{
+		get
+		{
+			return this._Member.Entity;
+		}
+		set
+		{
+			Member previousValue = this._Member.Entity;
+			if (((previousValue != value) 
+						|| (this._Member.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Member.Entity = null;
+					previousValue.EmailMessages.Remove(this);
+				}
+				this._Member.Entity = value;
+				if ((value != null))
+				{
+					value.EmailMessages.Add(this);
+					this._MemberID = value.Id;
+				}
+				else
+				{
+					this._MemberID = default(int);
+				}
+				this.SendPropertyChanged("Member");
+			}
+		}
+	}
+	
 	public event PropertyChangingEventHandler PropertyChanging;
 	
 	public event PropertyChangedEventHandler PropertyChanged;
@@ -1259,11 +991,11 @@ public partial class Member : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	private System.Nullable<System.DateTime> _TokenCreated;
 	
-	private EntitySet<Transfer> _Transfers;
+	private EntitySet<DownloadLink> _DownloadLinks;
 	
-	private EntitySet<ParkedFile> _ParkedFiles;
+	private EntitySet<EmailMessage> _EmailMessages;
 	
-	private EntitySet<Recipient> _Recipients;
+	private EntitySet<MemberPlan> _MemberPlans;
 	
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -1297,9 +1029,9 @@ public partial class Member : INotifyPropertyChanging, INotifyPropertyChanged
 	
 	public Member()
 	{
-		this._Transfers = new EntitySet<Transfer>(new Action<Transfer>(this.attach_Transfers), new Action<Transfer>(this.detach_Transfers));
-		this._ParkedFiles = new EntitySet<ParkedFile>(new Action<ParkedFile>(this.attach_ParkedFiles), new Action<ParkedFile>(this.detach_ParkedFiles));
-		this._Recipients = new EntitySet<Recipient>(new Action<Recipient>(this.attach_Recipients), new Action<Recipient>(this.detach_Recipients));
+		this._DownloadLinks = new EntitySet<DownloadLink>(new Action<DownloadLink>(this.attach_DownloadLinks), new Action<DownloadLink>(this.detach_DownloadLinks));
+		this._EmailMessages = new EntitySet<EmailMessage>(new Action<EmailMessage>(this.attach_EmailMessages), new Action<EmailMessage>(this.detach_EmailMessages));
+		this._MemberPlans = new EntitySet<MemberPlan>(new Action<MemberPlan>(this.attach_MemberPlans), new Action<MemberPlan>(this.detach_MemberPlans));
 		OnCreated();
 	}
 	
@@ -1543,42 +1275,42 @@ public partial class Member : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_Transfer", Storage="_Transfers", ThisKey="Id", OtherKey="MemberID")]
-	public EntitySet<Transfer> Transfers
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_DownloadLink", Storage="_DownloadLinks", ThisKey="Id", OtherKey="MemberID")]
+	public EntitySet<DownloadLink> DownloadLinks
 	{
 		get
 		{
-			return this._Transfers;
+			return this._DownloadLinks;
 		}
 		set
 		{
-			this._Transfers.Assign(value);
+			this._DownloadLinks.Assign(value);
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_ParkedFile", Storage="_ParkedFiles", ThisKey="Id", OtherKey="MemberID")]
-	public EntitySet<ParkedFile> ParkedFiles
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_EmailMessage", Storage="_EmailMessages", ThisKey="Id", OtherKey="MemberID")]
+	public EntitySet<EmailMessage> EmailMessages
 	{
 		get
 		{
-			return this._ParkedFiles;
+			return this._EmailMessages;
 		}
 		set
 		{
-			this._ParkedFiles.Assign(value);
+			this._EmailMessages.Assign(value);
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_Recipient", Storage="_Recipients", ThisKey="Id", OtherKey="MemberID")]
-	public EntitySet<Recipient> Recipients
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_MemberPlan", Storage="_MemberPlans", ThisKey="Id", OtherKey="MemberID")]
+	public EntitySet<MemberPlan> MemberPlans
 	{
 		get
 		{
-			return this._Recipients;
+			return this._MemberPlans;
 		}
 		set
 		{
-			this._Recipients.Assign(value);
+			this._MemberPlans.Assign(value);
 		}
 	}
 	
@@ -1602,40 +1334,407 @@ public partial class Member : INotifyPropertyChanging, INotifyPropertyChanged
 		}
 	}
 	
-	private void attach_Transfers(Transfer entity)
+	private void attach_DownloadLinks(DownloadLink entity)
 	{
 		this.SendPropertyChanging();
 		entity.Member = this;
 	}
 	
-	private void detach_Transfers(Transfer entity)
+	private void detach_DownloadLinks(DownloadLink entity)
 	{
 		this.SendPropertyChanging();
 		entity.Member = null;
 	}
 	
-	private void attach_ParkedFiles(ParkedFile entity)
+	private void attach_EmailMessages(EmailMessage entity)
 	{
 		this.SendPropertyChanging();
 		entity.Member = this;
 	}
 	
-	private void detach_ParkedFiles(ParkedFile entity)
+	private void detach_EmailMessages(EmailMessage entity)
 	{
 		this.SendPropertyChanging();
 		entity.Member = null;
 	}
 	
-	private void attach_Recipients(Recipient entity)
+	private void attach_MemberPlans(MemberPlan entity)
 	{
 		this.SendPropertyChanging();
 		entity.Member = this;
 	}
 	
-	private void detach_Recipients(Recipient entity)
+	private void detach_MemberPlans(MemberPlan entity)
 	{
 		this.SendPropertyChanging();
 		entity.Member = null;
+	}
+}
+
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.MemberPlan")]
+public partial class MemberPlan : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private int _ID;
+	
+	private int _MemberID;
+	
+	private System.DateTime _DateCreated;
+	
+	private System.DateTime _ExpiryDate;
+	
+	private decimal _Amount;
+	
+	private string _Name;
+	
+	private int _Term;
+	
+	private int _Limit;
+	
+	private string _TransactionCode;
+	
+	private string _TransactionDetails;
+	
+	private byte _Status;
+	
+	private System.Nullable<System.DateTime> _DateModified;
+	
+	private EntityRef<Member> _Member;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnMemberIDChanging(int value);
+    partial void OnMemberIDChanged();
+    partial void OnDateCreatedChanging(System.DateTime value);
+    partial void OnDateCreatedChanged();
+    partial void OnExpiryDateChanging(System.DateTime value);
+    partial void OnExpiryDateChanged();
+    partial void OnAmountChanging(decimal value);
+    partial void OnAmountChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnTermChanging(int value);
+    partial void OnTermChanged();
+    partial void OnLimitChanging(int value);
+    partial void OnLimitChanged();
+    partial void OnTransactionCodeChanging(string value);
+    partial void OnTransactionCodeChanged();
+    partial void OnTransactionDetailsChanging(string value);
+    partial void OnTransactionDetailsChanged();
+    partial void OnStatusChanging(byte value);
+    partial void OnStatusChanged();
+    partial void OnDateModifiedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateModifiedChanged();
+    #endregion
+	
+	public MemberPlan()
+	{
+		this._Member = default(EntityRef<Member>);
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+	public int ID
+	{
+		get
+		{
+			return this._ID;
+		}
+		set
+		{
+			if ((this._ID != value))
+			{
+				this.OnIDChanging(value);
+				this.SendPropertyChanging();
+				this._ID = value;
+				this.SendPropertyChanged("ID");
+				this.OnIDChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MemberID", DbType="Int NOT NULL")]
+	public int MemberID
+	{
+		get
+		{
+			return this._MemberID;
+		}
+		set
+		{
+			if ((this._MemberID != value))
+			{
+				if (this._Member.HasLoadedOrAssignedValue)
+				{
+					throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+				}
+				this.OnMemberIDChanging(value);
+				this.SendPropertyChanging();
+				this._MemberID = value;
+				this.SendPropertyChanged("MemberID");
+				this.OnMemberIDChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateCreated", DbType="DateTime NOT NULL")]
+	public System.DateTime DateCreated
+	{
+		get
+		{
+			return this._DateCreated;
+		}
+		set
+		{
+			if ((this._DateCreated != value))
+			{
+				this.OnDateCreatedChanging(value);
+				this.SendPropertyChanging();
+				this._DateCreated = value;
+				this.SendPropertyChanged("DateCreated");
+				this.OnDateCreatedChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExpiryDate", DbType="DateTime NOT NULL")]
+	public System.DateTime ExpiryDate
+	{
+		get
+		{
+			return this._ExpiryDate;
+		}
+		set
+		{
+			if ((this._ExpiryDate != value))
+			{
+				this.OnExpiryDateChanging(value);
+				this.SendPropertyChanging();
+				this._ExpiryDate = value;
+				this.SendPropertyChanged("ExpiryDate");
+				this.OnExpiryDateChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Money NOT NULL")]
+	public decimal Amount
+	{
+		get
+		{
+			return this._Amount;
+		}
+		set
+		{
+			if ((this._Amount != value))
+			{
+				this.OnAmountChanging(value);
+				this.SendPropertyChanging();
+				this._Amount = value;
+				this.SendPropertyChanged("Amount");
+				this.OnAmountChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+	public string Name
+	{
+		get
+		{
+			return this._Name;
+		}
+		set
+		{
+			if ((this._Name != value))
+			{
+				this.OnNameChanging(value);
+				this.SendPropertyChanging();
+				this._Name = value;
+				this.SendPropertyChanged("Name");
+				this.OnNameChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Term", DbType="Int NOT NULL")]
+	public int Term
+	{
+		get
+		{
+			return this._Term;
+		}
+		set
+		{
+			if ((this._Term != value))
+			{
+				this.OnTermChanging(value);
+				this.SendPropertyChanging();
+				this._Term = value;
+				this.SendPropertyChanged("Term");
+				this.OnTermChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Limit", DbType="Int NOT NULL")]
+	public int Limit
+	{
+		get
+		{
+			return this._Limit;
+		}
+		set
+		{
+			if ((this._Limit != value))
+			{
+				this.OnLimitChanging(value);
+				this.SendPropertyChanging();
+				this._Limit = value;
+				this.SendPropertyChanged("Limit");
+				this.OnLimitChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TransactionCode", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+	public string TransactionCode
+	{
+		get
+		{
+			return this._TransactionCode;
+		}
+		set
+		{
+			if ((this._TransactionCode != value))
+			{
+				this.OnTransactionCodeChanging(value);
+				this.SendPropertyChanging();
+				this._TransactionCode = value;
+				this.SendPropertyChanged("TransactionCode");
+				this.OnTransactionCodeChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TransactionDetails", DbType="NVarChar(2000) NOT NULL", CanBeNull=false)]
+	public string TransactionDetails
+	{
+		get
+		{
+			return this._TransactionDetails;
+		}
+		set
+		{
+			if ((this._TransactionDetails != value))
+			{
+				this.OnTransactionDetailsChanging(value);
+				this.SendPropertyChanging();
+				this._TransactionDetails = value;
+				this.SendPropertyChanged("TransactionDetails");
+				this.OnTransactionDetailsChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="TinyInt NOT NULL")]
+	public byte Status
+	{
+		get
+		{
+			return this._Status;
+		}
+		set
+		{
+			if ((this._Status != value))
+			{
+				this.OnStatusChanging(value);
+				this.SendPropertyChanging();
+				this._Status = value;
+				this.SendPropertyChanged("Status");
+				this.OnStatusChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateModified", DbType="DateTime")]
+	public System.Nullable<System.DateTime> DateModified
+	{
+		get
+		{
+			return this._DateModified;
+		}
+		set
+		{
+			if ((this._DateModified != value))
+			{
+				this.OnDateModifiedChanging(value);
+				this.SendPropertyChanging();
+				this._DateModified = value;
+				this.SendPropertyChanged("DateModified");
+				this.OnDateModifiedChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Member_MemberPlan", Storage="_Member", ThisKey="MemberID", OtherKey="Id", IsForeignKey=true)]
+	public Member Member
+	{
+		get
+		{
+			return this._Member.Entity;
+		}
+		set
+		{
+			Member previousValue = this._Member.Entity;
+			if (((previousValue != value) 
+						|| (this._Member.HasLoadedOrAssignedValue == false)))
+			{
+				this.SendPropertyChanging();
+				if ((previousValue != null))
+				{
+					this._Member.Entity = null;
+					previousValue.MemberPlans.Remove(this);
+				}
+				this._Member.Entity = value;
+				if ((value != null))
+				{
+					value.MemberPlans.Add(this);
+					this._MemberID = value.Id;
+				}
+				else
+				{
+					this._MemberID = default(int);
+				}
+				this.SendPropertyChanged("Member");
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
 	}
 }
 #pragma warning restore 1591

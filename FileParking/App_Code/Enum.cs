@@ -7,12 +7,11 @@
         Deleted = 2
     }
 
-    public enum MemberTypeType
+    public enum ParkedFileStatus
     {
-        Admin = 1,
-        Author = 2,
-        Member = 3,
-        Reader = 4
+        Uploading = 1,
+        Failed = 2,
+        Done = 3
     }
 }
 

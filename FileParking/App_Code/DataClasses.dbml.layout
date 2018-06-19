@@ -1,63 +1,56 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 10.125" name="DataClasses">
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 12.125" name="DataClasses">
   <DataContextMoniker Name="/FileParkingDataContext" />
   <nestedChildShapes>
-    <classShape Id="5bfdb621-5d9b-4d55-824a-157a72df3df2" absoluteBounds="6.25, 3.25, 2, 2.1554996744791666">
-      <DataClassMoniker Name="/FileParkingDataContext/Transfer" />
+    <classShape Id="3f0f540a-ed59-4f83-ac44-1502da23f3d4" absoluteBounds="3.5, 1.375, 2, 1.7708968098958329">
+      <DataClassMoniker Name="/FileParkingDataContext/DownloadLink" />
       <nestedChildShapes>
-        <elementListCompartment Id="7e39ea04-2a59-47f0-991e-c6a1d42b3fac" absoluteBounds="6.265, 3.71, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="690e8ed9-0961-4e51-bc2c-e98ddf4b4446" absoluteBounds="3.515, 1.835, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="36ab06ef-c365-4bc2-aa28-becd5405b209" absoluteBounds="3.5, 5, 2, 1.7708968098958327">
-      <DataClassMoniker Name="/FileParkingDataContext/ParkedFile" />
+    <classShape Id="33b6b8ae-5147-4ee6-bdd3-2ed832aebd74" absoluteBounds="6.75, 0.75, 2, 1.7708968098958329">
+      <DataClassMoniker Name="/FileParkingDataContext/Plan" />
       <nestedChildShapes>
-        <elementListCompartment Id="4f29e345-07e3-4688-ac92-a1d3e7dffd3b" absoluteBounds="3.515, 5.46, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="b8bef655-b339-4b26-8a1c-0f9ff815138b" absoluteBounds="6.765, 1.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="822dac1b-6b86-4bd7-b557-355972981d28" absoluteBounds="3.5, 2.625, 2, 1.5785953776041666">
-      <DataClassMoniker Name="/FileParkingDataContext/Recipient" />
-      <nestedChildShapes>
-        <elementListCompartment Id="692f0005-dd58-4719-a02f-a4d04124727e" absoluteBounds="3.515, 3.085, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
-    <associationConnector edgePoints="[(5.5 : 3.72679768880208); (6.25 : 3.72679768880208)]" fixedFrom="NotFixed" fixedTo="NotFixed">
-      <AssociationMoniker Name="/FileParkingDataContext/Recipient/Recipient_Transfer" />
-      <nodes>
-        <classShapeMoniker Id="822dac1b-6b86-4bd7-b557-355972981d28" />
-        <classShapeMoniker Id="5bfdb621-5d9b-4d55-824a-157a72df3df2" />
-      </nodes>
-    </associationConnector>
-    <classShape Id="6e1978f6-bdd7-4047-95e2-6351c91145e8" absoluteBounds="6.25, 6, 2, 3.8862125651041666">
+    <classShape Id="4b21bc9f-2e51-4300-8821-fcf86dd1f91c" absoluteBounds="3.5, 7.75, 2, 4.0785139973958318">
       <DataClassMoniker Name="/FileParkingDataContext/EmailMessage" />
       <nestedChildShapes>
-        <elementListCompartment Id="bdb9bb37-0dcb-4bc4-be11-46f520b0d0ae" absoluteBounds="6.265, 6.46, 1.9700000000000002, 3.3262125651041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="9930e13c-c978-4bc4-9aa2-7d12a3159e92" absoluteBounds="3.515, 8.21, 1.9700000000000002, 3.518513997395833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="1531aae8-6f76-41ad-9de6-2e40cd29f54d" absoluteBounds="0.875, 3.875, 2, 3.1170068359375">
+    <classShape Id="14e0fcd0-ec64-433c-b8cc-e322224cf882" absoluteBounds="0.75, 5, 2, 3.1170068359375014">
       <DataClassMoniker Name="/FileParkingDataContext/Member" />
       <nestedChildShapes>
-        <elementListCompartment Id="41c61495-9115-449a-8104-4c176ead9503" absoluteBounds="0.89, 4.335, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="04144ce8-bc5f-4040-b12d-d145af315b17" absoluteBounds="0.765, 5.46, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(2.875 : 4.60179768880208); (6.25 : 4.60179768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
-      <AssociationMoniker Name="/FileParkingDataContext/Member/Member_Transfer" />
+    <classShape Id="0e5531ee-fc34-4a63-8839-d2b506b30a4d" absoluteBounds="3.5, 3.875, 2, 3.1170068359375005">
+      <DataClassMoniker Name="/FileParkingDataContext/MemberPlan" />
+      <nestedChildShapes>
+        <elementListCompartment Id="edfb62af-60f3-4838-8db0-e329361af217" absoluteBounds="3.515, 4.335, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(1.75 : 5); (1.75 : 2.26044840494792); (3.5 : 2.26044840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/FileParkingDataContext/Member/Member_DownloadLink" />
       <nodes>
-        <classShapeMoniker Id="1531aae8-6f76-41ad-9de6-2e40cd29f54d" />
-        <classShapeMoniker Id="5bfdb621-5d9b-4d55-824a-157a72df3df2" />
+        <classShapeMoniker Id="14e0fcd0-ec64-433c-b8cc-e322224cf882" />
+        <classShapeMoniker Id="3f0f540a-ed59-4f83-ac44-1502da23f3d4" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.875 : 5.88544840494792); (3.5 : 5.88544840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
-      <AssociationMoniker Name="/FileParkingDataContext/Member/Member_ParkedFile" />
+    <associationConnector edgePoints="[(1.75 : 8.1170068359375); (1.75 : 9.97276091666667); (3.5 : 9.97276091666667)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/FileParkingDataContext/Member/Member_EmailMessage" />
       <nodes>
-        <classShapeMoniker Id="1531aae8-6f76-41ad-9de6-2e40cd29f54d" />
-        <classShapeMoniker Id="36ab06ef-c365-4bc2-aa28-becd5405b209" />
+        <classShapeMoniker Id="14e0fcd0-ec64-433c-b8cc-e322224cf882" />
+        <classShapeMoniker Id="4b21bc9f-2e51-4300-8821-fcf86dd1f91c" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(1.875 : 3.875); (1.875 : 3.2499995); (3.5 : 3.2499995)]" fixedFrom="Algorithm" fixedTo="Algorithm">
-      <AssociationMoniker Name="/FileParkingDataContext/Member/Member_Recipient" />
+    <associationConnector edgePoints="[(2.75 : 5.99600341796875); (3.5 : 5.99600341796875)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/FileParkingDataContext/Member/Member_MemberPlan" />
       <nodes>
-        <classShapeMoniker Id="1531aae8-6f76-41ad-9de6-2e40cd29f54d" />
-        <classShapeMoniker Id="822dac1b-6b86-4bd7-b557-355972981d28" />
+        <classShapeMoniker Id="14e0fcd0-ec64-433c-b8cc-e322224cf882" />
+        <classShapeMoniker Id="0e5531ee-fc34-4a63-8839-d2b506b30a4d" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>

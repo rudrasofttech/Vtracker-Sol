@@ -41,9 +41,10 @@ namespace FileParking.Models
             return msg;
         }
 
-        public static bool SendMail(String fromAddress, String toAddress, String senderName, String recieverName, String body, String subject, EmailMessageType messageType, string emailGroup)
+        public static bool SendMail(String fromAddress, String toAddress, String senderName, String recieverName, 
+            String body, String subject, EmailMessageType messageType, string emailGroup,int memberId)
         {
-            return SendMail(fromAddress, toAddress, senderName, recieverName, body, subject, string.Empty, messageType, emailGroup);
+            return SendMail(fromAddress, toAddress, senderName, recieverName, body, subject, string.Empty, messageType, emailGroup, memberId);
         }
 
         public static bool SendMail(EmailMessage em)
@@ -95,7 +96,7 @@ namespace FileParking.Models
 
         public static bool SendMail(String fromAddress, String toAddress,
             String senderName, String recieverName, String body, String subject,
-            string ccaddresses, EmailMessageType messageType, string emailGroup)
+            string ccaddresses, EmailMessageType messageType, string emailGroup, int memberId)
         {
             try
             {
@@ -112,7 +113,7 @@ namespace FileParking.Models
                 //emessage = emessage.Replace("[emailsignature]", Utility.GetSiteSetting("emailsignature"));
                 em.Message = emessage;
 
-                em = AddMessage(em.ID, toAddress, fromAddress, subject, emessage, messageType, emailGroup,ccaddresses, recieverName, senderName);
+                em = AddMessage(em.ID, toAddress, fromAddress, subject, emessage, messageType, emailGroup,ccaddresses, recieverName, senderName, memberId);
 
                 if (em != null)
                 {
@@ -219,7 +220,8 @@ namespace FileParking.Models
             string emailGroup,
             string ccaddress,
             string toname,
-            string fromname)
+            string fromname,
+            int memberId)
         {
             try
             {
@@ -233,15 +235,16 @@ namespace FileParking.Models
                         EmailType = (byte)messagetype,
                         Subject = subject,
                         ToAddress = toaddress,
-                        SentDate = DateTime.Now,
-                        CreateDate = DateTime.Now,
+                        SentDate = DateTime.UtcNow,
+                        CreateDate = DateTime.UtcNow,
                         IsRead = false,
                         IsSent = false,
                         EmailGroup = emailGroup,
                         CCAdress = ccaddress,
                         ToName = toname,
                         FromName = fromname,
-                        LastAttempt = DateTime.Now
+                        LastAttempt = DateTime.UtcNow,
+                        MemberID = memberId
                     };
                     db.EmailMessages.InsertOnSubmit(em);
                     db.SubmitChanges();

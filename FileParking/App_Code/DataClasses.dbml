@@ -1,36 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="RSTFileParking" Class="FileParkingDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="WebSettings" ConnectionString="Data Source=HP\SQLEXPRESS;Initial Catalog=RSTFileParking;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="RSTFileParkingConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.Transfer" Member="Transfers">
-    <Type Name="Transfer">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Message" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="Subject" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="MemberID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="RecipientID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="DateRead" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="Recipient_Transfer" Member="Recipient" ThisKey="RecipientID" OtherKey="Id" Type="Recipient" IsForeignKey="true" />
-      <Association Name="Member_Transfer" Member="Member" ThisKey="MemberID" OtherKey="Id" Type="Member" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.ParkedFile" Member="ParkedFiles">
-    <Type Name="ParkedFile">
+  <Table Name="dbo.DownloadLink" Member="DownloadLinks">
+    <Type Name="DownloadLink">
       <Column Name="Id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="FileName" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
-      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="ExpiryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="MemberID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Member_ParkedFile" Member="Member" ThisKey="MemberID" OtherKey="Id" Type="Member" IsForeignKey="true" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="FileName" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Member_DownloadLink" Member="Member" ThisKey="MemberID" OtherKey="Id" Type="Member" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Recipient" Member="Recipients">
-    <Type Name="Recipient">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
-      <Column Name="Email" Type="System.String" DbType="NVarChar(250) NOT NULL" CanBeNull="false" />
-      <Column Name="MemberID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Recipient_Transfer" Member="Transfers" ThisKey="Id" OtherKey="RecipientID" Type="Transfer" />
-      <Association Name="Member_Recipient" Member="Member" ThisKey="MemberID" OtherKey="Id" Type="Member" IsForeignKey="true" />
+  <Table Name="dbo.[Plan]" Member="Plans">
+    <Type Name="Plan">
+      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Term" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="Limit" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
   <Table Name="dbo.EmailMessage" Member="EmailMessages">
@@ -51,6 +37,8 @@
       <Column Name="ToName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
       <Column Name="FromName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
       <Column Name="LastAttempt" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="MemberID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Member_EmailMessage" Member="Member" ThisKey="MemberID" OtherKey="Id" Type="Member" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Member" Member="Members">
@@ -67,9 +55,26 @@
       <Column Name="PublicID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
       <Column Name="AuthToken" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
       <Column Name="TokenCreated" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="Member_Transfer" Member="Transfers" ThisKey="Id" OtherKey="MemberID" Type="Transfer" />
-      <Association Name="Member_ParkedFile" Member="ParkedFiles" ThisKey="Id" OtherKey="MemberID" Type="ParkedFile" />
-      <Association Name="Member_Recipient" Member="Recipients" ThisKey="Id" OtherKey="MemberID" Type="Recipient" />
+      <Association Name="Member_DownloadLink" Member="DownloadLinks" ThisKey="Id" OtherKey="MemberID" Type="DownloadLink" />
+      <Association Name="Member_EmailMessage" Member="EmailMessages" ThisKey="Id" OtherKey="MemberID" Type="EmailMessage" />
+      <Association Name="Member_MemberPlan" Member="MemberPlans" ThisKey="Id" OtherKey="MemberID" Type="MemberPlan" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MemberPlan" Member="MemberPlans">
+    <Type Name="MemberPlan">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MemberID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ExpiryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Amount" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Term" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Limit" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TransactionCode" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TransactionDetails" Type="System.String" DbType="NVarChar(2000) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Member_MemberPlan" Member="Member" ThisKey="MemberID" OtherKey="Id" Type="Member" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

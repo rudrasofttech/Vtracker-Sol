@@ -94,7 +94,7 @@ public partial class simpleupload : System.Web.UI.Page
     /// </summary>
     public bool PreviewAsCanvas { get; set; }
 
-#endregion
+    #endregion
 
     #region [ client side events ]
 
@@ -211,9 +211,21 @@ public partial class simpleupload : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if(Request["token"] == null)
+        if (Request["token"] == null)
         {
+            Response.StatusCode = 400;
+            Response.TrySkipIisCustomErrors = true;
             Response.End();
+        }
+        else
+        {
+            Member m = MemberManager.GetUserByToken(new Guid(Request["token"].Trim()));
+            if (m == null)
+            {
+                Response.StatusCode = 401;
+                Response.TrySkipIisCustomErrors = true;
+                Response.End();
+            }
         }
         Token = Request["token"];
         AcceptFileTypes = ".*";

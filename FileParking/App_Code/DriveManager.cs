@@ -68,6 +68,19 @@ namespace FileParking.Models
             }
         }
 
+        public bool FileExists(string filePath)
+        {
+            if (!DriveExist)
+            {
+                throw new DriveDoesNotExistException();
+            }
+
+            string drivepath = Path.Combine(MemberDataAbsPath, filePath);
+
+            FileInfo fi = new FileInfo(drivepath);
+            return fi.Exists;
+        }
+
         public bool RenameFolder(string folderpath, string name)
         {
             if (!DriveExist)
@@ -262,8 +275,8 @@ namespace FileParking.Models
             {
                 throw new DriveDoesNotExistException();
             }
-            string drivepath = Path.Combine(MemberDataAbsPath, folderPath);
-            File.Delete(drivepath);
+            string filepath = Path.Combine(MemberDataAbsPath, folderPath);
+            File.Delete(filepath);
             return true;
         }
 

@@ -1,4 +1,67 @@
-﻿#otppanel,
+﻿body {
+    font-family: Montserrat,Helvetica,Arial,sans-serif !important;
+}
+.alert {
+    border-radius: 0px !important;
+    margin-bottom: 0px !important;
+    font-weight:bold;
+    text-align:center;
+}
+.input {
+    border: 1px solid #ccc5b9 !important;
+    border-radius: 4px !important;
+    color: #66615b !important;
+    font-size: 14px;
+    -webkit-transition: background-color .3s ease 0s;
+    transition: background-color .3s ease 0s;
+    padding-right: 0 !important;
+    padding: 7px 12px;
+}
+
+    .input:focus {
+        outline: 0 !important;
+        background-color: #fff;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+    }
+#otppanel,
 #signinbtn {
     display: none;
+}
+.progress {
+    height: 10px !important;
+    border-radius: 0px !important;
+    margin-bottom: 0px !important;
+}
+#commonloading {
+    height: 10px;
+    border-radius: 0px;
+    margin-bottom: 0px;
+    width: 100%;
+    display: none;
+}
+
+#loginfrm{
+    max-width:400px;
+    position:fixed;
+    top:30%;
+    left:50%;
+    margin-left:-130px;
+    display:inline-block;
+    padding:30px;
+}
+
+.fixed-bottom{
+    position:fixed;
+    bottom:0px;
+    display:block;
+    width:100%;
+}
+
+.template-upload .start, .template-upload .cancel {
+    display: inline-block;
+}
+
+.template-upload .name{
+    font-size:13px;
 }

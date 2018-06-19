@@ -1,4 +1,5 @@
-﻿<%@ WebHandler Language="C#" Class="Upload" %>
+﻿
+<%@ WebHandler Language="C#" Class="Upload" %>
 
 using System;
 using System.Web;
@@ -88,6 +89,8 @@ public class Upload : IHttpHandler
         context.Response.AddHeader("Cache-Control", "private, no-cache");
         if (!Token)
         {
+            context.Response.StatusCode = 401;
+            context.Response.TrySkipIisCustomErrors = true;
             context.Response.End();
         }
 
@@ -166,13 +169,25 @@ public class Upload : IHttpHandler
     {
         string filename = context.Request["f"];
         string filePath = Path.Combine(StorageFolder, filename);
-        FileStatus status = File.Exists(filePath)
-                            ? new FileStatus(new FileInfo(filePath), StorageFolder)
-                            : new FileStatus(filename, 0, StorageFolder);
-        string jsonObj = _javaScriptSerializer.Serialize(status);
-        context.Response.AddHeader("Content-Disposition", "inline; filename=\"files.json\"");
-        context.Response.ContentType = "application/json";
-        context.Response.Write(jsonObj);
+        if (!File.Exists(context.Server.MapPath("~\\" + filePath)))
+        {
+            FileStatus status = File.Exists(filePath)
+                                ? new FileStatus(new FileInfo(filePath), StorageFolder)
+                                : new FileStatus(filename, 0, StorageFolder);
+            string jsonObj = _javaScriptSerializer.Serialize(status);
+            context.Response.AddHeader("Content-Disposition", "inline; filename=\"files.json\"");
+            context.Response.ContentType = "application/json";
+            context.Response.Write(jsonObj);
+        }
+        else
+        {
+            FileStatus status = new FileStatus(filename, 0, StorageFolder);
+            status.error = "File already exist";
+            string jsonObj = _javaScriptSerializer.Serialize(status);
+            context.Response.AddHeader("Content-Disposition", "inline; filename=\"files.json\"");
+            context.Response.ContentType = "application/json";
+            context.Response.Write(jsonObj);
+        }
     }
 
     private void DeliverFile(HttpContext context)

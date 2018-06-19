@@ -51,10 +51,10 @@ namespace FileParking
             type = "image/png";
             size = fileLength;
             progress = "1.0";
-            url = "Upload.axd?f=" + fileName + "&storageFolder=" + storage + "&resume=false"; // no resume in case of download
+            url = "";// "Upload.axd?f=" + fileName + "&storageFolder=" + storage + "&resume=false"; // no resume in case of download
             complete_url = "FileComplete.axd?f=" + fileName;
             error_url = "FileError.axd?f=" + fileName;
-            delete_url = "Upload.axd?f=" + fileName + "&storageFolder=" + storage;
+            delete_url = "";// "Upload.axd?f=" + fileName;// + "&storageFolder=" + storage;
             delete_type = "DELETE";
         }
 
