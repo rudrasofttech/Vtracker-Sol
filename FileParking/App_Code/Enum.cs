@@ -13,6 +13,13 @@
         Failed = 2,
         Done = 3
     }
+
+    public enum MemberPlanStatus
+    {
+        Active = 1,
+        Inactive = 2,
+        Expired = 3
+    }
 }
 
 namespace FileParking

@@ -10,15 +10,6 @@
       <Association Name="Member_DownloadLink" Member="Member" ThisKey="MemberID" OtherKey="Id" Type="Member" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.[Plan]" Member="Plans">
-    <Type Name="Plan">
-      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="Term" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Price" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
-      <Column Name="Limit" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
   <Table Name="dbo.EmailMessage" Member="EmailMessages">
     <Type Name="EmailMessage">
       <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -60,6 +51,16 @@
       <Association Name="Member_MemberPlan" Member="MemberPlans" ThisKey="Id" OtherKey="MemberID" Type="MemberPlan" />
     </Type>
   </Table>
+  <Table Name="dbo.[Plan]" Member="Plans">
+    <Type Name="Plan">
+      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Term" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="Limit" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FileSize" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
   <Table Name="dbo.MemberPlan" Member="MemberPlans">
     <Type Name="MemberPlan">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -74,6 +75,7 @@
       <Column Name="TransactionDetails" Type="System.String" DbType="NVarChar(2000) NOT NULL" CanBeNull="false" />
       <Column Name="Status" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
       <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="FileSize" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Member_MemberPlan" Member="Member" ThisKey="MemberID" OtherKey="Id" Type="Member" IsForeignKey="true" />
     </Type>
   </Table>

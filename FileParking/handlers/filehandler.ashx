@@ -173,7 +173,7 @@ public class parkedfilehandler : IHttpHandler
         try
         {
             DriveManager dm = new DriveManager(CurrentMember, Context.Server.MapPath("~/" + CurrentMember.Folder), "~/" + CurrentMember.Folder);
-            return js.Serialize(new { success = dm.DeleteFile(fileName) });
+            return js.Serialize(new { success = dm.DeleteFile(fileName), name = fileName });
         }
         catch (DriveDoesNotExistException)
         {

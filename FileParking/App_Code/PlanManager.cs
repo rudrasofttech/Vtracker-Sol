@@ -20,7 +20,10 @@ namespace FileParking.Models
         {
             using (FileParkingDataContext dc = new FileParkingDataContext())
             {
-                return dc.Plans.OrderBy(t => t.Price).ToList();
+                List<Plan> list = dc.Plans.OrderBy(t => t.Price).ToList();
+                list.Insert(0, FreePlan);
+
+                return list;
             }
         }
 
@@ -31,10 +34,11 @@ namespace FileParking.Models
                 return new Plan()
                 {
                     ID = Guid.Empty,
-                    Limit = 50,
+                    Limit = 10,
                     Name = "Free",
                     Price = 0,
-                    Term = 2
+                    Term = 2,
+                    FileSize = (1024 * 2)
                 };
             }
         }
@@ -75,5 +79,7 @@ namespace FileParking.Models
                 return dc.MemberPlans.Where(t => t.MemberID == memberId).OrderByDescending(t => t.DateCreated).ToList();
             }
         }
+
+        
     }
 }

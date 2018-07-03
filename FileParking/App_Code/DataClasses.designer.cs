@@ -32,15 +32,15 @@ public partial class FileParkingDataContext : System.Data.Linq.DataContext
   partial void InsertDownloadLink(DownloadLink instance);
   partial void UpdateDownloadLink(DownloadLink instance);
   partial void DeleteDownloadLink(DownloadLink instance);
-  partial void InsertPlan(Plan instance);
-  partial void UpdatePlan(Plan instance);
-  partial void DeletePlan(Plan instance);
   partial void InsertEmailMessage(EmailMessage instance);
   partial void UpdateEmailMessage(EmailMessage instance);
   partial void DeleteEmailMessage(EmailMessage instance);
   partial void InsertMember(Member instance);
   partial void UpdateMember(Member instance);
   partial void DeleteMember(Member instance);
+  partial void InsertPlan(Plan instance);
+  partial void UpdatePlan(Plan instance);
+  partial void DeletePlan(Plan instance);
   partial void InsertMemberPlan(MemberPlan instance);
   partial void UpdateMemberPlan(MemberPlan instance);
   partial void DeleteMemberPlan(MemberPlan instance);
@@ -84,14 +84,6 @@ public partial class FileParkingDataContext : System.Data.Linq.DataContext
 		}
 	}
 	
-	public System.Data.Linq.Table<Plan> Plans
-	{
-		get
-		{
-			return this.GetTable<Plan>();
-		}
-	}
-	
 	public System.Data.Linq.Table<EmailMessage> EmailMessages
 	{
 		get
@@ -105,6 +97,14 @@ public partial class FileParkingDataContext : System.Data.Linq.DataContext
 		get
 		{
 			return this.GetTable<Member>();
+		}
+	}
+	
+	public System.Data.Linq.Table<Plan> Plans
+	{
+		get
+		{
+			return this.GetTable<Plan>();
 		}
 	}
 	
@@ -291,164 +291,6 @@ public partial class DownloadLink : INotifyPropertyChanging, INotifyPropertyChan
 					this._MemberID = default(int);
 				}
 				this.SendPropertyChanged("Member");
-			}
-		}
-	}
-	
-	public event PropertyChangingEventHandler PropertyChanging;
-	
-	public event PropertyChangedEventHandler PropertyChanged;
-	
-	protected virtual void SendPropertyChanging()
-	{
-		if ((this.PropertyChanging != null))
-		{
-			this.PropertyChanging(this, emptyChangingEventArgs);
-		}
-	}
-	
-	protected virtual void SendPropertyChanged(String propertyName)
-	{
-		if ((this.PropertyChanged != null))
-		{
-			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-		}
-	}
-}
-
-[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[Plan]")]
-public partial class Plan : INotifyPropertyChanging, INotifyPropertyChanged
-{
-	
-	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-	
-	private System.Guid _ID;
-	
-	private string _Name;
-	
-	private int _Term;
-	
-	private decimal _Price;
-	
-	private int _Limit;
-	
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(System.Guid value);
-    partial void OnIDChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnTermChanging(int value);
-    partial void OnTermChanged();
-    partial void OnPriceChanging(decimal value);
-    partial void OnPriceChanged();
-    partial void OnLimitChanging(int value);
-    partial void OnLimitChanged();
-    #endregion
-	
-	public Plan()
-	{
-		OnCreated();
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-	public System.Guid ID
-	{
-		get
-		{
-			return this._ID;
-		}
-		set
-		{
-			if ((this._ID != value))
-			{
-				this.OnIDChanging(value);
-				this.SendPropertyChanging();
-				this._ID = value;
-				this.SendPropertyChanged("ID");
-				this.OnIDChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-	public string Name
-	{
-		get
-		{
-			return this._Name;
-		}
-		set
-		{
-			if ((this._Name != value))
-			{
-				this.OnNameChanging(value);
-				this.SendPropertyChanging();
-				this._Name = value;
-				this.SendPropertyChanged("Name");
-				this.OnNameChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Term", DbType="Int NOT NULL")]
-	public int Term
-	{
-		get
-		{
-			return this._Term;
-		}
-		set
-		{
-			if ((this._Term != value))
-			{
-				this.OnTermChanging(value);
-				this.SendPropertyChanging();
-				this._Term = value;
-				this.SendPropertyChanged("Term");
-				this.OnTermChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Price", DbType="Money NOT NULL")]
-	public decimal Price
-	{
-		get
-		{
-			return this._Price;
-		}
-		set
-		{
-			if ((this._Price != value))
-			{
-				this.OnPriceChanging(value);
-				this.SendPropertyChanging();
-				this._Price = value;
-				this.SendPropertyChanged("Price");
-				this.OnPriceChanged();
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Limit", DbType="Int NOT NULL")]
-	public int Limit
-	{
-		get
-		{
-			return this._Limit;
-		}
-		set
-		{
-			if ((this._Limit != value))
-			{
-				this.OnLimitChanging(value);
-				this.SendPropertyChanging();
-				this._Limit = value;
-				this.SendPropertyChanged("Limit");
-				this.OnLimitChanged();
 			}
 		}
 	}
@@ -1371,6 +1213,188 @@ public partial class Member : INotifyPropertyChanging, INotifyPropertyChanged
 	}
 }
 
+[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[Plan]")]
+public partial class Plan : INotifyPropertyChanging, INotifyPropertyChanged
+{
+	
+	private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+	
+	private System.Guid _ID;
+	
+	private string _Name;
+	
+	private int _Term;
+	
+	private decimal _Price;
+	
+	private int _Limit;
+	
+	private System.Nullable<int> _FileSize;
+	
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(System.Guid value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnTermChanging(int value);
+    partial void OnTermChanged();
+    partial void OnPriceChanging(decimal value);
+    partial void OnPriceChanged();
+    partial void OnLimitChanging(int value);
+    partial void OnLimitChanged();
+    partial void OnFileSizeChanging(System.Nullable<int> value);
+    partial void OnFileSizeChanged();
+    #endregion
+	
+	public Plan()
+	{
+		OnCreated();
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+	public System.Guid ID
+	{
+		get
+		{
+			return this._ID;
+		}
+		set
+		{
+			if ((this._ID != value))
+			{
+				this.OnIDChanging(value);
+				this.SendPropertyChanging();
+				this._ID = value;
+				this.SendPropertyChanged("ID");
+				this.OnIDChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+	public string Name
+	{
+		get
+		{
+			return this._Name;
+		}
+		set
+		{
+			if ((this._Name != value))
+			{
+				this.OnNameChanging(value);
+				this.SendPropertyChanging();
+				this._Name = value;
+				this.SendPropertyChanged("Name");
+				this.OnNameChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Term", DbType="Int NOT NULL")]
+	public int Term
+	{
+		get
+		{
+			return this._Term;
+		}
+		set
+		{
+			if ((this._Term != value))
+			{
+				this.OnTermChanging(value);
+				this.SendPropertyChanging();
+				this._Term = value;
+				this.SendPropertyChanged("Term");
+				this.OnTermChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Price", DbType="Money NOT NULL")]
+	public decimal Price
+	{
+		get
+		{
+			return this._Price;
+		}
+		set
+		{
+			if ((this._Price != value))
+			{
+				this.OnPriceChanging(value);
+				this.SendPropertyChanging();
+				this._Price = value;
+				this.SendPropertyChanged("Price");
+				this.OnPriceChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Limit", DbType="Int NOT NULL")]
+	public int Limit
+	{
+		get
+		{
+			return this._Limit;
+		}
+		set
+		{
+			if ((this._Limit != value))
+			{
+				this.OnLimitChanging(value);
+				this.SendPropertyChanging();
+				this._Limit = value;
+				this.SendPropertyChanged("Limit");
+				this.OnLimitChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FileSize", DbType="Int")]
+	public System.Nullable<int> FileSize
+	{
+		get
+		{
+			return this._FileSize;
+		}
+		set
+		{
+			if ((this._FileSize != value))
+			{
+				this.OnFileSizeChanging(value);
+				this.SendPropertyChanging();
+				this._FileSize = value;
+				this.SendPropertyChanged("FileSize");
+				this.OnFileSizeChanged();
+			}
+		}
+	}
+	
+	public event PropertyChangingEventHandler PropertyChanging;
+	
+	public event PropertyChangedEventHandler PropertyChanged;
+	
+	protected virtual void SendPropertyChanging()
+	{
+		if ((this.PropertyChanging != null))
+		{
+			this.PropertyChanging(this, emptyChangingEventArgs);
+		}
+	}
+	
+	protected virtual void SendPropertyChanged(String propertyName)
+	{
+		if ((this.PropertyChanged != null))
+		{
+			this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+}
+
 [global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.MemberPlan")]
 public partial class MemberPlan : INotifyPropertyChanging, INotifyPropertyChanged
 {
@@ -1400,6 +1424,8 @@ public partial class MemberPlan : INotifyPropertyChanging, INotifyPropertyChange
 	private byte _Status;
 	
 	private System.Nullable<System.DateTime> _DateModified;
+	
+	private System.Nullable<int> _FileSize;
 	
 	private EntityRef<Member> _Member;
 	
@@ -1431,6 +1457,8 @@ public partial class MemberPlan : INotifyPropertyChanging, INotifyPropertyChange
     partial void OnStatusChanged();
     partial void OnDateModifiedChanging(System.Nullable<System.DateTime> value);
     partial void OnDateModifiedChanged();
+    partial void OnFileSizeChanging(System.Nullable<int> value);
+    partial void OnFileSizeChanged();
     #endregion
 	
 	public MemberPlan()
@@ -1679,6 +1707,26 @@ public partial class MemberPlan : INotifyPropertyChanging, INotifyPropertyChange
 				this._DateModified = value;
 				this.SendPropertyChanged("DateModified");
 				this.OnDateModifiedChanged();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FileSize", DbType="Int")]
+	public System.Nullable<int> FileSize
+	{
+		get
+		{
+			return this._FileSize;
+		}
+		set
+		{
+			if ((this._FileSize != value))
+			{
+				this.OnFileSizeChanging(value);
+				this.SendPropertyChanging();
+				this._FileSize = value;
+				this.SendPropertyChanged("FileSize");
+				this.OnFileSizeChanged();
 			}
 		}
 	}

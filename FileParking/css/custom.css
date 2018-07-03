@@ -1,15 +1,51 @@
 ﻿body {
     font-family: Montserrat,Helvetica,Arial,sans-serif !important;
+    color: #777;
+}
+
+    body.bg1, body.bg1 .navbar-fixed-top {
+        background-image: url(../img/bg/curls.png);
+        background-attachment:fixed;
+    }
+
+    body .sitename {
+        text-align: center;
+        margin: 20px 0px 30px 0px;
+    }
+
+    body.bg1 .sitename {
+        color: #fff;
+    }
+
+    body .empty{
+        text-align:center;
+    }
+
+    body .card{
+        background-color:#fff;
+        border-radius:0px;
+        padding:15px;
+    }
+
+h1, h2, h3, h4, h5, h6{
+    font-weight:normal;
+}
+
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input{
+border-radius:0px;
+}
+.btn{
+    border-radius:0px;
 }
 .alert {
     border-radius: 0px !important;
     margin-bottom: 0px !important;
-    font-weight:bold;
-    text-align:center;
+    font-weight: bold;
+    text-align: center;
 }
+
 .input {
     border: 1px solid #ccc5b9 !important;
-    border-radius: 4px !important;
     color: #66615b !important;
     font-size: 14px;
     -webkit-transition: background-color .3s ease 0s;
@@ -24,15 +60,18 @@
         -webkit-box-shadow: none !important;
         box-shadow: none !important;
     }
+
 #otppanel,
 #signinbtn {
     display: none;
 }
+
 .progress {
     height: 10px !important;
     border-radius: 0px !important;
     margin-bottom: 0px !important;
 }
+
 #commonloading {
     height: 10px;
     border-radius: 0px;
@@ -41,27 +80,70 @@
     display: none;
 }
 
-#loginfrm{
-    max-width:400px;
-    position:fixed;
-    top:30%;
-    left:50%;
-    margin-left:-130px;
-    display:inline-block;
-    padding:30px;
+#loginfrm {
+    max-width: 400px;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    margin-left: -130px;
+    display: inline-block;
+    padding: 30px;
 }
 
-.fixed-bottom{
-    position:fixed;
-    bottom:0px;
-    display:block;
-    width:100%;
+#uploadfrm, #filelist {
+    margin-top: 20px;
+}
+
+.fixed-bottom {
+    position: fixed;
+    bottom: 0px;
+    display: block;
+    width: 100%;
 }
 
 .template-upload .start, .template-upload .cancel {
     display: inline-block;
 }
 
-.template-upload .name{
-    font-size:13px;
+.template-upload .name {
+    font-size: 13px;
+}
+
+.btn {
+    background-image: none !important;
+}
+
+#dropzone {
+    font-size: 2em !important;
+}
+
+.table th, .table td {
+    border-top: 0px !important;
+    font-size: 0.99em !important;
+}
+
+.fileinput-button {
+    float: none !important;
+}
+
+.progress-extended {
+    font-size: 0.85em;
+}
+
+
+.view2 .drive > .card{
+    min-height:calc(100vh - 135px);
+}
+
+.view2 .sendform > .card {
+    top: calc(50vh - 110px);
+    position: fixed;
+}
+
+    .view2 .sendform > .card input{
+        width:300px;
+    }
+
+body{
+    margin-top:90px;
 }

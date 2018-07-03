@@ -157,11 +157,12 @@ namespace FileParking.Models
                     rdi.CreateDate = i.CreationTime;
                     rdi.FileType = i.Extension;
                     rdi.LastAccessDate = i.LastAccessTime;
-                    rdi.Location = i.FullName.Replace(string.Format("{0}\\", MemberDataAbsPath), string.Empty);
+
+                    rdi.Location = ""; // i.FullName.Replace(string.Format("{0}\\", MemberDataAbsPath), string.Empty);
                     rdi.ModifyDate = i.LastWriteTime;
                     rdi.Name = i.Name;
                     rdi.Deletable = ItemDeletable;
-                    rdi.Editable = true;
+                    rdi.Editable = false;
                     long length = i.Length;
                     if (length < 1024)
                     {
@@ -338,7 +339,32 @@ namespace FileParking.Models
         public string Size { get; set; }
         public string FileType { get; set; }
         public DateTime CreateDate { get; set; }
+        public string CreateDateDisplay
+        {
+            get
+            {
+                if (CreateDate != null)
+                {
+                    return CreateDate.ToString("yy/M/d h:mm tt");
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
         public DateTime ModifyDate { get; set; }
+        public string ModifyDateDisplay
+        {
+            get
+            {
+                if (ModifyDate != null)
+                {
+                    return ModifyDate.ToString("yy/M/d h:mm tt");
+                }
+                else { return ""; }
+            }
+        }
         public DateTime LastAccessDate { get; set; }
         public bool Deletable { get; set; }
         public bool Editable { get; set; }

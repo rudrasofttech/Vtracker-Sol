@@ -1,4 +1,7 @@
-﻿var app:MainApp = null;
+﻿///<reference path="typings/jquery/jquery.d.ts" />
+///<reference path="typings/knockout/knockout.d.ts" />
+
+var app: MainApp = null;
 var user: UserIdentity = null;
 
 class UserIdentity {
@@ -15,6 +18,51 @@ class UserIdentity {
         this.id = _id;
         this.isValidated = false;
         this.token = "";
+    }
+}
+class Plan {
+    id: KnockoutObservable<string>;
+    name: KnockoutObservable<string>;
+    term: KnockoutObservable<number>;
+    price: KnockoutObservable<number>;
+    limit: KnockoutObservable<number>;
+
+    constructor(_id: string, _name: string, _term: number, _price: number, _limit: number) {
+        this.id = ko.observable(_id);
+        this.name = ko.observable(_name);
+        this.term = ko.observable(_term);
+        this.price = ko.observable(_price);
+        this.limit = ko.observable(_limit);
+    }
+}
+class MemberPlan {
+    created: KnockoutObservable<string>;
+    expiry: KnockoutObservable<string>;
+    name: KnockoutObservable<string>;
+    term: KnockoutObservable<number>;
+    limit: KnockoutObservable<number>;
+    filesize: KnockoutObservable<string>;
+
+    constructor(_name: string, _term: number, _limit: number,  _created: string, _expiry: string, _filesize:string) {
+        this.name = ko.observable(_name);
+        this.limit = ko.observable(_limit);
+        this.created = ko.observable(_created);
+        this.expiry = ko.observable(_expiry);
+        this.term = ko.observable(_term);
+        this.filesize = ko.observable(_filesize);
+    }
+}
+class ParkedFile {
+    name: KnockoutObservable<string>;
+    size: KnockoutObservable<string>;
+    created: KnockoutObservable<string>;
+    modified: KnockoutObservable<string>;
+
+    constructor(_name: string, _size: string, _created: string, _modified: string) {
+        this.name = ko.observable(_name);
+        this.size = ko.observable(_size);
+        this.created = ko.observable(_created);
+        this.modified = ko.observable(_modified);
     }
 }
 
@@ -69,7 +117,7 @@ class LoginForm {
                         user.isValidated = data.isValidated;
                         user.token = data.token;
                         instance.mainappdom.trigger("uservalidated", this.mainappdom);
-                        
+
                     } else {
                         Message.Display("Incorrect OTP! Try again.", "error");
                     }
@@ -78,7 +126,7 @@ class LoginForm {
                     Message.Display("Something went wrong! Try again.", "error");
                 }).always(function () {
                     Loader.Hide();
-                });;
+                });
         } else {
             this.formDom.find(".step2").hide();
             this.formDom.find(".step1").show();
@@ -101,13 +149,13 @@ class FileUploadForm {
             console.log("success");
         }).done(function (data) {
             instance.uploadfrmdom.html(data);
-            }).fail(function (data) {
-                if (data.status == 400) {
-                    Message.Display("Something went wrong! Try again.", "error");
-                } else if (data.status == 401) {
-                    Message.Display("Unauthorized request! Login in again.", "error");
-                    app.mainappdom.trigger("authexpired");
-                }
+        }).fail(function (data) {
+            if (data.status == 400) {
+                Message.Display("Something went wrong! Try again.", "error");
+            } else if (data.status == 401) {
+                Message.Display("Unauthorized request! Login in again.", "error");
+                app.mainappdom.trigger("authexpired");
+            }
         });
     }
 }
@@ -145,26 +193,122 @@ class MainApp {
     loginFrm: LoginForm;
     uploadFrm: FileUploadForm;
     mainappdom: any;
+    public files: KnockoutObservableArray<ParkedFile>;
+    public plans: KnockoutObservableArray<Plan>;
+    public shouldshowplans: KnockoutObservable<boolean>;
+    public activeplan: KnockoutObservable<MemberPlan>;
 
     constructor() {
         this.mainappdom = $("#mainapp");
         this.uploadFrm = null;
         this.loginFrm = new LoginForm(this.mainappdom);
+        this.files = ko.observableArray([]);
+        this.shouldshowplans = ko.observable(true);
+        this.activeplan = ko.observable(null);
+    }
+
+    removeFile(d: ParkedFile) {
+        if (confirm("Are you sure you want to delete this file?")) {
+            var instance = this;
+            Loader.Show();
+            var jqxhr = $.getJSON("handlers/filehandler.ashx", { a: "remove", token: user.token, f: d.name }, function () {
+            }).done(function (data) {
+                if (data.success) {
+                    app.files.remove(function (f) {
+                        return f.name() == data.name;
+                    });
+
+                } else {
+                    Message.Display("Could fetch files", "error");
+                }
+            }).fail(function () {
+                Message.Display("Something went wrong! Try again.", "error");
+            }).always(function () {
+                Loader.Hide();
+            });
+        }
     }
 
     bind() {
         this.mainappdom.on("uservalidated", this.onUserValidated);
         this.mainappdom.on("authexpired", this.onAuthExpired);
+        this.mainappdom.on("loadfiles", this.onLoadFiles)
+    }
+
+    loadPlans() {
+        var instance = this;
+        Loader.Show();
+        var jqxhr = $.getJSON("handlers/mplanhandler.ashx", { a: "plans" }, function () {
+        }).done(function (data) {
+            if (data.success) {
+                for (var k in data.plans) {
+                    var p = data.plans[k];
+                    instance.plans.push(new Plan(p.Id, p.Name, p.Term, p.Number, p.Limit));
+                }
+            } else {
+                Message.Display("Could not fetch Plans", "error");
+            }
+        }).fail(function () {
+            Message.Display("Something went wrong! Try again.", "error");
+        }).always(function () {
+            Loader.Hide();
+        });
+    }
+
+    loadList() {
+        var instance = this;
+        Loader.Show();
+        var jqxhr = $.getJSON("handlers/filehandler.ashx", { a: "list", token: user.token }, function () {
+        }).done(function (data) {
+            if (data.success) {
+                instance.files.removeAll();
+                for (var k in data.files) {
+                    var f = data.files[k];
+                    instance.files.push(new ParkedFile(f.Name, f.Size, f.CreateDateDisplay, f.ModifyDateDisplay));
+                }
+            } else {
+                Message.Display("Could not fetch files", "error");
+            }
+        }).fail(function () {
+            Message.Display("Something went wrong! Try again.", "error");
+        }).always(function () {
+            Loader.Hide();
+        });
+    }
+
+    loadActivePlan() {
+        var instance = this;
+        Loader.Show();
+        var jqxhr = $.getJSON("handlers/mplanhandler.ashx", { a: "active", token: user.token }, function () {
+        }).done(function (data) {
+            if (data.success) {
+                if (data.plan) {
+                    instance.activeplan(new MemberPlan(data.plan.Name,
+                        data.plan.Term, data.plan.Limit,  data.plan.DateCreated,
+                        data.plan.ExpiryDate, data.plan.FileSize));
+                }
+            } else {
+                Message.Display("Could not fetch active plan", "error");
+            }
+        }).fail(function () {
+            Message.Display("Something went wrong! Try again.", "error");
+        }).always(function () {
+            Loader.Hide();
+        });
+    }
+    onLoadFiles(event) {
+        app.loadList();
     }
 
     onUserValidated(event, _mainappdom) {
         app.uploadFrm = new FileUploadForm(_mainappdom);
         app.uploadFrm.loadForm();
         app.viewshouldchange();
+        app.loadActivePlan();
+        app.mainappdom.trigger("loadfiles");
     }
 
     onAuthExpired(event) {
-        console.log(event);
         user = null;
         app.viewshouldchange();
     }
@@ -173,6 +317,7 @@ class MainApp {
         if (user == null) {
             this.mainappdom.find(".view1").show();
             this.mainappdom.find(".view2").hide();
+            
         } else {
             this.mainappdom.find(".view1").hide();
             this.mainappdom.find(".view2").show();
@@ -182,9 +327,12 @@ class MainApp {
 
 app = new MainApp();
 user = null;
-app.bind();
-
 user = new UserIdentity('raj@gmail.com', '11310605-0FAA-467F-A5AC-211BB2BD0EA2');
 user.isValidated = true;
-user.token = '7D33061F-5BB3-480B-8E45-5E345143DF29';
+user.token = '5C0577C0-28F9-4BF7-BC52-72E95E574C0F';
+
+app.bind();
+ko.applyBindings(app);
+
 app.mainappdom.trigger("uservalidated", app.mainappdom);
+//app.mainappdom.trigger("loadfiles");

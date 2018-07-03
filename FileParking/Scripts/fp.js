@@ -1,3 +1,5 @@
+///<reference path="typings/jquery/jquery.d.ts" />
+///<reference path="typings/knockout/knockout.d.ts" />
 var app = null;
 var user = null;
 var UserIdentity = /** @class */ (function () {
@@ -8,6 +10,36 @@ var UserIdentity = /** @class */ (function () {
         this.token = "";
     }
     return UserIdentity;
+}());
+var Plan = /** @class */ (function () {
+    function Plan(_id, _name, _term, _price, _limit) {
+        this.id = ko.observable(_id);
+        this.name = ko.observable(_name);
+        this.term = ko.observable(_term);
+        this.price = ko.observable(_price);
+        this.limit = ko.observable(_limit);
+    }
+    return Plan;
+}());
+var MemberPlan = /** @class */ (function () {
+    function MemberPlan(_name, _term, _limit, _created, _expiry, _filesize) {
+        this.name = ko.observable(_name);
+        this.limit = ko.observable(_limit);
+        this.created = ko.observable(_created);
+        this.expiry = ko.observable(_expiry);
+        this.term = ko.observable(_term);
+        this.filesize = ko.observable(_filesize);
+    }
+    return MemberPlan;
+}());
+var ParkedFile = /** @class */ (function () {
+    function ParkedFile(_name, _size, _created, _modified) {
+        this.name = ko.observable(_name);
+        this.size = ko.observable(_size);
+        this.created = ko.observable(_created);
+        this.modified = ko.observable(_modified);
+    }
+    return ParkedFile;
 }());
 var LoginForm = /** @class */ (function () {
     function LoginForm(_mainappdom) {
@@ -60,7 +92,6 @@ var LoginForm = /** @class */ (function () {
             }).always(function () {
                 Loader.Hide();
             });
-            ;
         }
         else {
             this.formDom.find(".step2").hide();
@@ -130,18 +161,107 @@ var MainApp = /** @class */ (function () {
         this.mainappdom = $("#mainapp");
         this.uploadFrm = null;
         this.loginFrm = new LoginForm(this.mainappdom);
+        this.files = ko.observableArray([]);
+        this.shouldshowplans = ko.observable(true);
+        this.activeplan = ko.observable(null);
     }
+    MainApp.prototype.removeFile = function (d) {
+        if (confirm("Are you sure you want to delete this file?")) {
+            var instance = this;
+            Loader.Show();
+            var jqxhr = $.getJSON("handlers/filehandler.ashx", { a: "remove", token: user.token, f: d.name }, function () {
+            }).done(function (data) {
+                if (data.success) {
+                    app.files.remove(function (f) {
+                        return f.name() == data.name;
+                    });
+                }
+                else {
+                    Message.Display("Could fetch files", "error");
+                }
+            }).fail(function () {
+                Message.Display("Something went wrong! Try again.", "error");
+            }).always(function () {
+                Loader.Hide();
+            });
+        }
+    };
     MainApp.prototype.bind = function () {
         this.mainappdom.on("uservalidated", this.onUserValidated);
         this.mainappdom.on("authexpired", this.onAuthExpired);
+        this.mainappdom.on("loadfiles", this.onLoadFiles);
+    };
+    MainApp.prototype.loadPlans = function () {
+        var instance = this;
+        Loader.Show();
+        var jqxhr = $.getJSON("handlers/mplanhandler.ashx", { a: "plans" }, function () {
+        }).done(function (data) {
+            if (data.success) {
+                for (var k in data.plans) {
+                    var p = data.plans[k];
+                    instance.plans.push(new Plan(p.Id, p.Name, p.Term, p.Number, p.Limit));
+                }
+            }
+            else {
+                Message.Display("Could not fetch Plans", "error");
+            }
+        }).fail(function () {
+            Message.Display("Something went wrong! Try again.", "error");
+        }).always(function () {
+            Loader.Hide();
+        });
+    };
+    MainApp.prototype.loadList = function () {
+        var instance = this;
+        Loader.Show();
+        var jqxhr = $.getJSON("handlers/filehandler.ashx", { a: "list", token: user.token }, function () {
+        }).done(function (data) {
+            if (data.success) {
+                instance.files.removeAll();
+                for (var k in data.files) {
+                    var f = data.files[k];
+                    instance.files.push(new ParkedFile(f.Name, f.Size, f.CreateDateDisplay, f.ModifyDateDisplay));
+                }
+            }
+            else {
+                Message.Display("Could not fetch files", "error");
+            }
+        }).fail(function () {
+            Message.Display("Something went wrong! Try again.", "error");
+        }).always(function () {
+            Loader.Hide();
+        });
+    };
+    MainApp.prototype.loadActivePlan = function () {
+        var instance = this;
+        Loader.Show();
+        var jqxhr = $.getJSON("handlers/mplanhandler.ashx", { a: "active", token: user.token }, function () {
+        }).done(function (data) {
+            if (data.success) {
+                if (data.plan) {
+                    instance.activeplan(new MemberPlan(data.plan.Name, data.plan.Term, data.plan.Limit, data.plan.DateCreated, data.plan.ExpiryDate, data.plan.FileSize));
+                }
+            }
+            else {
+                Message.Display("Could not fetch active plan", "error");
+            }
+        }).fail(function () {
+            Message.Display("Something went wrong! Try again.", "error");
+        }).always(function () {
+            Loader.Hide();
+        });
+    };
+    MainApp.prototype.onLoadFiles = function (event) {
+        app.loadList();
     };
     MainApp.prototype.onUserValidated = function (event, _mainappdom) {
         app.uploadFrm = new FileUploadForm(_mainappdom);
         app.uploadFrm.loadForm();
         app.viewshouldchange();
+        app.loadActivePlan();
+        app.mainappdom.trigger("loadfiles");
     };
     MainApp.prototype.onAuthExpired = function (event) {
-        console.log(event);
         user = null;
         app.viewshouldchange();
     };
@@ -159,9 +279,11 @@ var MainApp = /** @class */ (function () {
 }());
 app = new MainApp();
 user = null;
-app.bind();
 user = new UserIdentity('raj@gmail.com', '11310605-0FAA-467F-A5AC-211BB2BD0EA2');
 user.isValidated = true;
-user.token = '7D33061F-5BB3-480B-8E45-5E345143DF29';
+user.token = '5C0577C0-28F9-4BF7-BC52-72E95E574C0F';
+app.bind();
+ko.applyBindings(app);
 app.mainappdom.trigger("uservalidated", app.mainappdom);
+//app.mainappdom.trigger("loadfiles"); 
 //# sourceMappingURL=fp.js.map

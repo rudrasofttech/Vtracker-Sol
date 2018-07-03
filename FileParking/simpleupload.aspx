@@ -4,7 +4,7 @@
 <div id="fileupload">
     <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
     <div class="row-fluid fileupload-buttonbar">
-        <div class="span12">
+        <div class="span12" style="text-align:center;">
             <!-- The fileinput-button span is used to style the file input field as button -->
             <span class="btn btn-action fileinput-button"><i class="icon-plus"></i><span>Add files...</span>
                 <!--Enable selecting a complete folder structure, this is currently only supported by Google Chrome-->
@@ -35,22 +35,20 @@
     </div>
     <div class="fileupload-loading">
     </div>
-    <!--<div id="dropzone" class="fade well">
-            Drop files here</div>-->
+    <!--<div id="dropzone" class="fade well">Drop files here</div>-->
+    
     <br />
-    <table role="presentation" class="table">
-        <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
-        </tbody>
-    </table>
+    <div class="container-fluid files">
+    </div>
 </div>
 
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
-    <tr class="template-upload fade">
-        <td>
+    <div class="template-upload fade">
+        <div>
             <div class="row-fluid">
-                <div class="span9 name"> <span>{%=file.name%}</span> <span>{%=o.formatFileSize(file.size)%}</span></div>
-                <div class="span3">
+                <div class="span8 name"> <span>{%=file.name%}</span> <span>{%=o.formatFileSize(file.size)%}</span></div>
+                <div class="span4" style="text-align:right;">
                 {% if (o.files.valid && !i) { %}
                     <div class="start"><button class="btn btn-action">
                         <i class="icon-upload"></i>
@@ -76,28 +74,27 @@
                 </div>
             </div>
             {% } %}
-        </td>
-    </tr>
+        </div>
+    </div>
 {% } %}
 </script>
 <!-- The template to display files available for download -->
 <script id="template-download" type="text/x-tmpl">
-{% for (var i=0, file; file=o.files[i]; i++) { %}
-    <tr class="template-download fade">
+{% for (var i=0, file; file=o.files[i] && false; i++) { %}
+    <div class="template-download fade row-fluid">
         {% if (file.error) { %}
-            <td class="name"><span>{%=file.name%}</span></td>
-            <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-            <td class="error" colspan="2"><span class="label label-important">
-            {%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
+            <div class="name span10"><span>{%=file.name%}</span></div>
+            <div class="size span2"><span>{%=o.formatFileSize(file.size)%}</span></div>
+            <div class="row-fluid error"><span class="label label-important">
+            {%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</div>
         {% } else { %}
-            <td class="name">
+            <div class="name span10">
                 <span>{%=file.name%}</span>
-            </td>
-            <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-            <td colspan="2"></td>
+            </div>
+            <div class="size span2"><span>{%=o.formatFileSize(file.size)%}</span></div>
         {% } %}
         
-    </tr>
+    </div>
 {% } %}
 </script>
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
@@ -321,11 +318,11 @@
                 typeof window[fileuploadadd] == 'function' && window[fileuploadadd](e, data);
                 console.log(e);
                 console.log(data);
-                alert("fileuploadadd");
+                //alert("fileuploadadd");
             })
             .bind('fileuploadsubmit', function (e, data) {
                 typeof window[fileuploadsubmit] == 'function' && window[fileuploadsubmit](e, data);
-                alert("fileuploadsubmit");
+                //alert("fileuploadsubmit");
             })
             .bind('fileuploadsend', function (e, data) {
                 typeof window[fileuploadsend] == 'function' && window[fileuploadsend](e, data);
@@ -377,7 +374,9 @@
             })
             .bind('fileuploadcompleted', function (e, data) {
                 typeof window[fileuploadcompleted] == 'function' && window[fileuploadcompleted](e, data);
-
+                try {
+                    app.mainappdom.trigger("loadfiles");
+                } catch{ }
                 console.log(data);
             })
             .bind('fileuploadfailed', function (e, data) {

@@ -56,7 +56,7 @@ public class userhandler : IHttpHandler
             {
                 MemberManager.ChangePassword(m.Id, pass);
                 EmailManager.SendMail(EmailManager.noreply, email, "", "", EmailManager.GetOTPEmail(pass),
-                    string.Format("{0} OTP", Utility.SiteName), EmailMessageType.Communication, "OTP");
+                    string.Format("{0} OTP", Utility.SiteName), EmailMessageType.Communication, "OTP", m.Id);
                 return js.Serialize(new { email = m.Email, id = m.PublicID, isValidated = false, success = true });
             }
             else
@@ -68,7 +68,7 @@ public class userhandler : IHttpHandler
                 {
                     m = MemberManager.GetUser(email);
                     EmailManager.SendMail(EmailManager.noreply, email, "", "", EmailManager.GetSignupEmail(pass),
-                        string.Format("{0} OTP", Utility.SiteName), EmailMessageType.Communication, "OTP");
+                        string.Format("{0} OTP", Utility.SiteName), EmailMessageType.Communication, "OTP", m.Id);
 
                     return js.Serialize(new { email = m.Email, id = m.PublicID, isValidated = false, success = true });
                 }
