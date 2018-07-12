@@ -64,7 +64,8 @@ namespace FileParking.Models
                         Status = (byte)MemberPlanStatus.Active,
                         Term = FreePlan.Term,
                         TransactionCode = "",
-                        TransactionDetails = ""
+                        TransactionDetails = "",
+                        FileSize = FreePlan.FileSize
                     };
                 }
 

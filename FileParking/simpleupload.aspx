@@ -2,9 +2,10 @@
 
 <!-- The file upload form used as target for the file upload widget -->
 <div id="fileupload">
+
     <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
     <div class="row-fluid fileupload-buttonbar">
-        <div class="span12" style="text-align:center;">
+        <div class="span12" style="text-align: center;">
             <!-- The fileinput-button span is used to style the file input field as button -->
             <span class="btn btn-action fileinput-button"><i class="icon-plus"></i><span>Add files...</span>
                 <!--Enable selecting a complete folder structure, this is currently only supported by Google Chrome-->
@@ -33,10 +34,11 @@
             </div>
         </div>
     </div>
+
     <div class="fileupload-loading">
     </div>
     <!--<div id="dropzone" class="fade well">Drop files here</div>-->
-    
+
     <br />
     <div class="container-fluid files">
     </div>
@@ -318,6 +320,10 @@
                 typeof window[fileuploadadd] == 'function' && window[fileuploadadd](e, data);
                 console.log(e);
                 console.log(data);
+                
+                if (app.remaininglimit() < data.files.length) {
+                    data.files.slice(0, data.files.length - app.remaininglimit());
+                }
                 //alert("fileuploadadd");
             })
             .bind('fileuploadsubmit', function (e, data) {

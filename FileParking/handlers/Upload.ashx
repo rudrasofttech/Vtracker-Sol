@@ -95,7 +95,7 @@ public class Upload : IHttpHandler
         }
 
 
-        DM = new DriveManager(new Member(), HttpContext.Current.Server.MapPath("~"), string.Format("{0}/{1}", Utility.SiteURL, ""));
+        DM = new DriveManager(new Member(), HttpContext.Current.Server.MapPath(string.Format("~/{0}", CurrentMember.Folder)), string.Format("{0}/{1}", Utility.SiteURL, CurrentMember.Folder));
 
         // Cross-site chunked uploads
         context.Response.AddHeader("Access-Control-Allow-Headers", "X-File-Name,X-File-Type,X-File-Size");
@@ -131,7 +131,10 @@ public class Upload : IHttpHandler
                 break;
             case "POST":
             case "PUT":
-                UploadFile(context);
+                if (DM.RemainingFileLimit() > 0)
+                {
+                    UploadFile(context);
+                }
                 break;
             case "DELETE":
                 DeleteFile(context);

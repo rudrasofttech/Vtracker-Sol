@@ -2,22 +2,11 @@
     font-family: Montserrat,Helvetica,Arial,sans-serif !important;
     color: #777;
 }
-
-    body.bg1, body.bg1 .navbar-fixed-top {
-        background-image: url(../img/bg/curls.png);
-        background-attachment:fixed;
-    }
-
-    body .sitename {
+body .sitename {
         text-align: center;
         margin: 20px 0px 30px 0px;
     }
-
-    body.bg1 .sitename {
-        color: #fff;
-    }
-
-    body .empty{
+body .empty{
         text-align:center;
     }
 
@@ -25,6 +14,34 @@
         background-color:#fff;
         border-radius:0px;
         padding:15px;
+    }
+
+    body.bg1, body.bg1 .navbar-fixed-top {
+        background-image: url(../img/bg/Sports.png);
+        background-attachment:fixed;
+    }
+
+    body.doodles, body.doodles .navbar-fixed-top {
+        background-image: url(../img/bg/doodles.png);
+        background-attachment: fixed;
+    }
+
+    body.bg1 .sitename {
+        color: #fff;
+    }
+
+    body.doodles .sitename {
+        color: #777;
+    }
+
+    body.doodles .card {
+        border:1px solid #777;
+    }
+
+    body.doodles .sitename {
+        background-color: #fff;
+        padding: 20px;
+        margin: 10px 0px 0px 0px
     }
 
 h1, h2, h3, h4, h5, h6{
@@ -134,16 +151,30 @@ border-radius:0px;
 .view2 .drive > .card{
     min-height:calc(100vh - 135px);
 }
+body {
+    margin-top: 90px;
+}
+@media (max-width: 979px) {
+    body {
+        margin-top: 0px;
+    }
+}
+/**/
 
-.view2 .sendform > .card {
-    top: calc(50vh - 110px);
-    position: fixed;
+.alert-danger, .alert-error {
+    background-color: #FF4747;
+    border-color: #FF4747;
+    color:#fff;
+    text-shadow:none;
 }
 
-    .view2 .sendform > .card input{
-        width:300px;
-    }
+.alert-info {
+    background-color: #1E8089;
+    border-color: #1E8089;
+    color:#fff;
+    text-shadow:none;
+}
 
-body{
-    margin-top:90px;
+.bold{
+    font-weight:bold;
 }

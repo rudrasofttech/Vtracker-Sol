@@ -84,6 +84,9 @@ public class parkedfilehandler : IHttpHandler
             case "link":
                 context.Response.Write(Download());
                 break;
+            case "checklimit":
+                context.Response.Write(CheckLimit());
+                break;
             default:
                 context.Response.Write("");
                 break;
@@ -91,13 +94,29 @@ public class parkedfilehandler : IHttpHandler
 
     }
 
+    private string CheckLimit()
+    {
+        JavaScriptSerializer js = new JavaScriptSerializer();
+        DriveManager dm = new DriveManager(CurrentMember, Context.Server.MapPath("~/" + CurrentMember.Folder), "~/" + CurrentMember.Folder);
+        try
+        {
+            return js.Serialize(new { success = true, remaining = dm.RemainingFileLimit() });
+        }
+        catch (DriveDoesNotExistException)
+        {
+            Context.Response.StatusCode = 500;
+            Context.Response.TrySkipIisCustomErrors = true;
+            return js.Serialize(new { success = false, message = "Invalid User" });
+        }
+    }
     private string GetFileList()
     {
         JavaScriptSerializer js = new JavaScriptSerializer();
         DriveManager dm = new DriveManager(CurrentMember, Context.Server.MapPath("~/" + CurrentMember.Folder), "~/" + CurrentMember.Folder);
         try
         {
-            return js.Serialize(new { success = true, files = dm.GetFileItemList("") });
+            dm.RemoveExpiredFiles("");
+            return js.Serialize(new { success = true, files = dm.GetFileItemList(""), remaining = dm.RemainingFileLimit() });
         }
         catch (DriveDoesNotExistException)
         {
@@ -173,7 +192,7 @@ public class parkedfilehandler : IHttpHandler
         try
         {
             DriveManager dm = new DriveManager(CurrentMember, Context.Server.MapPath("~/" + CurrentMember.Folder), "~/" + CurrentMember.Folder);
-            return js.Serialize(new { success = dm.DeleteFile(fileName), name = fileName });
+            return js.Serialize(new { success = dm.DeleteFile(fileName), name = fileName, remaining = dm.RemainingFileLimit() });
         }
         catch (DriveDoesNotExistException)
         {

@@ -137,6 +137,31 @@ namespace FileParking.Models
             }
         }
 
+        public void RemoveExpiredFiles(string folderpath)
+        {
+            if (!DriveExist)
+            {
+                throw new DriveDoesNotExistException();
+            }
+
+            List<RFileItem> list = new List<RFileItem>();
+            string drivepath = Path.Combine(MemberDataAbsPath, folderpath);
+            MemberPlan mp = PlanManager.GetUserActivePlan(CurrentMember.Id);
+
+            DirectoryInfo di = new DirectoryInfo(drivepath);
+            if (di.Exists)
+            {
+                foreach (FileInfo i in di.EnumerateFiles())
+                {
+                    if((mp.Amount == 0 && i.CreationTimeUtc.AddDays(mp.Term) < DateTime.UtcNow) ||
+                        (mp.Amount > 0 && mp.ExpiryDate < DateTime.UtcNow))
+                    {
+                        i.Delete();
+                    }
+                }
+            }
+        }
+
         public List<RFileItem> GetFileItemList(string folderpath)
         {
             if (!DriveExist)
@@ -146,14 +171,17 @@ namespace FileParking.Models
 
             List<RFileItem> list = new List<RFileItem>();
             string drivepath = Path.Combine(MemberDataAbsPath, folderpath);
+            MemberPlan mp = PlanManager.GetUserActivePlan(CurrentMember.Id);
 
-            DirectoryInfo di = new DirectoryInfo(drivepath);
+                DirectoryInfo di = new DirectoryInfo(drivepath);
             if (di.Exists)
             {
                 foreach (FileInfo i in di.EnumerateFiles())
                 {
                     RFileItem rdi = new RFileItem();
                     rdi.ID = Guid.NewGuid();
+                    rdi.ExpiryDate = mp.Amount == 0 ? i.CreationTimeUtc.AddDays(mp.Term) : mp.ExpiryDate;
+
                     rdi.CreateDate = i.CreationTime;
                     rdi.FileType = i.Extension;
                     rdi.LastAccessDate = i.LastAccessTime;
@@ -314,6 +342,13 @@ namespace FileParking.Models
             }
         }
 
+        public int RemainingFileLimit()
+        {
+            MemberPlan mp = PlanManager.GetUserActivePlan(CurrentMember.Id);
+            int fileCount = GetFileItemList("").Count;
+            return mp.Limit - fileCount;
+        } 
+
     }
 
     public class RDirectoryItem
@@ -371,6 +406,14 @@ namespace FileParking.Models
         public string ThumbNail { get; set; }
         public DriveItemType ItemType { get; set; }
         public string WebPath { get; set; }
+        public DateTime ExpiryDate { get; set; }
+        public string ExpiryDateDisplay { get {
+                if (ExpiryDate != null)
+                {
+                    return ExpiryDate.ToString("yy/M/d h:mm tt");
+                }
+                else { return ""; }
+            } }
     }
 
     public enum DriveItemType

@@ -22,6 +22,7 @@ namespace VTracker.Models
     {
         LastHour = 1,
         Today = 2,
+        Yesterday = 13,
         Last7Days = 3,
         Last15Days = 4,
         Last30Days = 5,

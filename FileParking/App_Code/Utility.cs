@@ -66,6 +66,8 @@ namespace FileParking.Models
             }
         }
 
+        public static Guid ProPlanId { get { return new Guid("f04639d7-0b5d-43e2-9fb4-89f001f6c295"); } }
+
         public static string OTPEmail
         {
             get

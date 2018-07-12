@@ -33,11 +33,11 @@ var MemberPlan = /** @class */ (function () {
     return MemberPlan;
 }());
 var ParkedFile = /** @class */ (function () {
-    function ParkedFile(_name, _size, _created, _modified) {
+    function ParkedFile(_name, _size, _created, _expiry) {
         this.name = ko.observable(_name);
         this.size = ko.observable(_size);
         this.created = ko.observable(_created);
-        this.modified = ko.observable(_modified);
+        this.expiry = ko.observable(_expiry);
     }
     return ParkedFile;
 }());
@@ -164,6 +164,7 @@ var MainApp = /** @class */ (function () {
         this.files = ko.observableArray([]);
         this.shouldshowplans = ko.observable(true);
         this.activeplan = ko.observable(null);
+        this.remaininglimit = ko.observable(null);
     }
     MainApp.prototype.removeFile = function (d) {
         if (confirm("Are you sure you want to delete this file?")) {
@@ -175,6 +176,7 @@ var MainApp = /** @class */ (function () {
                     app.files.remove(function (f) {
                         return f.name() == data.name;
                     });
+                    app.remaininglimit(data.remaining);
                 }
                 else {
                     Message.Display("Could fetch files", "error");
@@ -217,10 +219,11 @@ var MainApp = /** @class */ (function () {
         var jqxhr = $.getJSON("handlers/filehandler.ashx", { a: "list", token: user.token }, function () {
         }).done(function (data) {
             if (data.success) {
+                instance.remaininglimit(data.remaining);
                 instance.files.removeAll();
                 for (var k in data.files) {
                     var f = data.files[k];
-                    instance.files.push(new ParkedFile(f.Name, f.Size, f.CreateDateDisplay, f.ModifyDateDisplay));
+                    instance.files.push(new ParkedFile(f.Name, f.Size, f.CreateDateDisplay, f.ExpiryDateDisplay));
                 }
             }
             else {
@@ -251,14 +254,33 @@ var MainApp = /** @class */ (function () {
             Loader.Hide();
         });
     };
+    MainApp.prototype.loadRemainingLimit = function () {
+        var instance = this;
+        Loader.Show();
+        var jqxhr = $.getJSON("handlers/filehandler.ashx", { a: "checklimit", token: user.token }, function () {
+        }).done(function (data) {
+            if (data.success) {
+                instance.remaininglimit(data.remaining);
+            }
+            else {
+                Message.Display("Could not fetch remaining limit", "error");
+            }
+        }).fail(function () {
+            Message.Display("Something went wrong! Try again.", "error");
+        }).always(function () {
+            Loader.Hide();
+        });
+    };
     MainApp.prototype.onLoadFiles = function (event) {
         app.loadList();
+        app.loadRemainingLimit();
     };
     MainApp.prototype.onUserValidated = function (event, _mainappdom) {
         app.uploadFrm = new FileUploadForm(_mainappdom);
         app.uploadFrm.loadForm();
         app.viewshouldchange();
         app.loadActivePlan();
+        app.loadRemainingLimit();
         app.mainappdom.trigger("loadfiles");
     };
     MainApp.prototype.onAuthExpired = function (event) {
@@ -281,7 +303,7 @@ app = new MainApp();
 user = null;
 user = new UserIdentity('raj@gmail.com', '11310605-0FAA-467F-A5AC-211BB2BD0EA2');
 user.isValidated = true;
-user.token = '5C0577C0-28F9-4BF7-BC52-72E95E574C0F';
+user.token = '1A4621FF-ABD2-44D6-9E07-18D0514A68C4';
 app.bind();
 ko.applyBindings(app);
 app.mainappdom.trigger("uservalidated", app.mainappdom);

@@ -17,7 +17,7 @@
     <link href="css/bootstrap-image-gallery.min.css" rel="stylesheet" type="text/css" />
     <link href="css/jquery.fileupload-ui.css" rel="stylesheet" type="text/css" />
 </head>
-<body id="mainapp" class="bg1">
+<body id="mainapp" class="doodles">
     <div class="container">
         <div class="row-fluid navbar-fixed-top">
             <div class="span4">
@@ -45,18 +45,28 @@
         </div>
         <div class="row-fluid view2">
             <div class="span4 sendform">
-                <div class="card">
-                    <div>
-                        <label class="control-label" for="toemailtxt">To</label>
-                        <input type="text" id="toemailtxt" placeholder="Emails" />
+                <div data-spy="affix" data-offset-top="0" style="display: inline-block">
+                    <div class="card">
+                        <div>
+                            <label class="control-label" for="toemailtxt">To</label>
+                            <input type="text" id="toemailtxt" placeholder="Emails" />
+                        </div>
+                        <div>
+                            <label class="control-label" for="messagetxt">Message</label>
+                            <input type="text" id="messagetxt" />
+                        </div>
+                        <button type="button" class="btn"><i class="fa fa-paper-plane-o" aria-hidden="true"></i>Send</button>
                     </div>
-                    <div>
-                        <label class="control-label" for="messagetxt">Message</label>
-                        <input type="text" id="messagetxt" />
+                    <!-- ko if: activeplan() != null-->
+                    <div class="card" style="margin-top: 30px;">
+                        <h4 class="bold"><span data-bind="text: activeplan().name"></span>User</h4>
+                        <h5><span class="bold" data-bind="text: files().length"></span> / <span class="bold" data-bind="text: activeplan().limit"></span> File Stats</h5>
+                        <h6><span class="bold" data-bind="text: activeplan().filesize"></span> per File</h6>
+                        <div data-bind="visible: shouldshowplans">
+                            Need more storage <a href="#planModal" role="button" data-toggle="modal" class="btn btn-info">Go Pro</a>
+                        </div>
                     </div>
-
-
-                    <button type="button" class="btn"><i class="fa fa-paper-plane-o" aria-hidden="true"></i>Send</button>
+                    <!-- /ko -->
 
                 </div>
 
@@ -66,20 +76,13 @@
                     <div id="uploadfrm">
                     </div>
                     <div id="filelist">
-
-                        <!-- ko if: activeplan() != null-->
-                        <p>
-                            You are currently using our <span data-bind="text: activeplan().name"></span>plan. You can park <span data-bind="text: activeplan().limit"></span>files (<span data-bind="text: activeplan().filesize"></span>) for 
-                        up to <span data-bind="text: activeplan().term"></span>days.
-                        </p>
-                        <!-- /ko -->
                         <!-- ko if: files().length > 0-->
                         <table class="table table-hover table-condensed">
                             <tr>
                                 <th>Name</th>
                                 <th>Size</th>
                                 <th>Create Date</th>
-                                <th>Modified Date</th>
+                                <th>Expiry Date</th>
                                 <th></th>
                             </tr>
                             <tbody data-bind="foreach: files">
@@ -87,7 +90,7 @@
                                     <td data-bind="text: name"></td>
                                     <td data-bind="text: size"></td>
                                     <td data-bind="text: created"></td>
-                                    <td data-bind="text: modified"></td>
+                                    <td data-bind="text: expiry"></td>
                                     <td>
                                         <button class="btn btn-link" data-bind="click: $parent.removeFile"><i class="icon-remove"></i></button>
                                     </td>
@@ -139,7 +142,46 @@
                             <li>Parked for 365 days</li>
                             <li>Upto 120 GB Storage</li>
                         </ul>
-                        <a href="#" class="btn btn-primary">I Prefer Pro</a>
+
+                        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+                        <div id="paypal-button">
+                            <script>
+                                (function () {
+                                    paypal.Button.render({
+                                        env: 'sandbox', // Or 'production',
+                                        client: {
+                                            sandbox: 'rajkiran.singh-facilitator@rudrasofttech.com',
+                                            production: 'rajkiran.singh@rudrasofttech.com'
+                                        },style: {
+                                    size: 'small',
+                                    color: 'gold',
+                                    shape: 'pill',
+                                },
+                                        payment: function (data, actions) {
+                                    return actions.payment.create({
+                                        transactions: [{
+                                            amount: {
+                                                total: '<%: ProPlan.Price %>',
+                                                currency: 'USD'
+                                            }
+                                        }]
+                                    });
+                                },
+                                        onAuthorize: function (data, actions) {
+                                            return actions.redirect();
+                                        },
+                                        onCancel: function (data, actions) {
+                                            return actions.redirect();
+                                        },
+                                        onError: function (error) {
+                                            // You will want to handle this differently
+                                            return alert(error);
+                                        }
+                                    }, '#paypal-button');
+                                })();
+                            </script>
+                        </div>
+                        
                     </div>
                 </div>
             </div>

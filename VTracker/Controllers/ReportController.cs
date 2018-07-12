@@ -96,6 +96,38 @@ namespace VTracker.Controllers
                             wdp.BrowserData.AddRange(GetBrowserUsage(vt));
                             wdp.RefererList.AddRange(vt.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
+                        case ReportDateRangeType.Yesterday:
+                            var vty = visits.Where(t => t.DateCreated >= new DateTime(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month, DateTime.Now.AddDays(-1).Day)
+                            && t.DateCreated < new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day)
+                            ).ToList();
+                            DateTime daystarty = new DateTime(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month, DateTime.Now.AddDays(-1).Day);
+                            wdp.VisitCount = vty.Count;
+                            while (daystarty <= new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day))
+                            {
+                                VisitCountChartPoint p = new VisitCountChartPoint();
+                                p.X = daystarty.ToString("h:m tt");
+                                p.Y = vty.Where(t => t.DateCreated >= daystarty &&
+                                t.DateCreated <= daystarty.AddHours(1)).Count();
+                                wdp.VisitsData.Add(p);
+
+                                VisitCountChartPoint np = new VisitCountChartPoint();
+                                np.X = daystarty.ToString("h:m tt");
+                                np.Y = vty.Where(t => t.DateCreated >= daystarty &&
+                                t.DateCreated <= daystarty.AddHours(1) && t.LastVisitID.HasValue == false).Count();
+                                wdp.NewVisitsData.Add(np);
+
+                                VisitCountChartPoint rp = new VisitCountChartPoint();
+                                rp.X = daystarty.ToString("h:m tt");
+                                rp.Y = vty.Where(t => t.DateCreated >= daystarty &&
+                                t.DateCreated <= daystarty.AddHours(1) && t.LastVisitID.HasValue == true).Count();
+                                wdp.ReturnVisitsData.Add(rp);
+
+                                daystarty = daystarty.AddHours(1);
+                            }
+                            wdp.VisitChartDescription = "Yesterday";
+                            wdp.BrowserData.AddRange(GetBrowserUsage(vty));
+                            wdp.RefererList.AddRange(vty.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
+                            break;
                         case ReportDateRangeType.LastHour:
                             var vlh = visits.Where(t => t.DateCreated >= DateTime.Now.AddMinutes(-60)).ToList();
                             wdp.VisitCount = vlh.Count;
