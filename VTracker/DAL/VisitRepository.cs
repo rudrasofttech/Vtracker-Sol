@@ -10,6 +10,7 @@ namespace VTracker.DAL
     public interface IVisitRepository : IDisposable
     {
         IEnumerable<Visit> GetVisits();
+        IEnumerable<Visit> GetVisits(int websiteId);
         IEnumerable<Visit> GetVisitsByWebpage(int webpageId);
         Visit GetVisitByID(int id);
         Visit GetVisitByCC(Guid cc);
@@ -58,6 +59,11 @@ namespace VTracker.DAL
         public IEnumerable<Visit> GetVisits()
         {
             return context.Visits.ToList();
+        }
+
+        public IEnumerable<Visit> GetVisits(int websiteId)
+        {
+            return context.Visits.Where(t => t.Website.ID == websiteId).OrderByDescending(t => t.DateCreated).ToList();
         }
 
         public void InsertVisit(Visit w)

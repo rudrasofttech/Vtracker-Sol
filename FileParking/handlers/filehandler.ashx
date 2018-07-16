@@ -5,6 +5,7 @@ using System.Web;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Text;
 using FileParking.Models;
 using System.Web.Script.Serialization;
 
@@ -84,6 +85,9 @@ public class parkedfilehandler : IHttpHandler
             case "link":
                 context.Response.Write(Download());
                 break;
+            case "share":
+                context.Response.Write(Share());
+                break;
             case "checklimit":
                 context.Response.Write(CheckLimit());
                 break;
@@ -92,6 +96,82 @@ public class parkedfilehandler : IHttpHandler
                 break;
         }
 
+    }
+
+    public string Share()
+    {
+        JavaScriptSerializer js = new JavaScriptSerializer();
+        List<string> emails = new List<string>();
+        if (!string.IsNullOrEmpty(Context.Request["emails"]))
+        {
+            foreach (string s in Context.Request["emails"].Trim().Split(",".ToCharArray()))
+            {
+                emails.Add(s);
+            }
+        }
+        List<string> files = new List<string>();
+        if (!string.IsNullOrEmpty(Context.Request["f"]) && emails.Count > 0)
+        {
+            foreach (string s in Context.Request["f"].Trim().Split(",".ToCharArray()))
+            {
+                files.Add(s);
+            }
+
+            try
+            {
+                DriveManager dm = new DriveManager(CurrentMember, Context.Server.MapPath("~/" + CurrentMember.Folder), "~/" + CurrentMember.Folder);
+                List<DownloadLink> links = new List<DownloadLink>();
+                using (FileParkingDataContext dc = new FileParkingDataContext())
+                {
+                    foreach (string fileName in files)
+                    {
+                        if (dm.FileExists(fileName))
+                        {
+                            DownloadLink dl = dc.DownloadLinks.SingleOrDefault(t => t.FileName.ToLower() == fileName.ToLower() && t.MemberID == CurrentMember.Id);
+                            if (dl == null)
+                            {
+                                dl = new DownloadLink()
+                                {
+                                    DateCreated = DateTime.UtcNow,
+                                    FileName = fileName,
+                                    Id = Guid.NewGuid(),
+                                    MemberID = CurrentMember.Id,
+                                    Password = ""
+                                };
+                                dc.DownloadLinks.InsertOnSubmit(dl);
+                                dc.SubmitChanges();
+                            }
+                            links.Add(dl);
+                            //return js.Serialize(new { success = false, dl = string.Format("{0}/download.ashx?id={1}", Utility.SiteURL, dl.Id) });
+                        }
+                        else
+                        {
+                            //Context.Response.StatusCode = 500;
+                            //Context.Response.TrySkipIisCustomErrors = true;
+                            //return js.Serialize(new { success = false, message = "File Not Found" });
+
+                        }
+                    }
+                }
+
+                StringBuilder builder = new StringBuilder();
+                foreach (DownloadLink item in links)
+                {
+                    builder.Append("<li>");
+                    builder.Append(string.Format("<a href='{1}'>{0}</a>", item.FileName, string.Format("{0}/download.ashx?id={1}", Utility.SiteURL, item.Id)));
+                    builder.Append(string.Format("<span>{0}</span>", dm.GetFileSize(item.FileName)));
+                    builder.Append("</li>");
+                }
+            }
+            catch { }
+            return "";
+        }
+        else
+        {
+            Context.Response.StatusCode = 500;
+            Context.Response.TrySkipIisCustomErrors = true;
+            return js.Serialize(new { success = false, message = "Invalid Request" });
+        }
     }
 
     private string CheckLimit()

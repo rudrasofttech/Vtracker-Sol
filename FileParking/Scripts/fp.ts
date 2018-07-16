@@ -231,6 +231,19 @@ class MainApp {
         }
     }
 
+    shareFiles() {
+        if ($(".filechk:checked").length == 0) {
+            alert("Please choose a file");
+            return;
+        }
+        if ($('#toemailtxt').val() == "") {
+            alert("Provide an email");
+            $('.multiple_emails-input').focus();
+            return;
+
+        }
+    }
+
     bind() {
         this.mainappdom.on("uservalidated", this.onUserValidated);
         this.mainappdom.on("authexpired", this.onAuthExpired);
@@ -269,6 +282,9 @@ class MainApp {
                     var f = data.files[k];
                     instance.files.push(new ParkedFile(f.Name, f.Size, f.CreateDateDisplay, f.ExpiryDateDisplay));
                 }
+                $(".filechk").click(function (event) {
+                    event.stopPropagation();
+                });
             } else {
                 Message.Display("Could not fetch files", "error");
             }
@@ -352,7 +368,7 @@ app = new MainApp();
 user = null;
 user = new UserIdentity('raj@gmail.com', '11310605-0FAA-467F-A5AC-211BB2BD0EA2');
 user.isValidated = true;
-user.token = '1A4621FF-ABD2-44D6-9E07-18D0514A68C4';
+user.token = 'EED7529F-7E27-497F-B30D-316F78417D5F';
 
 app.bind();
 ko.applyBindings(app);

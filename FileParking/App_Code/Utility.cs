@@ -66,6 +66,18 @@ namespace FileParking.Models
             }
         }
 
+        public static string FileShareEmail
+        {
+            get
+            {
+                if (CacheManager.Get<string>("fileshareemail") == null)
+                {
+                    CacheManager.AddSliding("fileshareemail", System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("~/emailtemplates/fileshare.html")), 180);
+                }
+                return CacheManager.Get<string>("fileshareemail");
+            }
+        }
+
         public static Guid ProPlanId { get { return new Guid("f04639d7-0b5d-43e2-9fb4-89f001f6c295"); } }
 
         public static string OTPEmail

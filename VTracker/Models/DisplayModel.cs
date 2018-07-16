@@ -44,11 +44,29 @@ namespace VTracker.Models
         public int WebsiteId { get; set; }
         public string Path { get; set; }
         public ReportDateRangeType Range { get; set; }
-        //public int VisitCountLast30Days { get; set; }
-        //public int VisitCountLastHour { get; set; }
-        //public int VisitCountLastWeek { get; set; }
-        //public int VisitCountToday { get; set; }
-        //public int TotalVisitCount { get; set; }
+        public int VisitCount { get; set; }
+        public List<VisitCountChartPoint> VisitsData { get; set; }
+        public List<VisitCountChartPoint> NewVisitsData { get; set; }
+        public List<VisitCountChartPoint> ReturnVisitsData { get; set; }
+        public List<PieChartPoint> BrowserData { get; set; }
+        public string VisitChartDescription { get; set; }
+        public List<RefererData> RefererList { get; set; }
+
+    }
+
+    public class WebsiteDisplayPublic
+    {
+
+        public WebsiteDisplayPublic()
+        {
+            VisitsData = new List<VisitCountChartPoint>();
+            BrowserData = new List<PieChartPoint>();
+            RefererList = new List<RefererData>();
+            NewVisitsData = new List<VisitCountChartPoint>();
+            ReturnVisitsData = new List<VisitCountChartPoint>();
+        }
+        public int WebsiteId { get; set; }
+        public ReportDateRangeType Range { get; set; }
         public int VisitCount { get; set; }
         public List<VisitCountChartPoint> VisitsData { get; set; }
         public List<VisitCountChartPoint> NewVisitsData { get; set; }

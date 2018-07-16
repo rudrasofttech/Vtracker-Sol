@@ -16,8 +16,10 @@
 
     <link href="css/bootstrap-image-gallery.min.css" rel="stylesheet" type="text/css" />
     <link href="css/jquery.fileupload-ui.css" rel="stylesheet" type="text/css" />
+    <link href="css/multiple-emails.css" rel="stylesheet" />
+  
 </head>
-<body id="mainapp" class="doodles">
+<body id="mainapp" class="curls1">
     <div class="container">
         <div class="row-fluid navbar-fixed-top">
             <div class="span4">
@@ -26,7 +28,7 @@
                 <h1 class="sitename">File Transfer</h1>
             </div>
             <div class="span4" style="text-align: right; padding: 20px 10px;">
-                <a href="#planModal" role="button" data-toggle="modal" class="btn btn-info" data-bind="visible: shouldshowplans">Plans</a>
+                <!--<a href="#planModal" role="button" data-toggle="modal" class="btn btn-info" data-bind="visible: shouldshowplans">Plans</a>-->
             </div>
         </div>
         <div class="view1 card" id="loginfrm">
@@ -55,13 +57,13 @@
                             <label class="control-label" for="messagetxt">Message</label>
                             <input type="text" id="messagetxt" />
                         </div>
-                        <button type="button" class="btn"><i class="fa fa-paper-plane-o" aria-hidden="true"></i>Send</button>
+                        <button type="button" class="btn" data-bind="click: shareFiles"><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Send</button>
                     </div>
                     <!-- ko if: activeplan() != null-->
                     <div class="card" style="margin-top: 30px;">
-                        <h4 class="bold"><span data-bind="text: activeplan().name"></span>User</h4>
-                        <h5><span class="bold" data-bind="text: files().length"></span> / <span class="bold" data-bind="text: activeplan().limit"></span> File Stats</h5>
-                        <h6><span class="bold" data-bind="text: activeplan().filesize"></span> per File</h6>
+                        <h4 class="bold"><span data-bind="text: activeplan().name"></span> User</h4>
+                        <h5><span class="bold" data-bind="text: activeplan().limit"></span> Files Limit</h5>
+                        <h6><span class="bold" data-bind="text: activeplan().filesize"></span> per File Limit</h6>
                         <div data-bind="visible: shouldshowplans">
                             Need more storage <a href="#planModal" role="button" data-toggle="modal" class="btn btn-info">Go Pro</a>
                         </div>
@@ -79,6 +81,7 @@
                         <!-- ko if: files().length > 0-->
                         <table class="table table-hover table-condensed">
                             <tr>
+                                <th><input type="checkbox" class="filechkheader" onchange="$('.filechk').prop('checked', $(this).is(':checked'))" /></th>
                                 <th>Name</th>
                                 <th>Size</th>
                                 <th>Create Date</th>
@@ -86,7 +89,10 @@
                                 <th></th>
                             </tr>
                             <tbody data-bind="foreach: files">
-                                <tr>
+                                <tr onclick="$(this).find('.filechk').prop('checked', !($(this).find('.filechk').is(':checked')))">
+                                    <td>
+                                        <input type="checkbox" class="filechk" data-bind="attr: {value: name}" onclick="fileCHKChecked(event)" />
+                                    </td>
                                     <td data-bind="text: name"></td>
                                     <td data-bind="text: size"></td>
                                     <td data-bind="text: created"></td>
@@ -124,17 +130,7 @@
         <div class="modal-body">
             <div class="container-fluid">
                 <div class="row-fluid">
-                    <div class="span6">
-                        <h4>Free</h4>
-                        <ul>
-                            <li>10 Files</li>
-                            <li>2 Gb per File</li>
-                            <li>Parked for 2 days</li>
-                            <li>Upto 20 GB</li>
-                        </ul>
-                        <a href="#" class="btn btn-default">I Choose Free</a>
-                    </div>
-                    <div class="span6">
+                    <div class="span12">
                         <h4>Pro</h4>
                         <ul>
                             <li>30 Files</li>
@@ -152,21 +148,21 @@
                                         client: {
                                             sandbox: 'rajkiran.singh-facilitator@rudrasofttech.com',
                                             production: 'rajkiran.singh@rudrasofttech.com'
-                                        },style: {
-                                    size: 'small',
-                                    color: 'gold',
-                                    shape: 'pill',
-                                },
+                                        }, style: {
+                                            size: 'small',
+                                            color: 'gold',
+                                            shape: 'pill',
+                                        },
                                         payment: function (data, actions) {
-                                    return actions.payment.create({
-                                        transactions: [{
-                                            amount: {
-                                                total: '<%: ProPlan.Price %>',
-                                                currency: 'USD'
-                                            }
-                                        }]
-                                    });
-                                },
+                                            return actions.payment.create({
+                                                transactions: [{
+                                                    amount: {
+                                                        total: '<%: ProPlan.Price %>',
+                                                        currency: 'USD'
+                                                    }
+                                                }]
+                                            });
+                                        },
                                         onAuthorize: function (data, actions) {
                                             return actions.redirect();
                                         },
@@ -181,15 +177,25 @@
                                 })();
                             </script>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/multiple-emails.js"></script>
     <script src="js/site/bootstrap.js"></script>
     <script src="Scripts/knockout-3.4.2.js"></script>
     <script src="Scripts/fp.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#toemailtxt').multiple_emails();
+        });
+
+        function fileCHKChecked(event) {
+            event.stopPropagation();
+        }
+    </script>
 </body>
 </html>

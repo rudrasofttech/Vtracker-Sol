@@ -236,6 +236,34 @@ namespace FileParking.Models
             return list;
         }
 
+        public string GetFileSize(string filepath)
+        {
+            if (!DriveExist)
+            {
+                throw new DriveDoesNotExistException();
+            }
+            FileInfo fi = new FileInfo(filepath);
+            string size = "";
+            if (fi.Exists)
+            {
+                long length = fi.Length;
+                if (length < 1024)
+                {
+                    size = string.Format("{0} B", fi.Length.ToString());
+                }
+                else if (length >= 1024 && length < (1024 * 1024))
+                {
+                    size = string.Format("{0} KB", (fi.Length / 1024).ToString());
+                }
+                else if (length >= (1024 * 1024) && length < (1024 * 1024 * 1024))
+                {
+                    size = string.Format("{0} MB", ((fi.Length / 1024) / 1024).ToString());
+                }
+            }
+            return size;
+            
+        }
+
         public List<RDirectoryItem> GetDirectoryItemList(string folderpath)
         {
             if (!DriveExist)

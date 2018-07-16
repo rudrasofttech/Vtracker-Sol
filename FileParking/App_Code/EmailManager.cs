@@ -41,6 +41,14 @@ namespace FileParking.Models
             return msg;
         }
 
+        public static string GetFileShareEmail(string from, int count, int totalsize, string expiry, string links)
+        {
+            string msg = Utility.FileShareEmail.Replace("[from]", from).Replace("[count]", count.ToString())
+                .Replace("[totalsize]", totalsize.ToString()).Replace("[expiry]", expiry).Replace("[links]", links);
+
+            return msg;
+        }
+
         public static bool SendMail(String fromAddress, String toAddress, String senderName, String recieverName, 
             String body, String subject, EmailMessageType messageType, string emailGroup,int memberId)
         {
