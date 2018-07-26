@@ -102,11 +102,19 @@ public class parkedfilehandler : IHttpHandler
     {
         JavaScriptSerializer js = new JavaScriptSerializer();
         List<string> emails = new List<string>();
+        string message = "";
+        if (!string.IsNullOrEmpty(Context.Request["message"]))
+        {
+            message = Context.Request["message"].Trim();
+        }
         if (!string.IsNullOrEmpty(Context.Request["emails"]))
         {
             foreach (string s in Context.Request["emails"].Trim().Split(",".ToCharArray()))
             {
-                emails.Add(s);
+                if (!string.IsNullOrEmpty(s))
+                {
+                    emails.Add(s.Replace("\"", "").Replace("[", "").Replace("]", ""));
+                }
             }
         }
         List<string> files = new List<string>();
@@ -114,7 +122,10 @@ public class parkedfilehandler : IHttpHandler
         {
             foreach (string s in Context.Request["f"].Trim().Split(",".ToCharArray()))
             {
-                files.Add(s);
+                if (!string.IsNullOrEmpty(s))
+                {
+                    files.Add(s);
+                }
             }
 
             try
@@ -142,14 +153,6 @@ public class parkedfilehandler : IHttpHandler
                                 dc.SubmitChanges();
                             }
                             links.Add(dl);
-                            //return js.Serialize(new { success = false, dl = string.Format("{0}/download.ashx?id={1}", Utility.SiteURL, dl.Id) });
-                        }
-                        else
-                        {
-                            //Context.Response.StatusCode = 500;
-                            //Context.Response.TrySkipIisCustomErrors = true;
-                            //return js.Serialize(new { success = false, message = "File Not Found" });
-
                         }
                     }
                 }
@@ -159,18 +162,31 @@ public class parkedfilehandler : IHttpHandler
                 {
                     builder.Append("<li>");
                     builder.Append(string.Format("<a href='{1}'>{0}</a>", item.FileName, string.Format("{0}/download.ashx?id={1}", Utility.SiteURL, item.Id)));
-                    builder.Append(string.Format("<span>{0}</span>", dm.GetFileSize(item.FileName)));
+                    builder.Append(string.Format("<span  style='font-size:12px; padding:0px 5px;'> {0}</span>", dm.GetFileSize(item.FileName)));
                     builder.Append("</li>");
                 }
+
+                foreach (string email in emails)
+                {
+                    EmailManager.SendMail(EmailManager.noreply, email, "", "",
+                        EmailManager.GetFileShareEmail(email, links.Count, builder.ToString(), message),
+                        string.Format("{0} sent you {1} files", CurrentMember.Email, links.Count), EmailMessageType.FileShare, "FileShare", CurrentMember.Id);
+                }
+                return js.Serialize(new { success = true, message = string.Format("{0} files shared.", links.Count) });
             }
-            catch { }
-            return "";
+            catch (Exception ex)
+            {
+                Context.Response.StatusCode = 500;
+                Context.Response.TrySkipIisCustomErrors = true;
+                return js.Serialize(new { success = false, message = ex.Message });
+            }
+
         }
         else
         {
             Context.Response.StatusCode = 500;
             Context.Response.TrySkipIisCustomErrors = true;
-            return js.Serialize(new { success = false, message = "Invalid Request" });
+            return js.Serialize(new { success = false, message = "No Files Selected or Emails Provided." });
         }
     }
 

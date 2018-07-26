@@ -242,7 +242,8 @@ namespace FileParking.Models
             {
                 throw new DriveDoesNotExistException();
             }
-            FileInfo fi = new FileInfo(filepath);
+            string absfpath = Path.Combine(MemberDataAbsPath, filepath);
+            FileInfo fi = new FileInfo(absfpath);
             string size = "";
             if (fi.Exists)
             {

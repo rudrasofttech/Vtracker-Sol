@@ -52,7 +52,7 @@ namespace VTracker.Controllers
                 Webpage wp = null;
                 if (v != null)
                 {
-                    v.LastPingDate = DateTime.Now;
+                    v.LastPingDate = DateTime.UtcNow;
                     visitRepository.UpdateVisit(v);
                     visitRepository.Save();
 
@@ -64,7 +64,7 @@ namespace VTracker.Controllers
 
                         if (vp != null && vp.webpage.ID == wp.ID)
                         {
-                            vp.LastPingDate = DateTime.Now;
+                            vp.LastPingDate = DateTime.UtcNow;
                             vp.BrowserHeight = h;
                             vp.BrowserWidth = w;
                             visitRepository.UpdateVisitPage(vp);
@@ -74,10 +74,10 @@ namespace VTracker.Controllers
                         {
                             vp = new VisitPage()
                             {
-                                LastPingDate = DateTime.Now,
+                                LastPingDate = DateTime.UtcNow,
                                 visit = v,
                                 webpage = wp,
-                                DateCreated = DateTime.Now,
+                                DateCreated = DateTime.UtcNow,
                                 BrowserHeight = h,
                                 BrowserWidth = w,
                                 ScrollTop = st,
@@ -131,7 +131,7 @@ namespace VTracker.Controllers
                 {
                     wp = new Webpage()
                     {
-                        DateCreated = DateTime.Now,
+                        DateCreated = DateTime.UtcNow,
                         Path = u.AbsolutePath.Trim(),
                         QueryString = u.Query.Trim(),
                         Status = RecordStatus.Active,
@@ -159,10 +159,10 @@ namespace VTracker.Controllers
                     v = new Visit()
                     {
                         CountryAbbr = "",
-                        DateCreated = DateTime.Now,
+                        DateCreated = DateTime.UtcNow,
                         DateModified = null,
                         IPAddress = Request.UserHostAddress,
-                        LastPingDate = DateTime.Now,
+                        LastPingDate = DateTime.UtcNow,
                         Referer = referer,
                         Status = RecordStatus.Active,
                         WebsiteVisitorReferenceID = wvri,
@@ -186,10 +186,10 @@ namespace VTracker.Controllers
                 {
                     vp = new VisitPage()
                     {
-                        LastPingDate = DateTime.Now,
+                        LastPingDate = DateTime.UtcNow,
                         visit = v,
                         webpage = wp,
-                        DateCreated = DateTime.Now,
+                        DateCreated = DateTime.UtcNow,
                         BrowserWidth = null,
                         BrowserHeight = null,
                         ScrollLeft = sl,
@@ -222,7 +222,7 @@ namespace VTracker.Controllers
             Webpage wp = null;
             if (v != null)
             {
-                v.LastPingDate = DateTime.Now;
+                v.LastPingDate = DateTime.UtcNow;
                 visitRepository.UpdateVisit(v);
                 visitRepository.Save();
 
@@ -238,7 +238,7 @@ namespace VTracker.Controllers
                         vpa.Activity = ActivityName.Click;
                         vpa.ClickTagId = tagid;
                         vpa.ClickTagName = tag;
-                        vpa.DateCreated = DateTime.Now;
+                        vpa.DateCreated = DateTime.UtcNow;
                         vpa.MouseClickX = x;
                         vpa.MouseClickY = y;
                         vpa.visit = v;
@@ -264,7 +264,7 @@ namespace VTracker.Controllers
             Webpage wp = null;
             if (v != null)
             {
-                v.LastPingDate = DateTime.Now;
+                v.LastPingDate = DateTime.UtcNow;
                 visitRepository.UpdateVisit(v);
                 visitRepository.Save();
 
@@ -280,7 +280,7 @@ namespace VTracker.Controllers
                         vpa.Activity = ActivityName.WindowBlur;
                         vpa.ClickTagId = "";
                         vpa.ClickTagName = "";
-                        vpa.DateCreated = DateTime.Now;
+                        vpa.DateCreated = DateTime.UtcNow;
                         vpa.MouseClickX = null;
                         vpa.MouseClickY = null;
                         vpa.visit = v;
@@ -308,7 +308,7 @@ namespace VTracker.Controllers
             Webpage wp = null;
             if (v != null)
             {
-                v.LastPingDate = DateTime.Now;
+                v.LastPingDate = DateTime.UtcNow;
                 visitRepository.UpdateVisit(v);
                 visitRepository.Save();
 
@@ -324,7 +324,7 @@ namespace VTracker.Controllers
                         vpa.Activity = ActivityName.WindowFocus;
                         vpa.ClickTagId = "";
                         vpa.ClickTagName = "";
-                        vpa.DateCreated = DateTime.Now;
+                        vpa.DateCreated = DateTime.UtcNow;
                         vpa.MouseClickX = null;
                         vpa.MouseClickY = null;
                         vpa.visit = v;
@@ -352,7 +352,7 @@ namespace VTracker.Controllers
             Webpage wp = null;
             if (v != null)
             {
-                v.LastPingDate = DateTime.Now;
+                v.LastPingDate = DateTime.UtcNow;
                 visitRepository.UpdateVisit(v);
                 visitRepository.Save();
 
@@ -368,7 +368,7 @@ namespace VTracker.Controllers
                         vpa.Activity = ActivityName.ScrollBottom;
                         vpa.ClickTagId = "";
                         vpa.ClickTagName = "";
-                        vpa.DateCreated = DateTime.Now;
+                        vpa.DateCreated = DateTime.UtcNow;
                         vpa.MouseClickX = null;
                         vpa.MouseClickY = null;
                         vpa.visit = v;

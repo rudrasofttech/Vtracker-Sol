@@ -21,7 +21,7 @@
 </head>
 <body id="mainapp" class="curls1">
     <div class="container">
-        <div class="row-fluid navbar-fixed-top">
+        <div class="row-fluid navbar-fixed-top" style="background-color:#313A45;">
             <div class="span4">
             </div>
             <div class="span4">

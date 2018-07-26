@@ -30,9 +30,9 @@ namespace VTracker.Migrations
             //
 
             //var websites = new List<Website> {
-            //    new Website { ClientID = 1, Name = "Rockying.com", Status= RecordStatus.Active, DateCreated = DateTime.Now },
-            //    new Website { ClientID = 1, Name = "indiabobbles.com", Status= RecordStatus.Active, DateCreated = DateTime.Now },
-            //    new Website { ClientID = 1, Name = "rudrasofttech.com", Status= RecordStatus.Active, DateCreated = DateTime.Now }
+            //    new Website { ClientID = 1, Name = "Rockying.com", Status= RecordStatus.Active, DateCreated = DateTime.UtcNow },
+            //    new Website { ClientID = 1, Name = "indiabobbles.com", Status= RecordStatus.Active, DateCreated = DateTime.UtcNow },
+            //    new Website { ClientID = 1, Name = "rudrasofttech.com", Status= RecordStatus.Active, DateCreated = DateTime.UtcNow }
             //};
 
             //websites.ForEach(w => context.Websites.AddOrUpdate(p => p.Name, w));

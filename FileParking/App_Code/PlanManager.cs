@@ -38,11 +38,20 @@ namespace FileParking.Models
                     Name = "Free",
                     Price = 0,
                     Term = 2,
-                    FileSize = (1024 * 2)
+                    FileSize = (1024 * 5)
                 };
             }
         }
 
+        public static string FreePlanDisplayString
+        {
+            get
+            {
+                return string.Format("Store or share upto {0} GB for free, get more with <a href='{1}'>pro account</a>.", 
+                    (FreePlan.FileSize / 1024) * FreePlan.Limit,
+                    Utility.SiteURL);
+            }
+        }
 
         public static MemberPlan GetUserActivePlan(int memberId)
         {

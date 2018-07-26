@@ -198,6 +198,25 @@ var MainApp = /** @class */ (function () {
             $('.multiple_emails-input').focus();
             return;
         }
+        var filenames = "";
+        $(".filechk:checked").each(function () {
+            filenames += "," + $(this).val();
+        });
+        var instance = this;
+        Loader.Show();
+        var jqxhr = $.getJSON("handlers/filehandler.ashx", { a: "share", token: user.token, emails: $('#toemailtxt').val(), f: filenames }, function () {
+        }).done(function (data) {
+            if (data.success) {
+                Message.Display(data.message, "success");
+            }
+            else {
+                Message.Display("Could not fetch files", "error");
+            }
+        }).fail(function () {
+            Message.Display("Something went wrong! Try again.", "error");
+        }).always(function () {
+            Loader.Hide();
+        });
     };
     MainApp.prototype.bind = function () {
         this.mainappdom.on("uservalidated", this.onUserValidated);
@@ -317,7 +336,7 @@ app = new MainApp();
 user = null;
 user = new UserIdentity('raj@gmail.com', '11310605-0FAA-467F-A5AC-211BB2BD0EA2');
 user.isValidated = true;
-user.token = 'EED7529F-7E27-497F-B30D-316F78417D5F';
+user.token = 'AFE77E11-61D5-4566-9CAC-4B821BF30D6F';
 app.bind();
 ko.applyBindings(app);
 app.mainappdom.trigger("uservalidated", app.mainappdom);

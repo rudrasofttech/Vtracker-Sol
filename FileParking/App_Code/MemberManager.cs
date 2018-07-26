@@ -224,7 +224,7 @@ namespace FileParking.Models
                 using (FileParkingDataContext dc = new FileParkingDataContext())
                 {
                     Member m = new Member();
-                    m.DateCreated = DateTime.Now;
+                    m.DateCreated = DateTime.UtcNow;
                     m.Email = username;
                     m.FirstName = firstName;
                     m.Password = password;

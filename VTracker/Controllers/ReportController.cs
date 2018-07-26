@@ -63,13 +63,13 @@ namespace VTracker.Controllers
                 if (wp != null)
                 {
                     var visits = visitRepository.GetVisitsByWebpage(wp.ID);
-                    DateTime current = DateTime.Now;
+                    DateTime current = DateTime.UtcNow;
                     Dictionary<string, int> browsers = new Dictionary<string, int>();
                     switch (wdp.Range)
                     {
                         case ReportDateRangeType.Today:
-                            var vt = visits.Where(t => t.DateCreated >= DateTime.Now.AddHours(-1 * DateTime.Now.Hour)).ToList();
-                            DateTime daystart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                            var vt = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddHours(-1 * DateTime.UtcNow.Hour)).ToList();
+                            DateTime daystart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day);
                             wdp.VisitCount = vt.Count;
                             while (daystart <= current)
                             {
@@ -98,12 +98,12 @@ namespace VTracker.Controllers
                             wdp.RefererList.AddRange(vt.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
                         case ReportDateRangeType.Yesterday:
-                            var vty = visits.Where(t => t.DateCreated >= new DateTime(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month, DateTime.Now.AddDays(-1).Day)
-                            && t.DateCreated < new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day)
+                            var vty = visits.Where(t => t.DateCreated >= new DateTime(DateTime.UtcNow.AddDays(-1).Year, DateTime.UtcNow.AddDays(-1).Month, DateTime.UtcNow.AddDays(-1).Day)
+                            && t.DateCreated < new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day)
                             ).ToList();
-                            DateTime daystarty = new DateTime(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month, DateTime.Now.AddDays(-1).Day);
+                            DateTime daystarty = new DateTime(DateTime.UtcNow.AddDays(-1).Year, DateTime.UtcNow.AddDays(-1).Month, DateTime.UtcNow.AddDays(-1).Day);
                             wdp.VisitCount = vty.Count;
-                            while (daystarty <= new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day))
+                            while (daystarty <= new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day))
                             {
                                 VisitCountChartPoint p = new VisitCountChartPoint();
                                 p.X = daystarty.ToString("h:m tt");
@@ -130,9 +130,9 @@ namespace VTracker.Controllers
                             wdp.RefererList.AddRange(vty.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
                         case ReportDateRangeType.LastHour:
-                            var vlh = visits.Where(t => t.DateCreated >= DateTime.Now.AddMinutes(-60)).ToList();
+                            var vlh = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddMinutes(-60)).ToList();
                             wdp.VisitCount = vlh.Count;
-                            DateTime past60min = DateTime.Now.AddMinutes(-60);
+                            DateTime past60min = DateTime.UtcNow.AddMinutes(-60);
                             while (past60min <= current)
                             {
                                 VisitCountChartPoint p = new VisitCountChartPoint();
@@ -157,9 +157,9 @@ namespace VTracker.Controllers
                             wdp.RefererList.AddRange(vlh.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
                         case ReportDateRangeType.Last7Days:
-                            var vw = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-7)).ToList();
+                            var vw = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddDays(-7)).ToList();
                             wdp.VisitCount = vw.Count;
-                            daystart = new DateTime(DateTime.Now.AddDays(-7).Year, DateTime.Now.AddDays(-7).Month, DateTime.Now.AddDays(-7).Day);
+                            daystart = new DateTime(DateTime.UtcNow.AddDays(-7).Year, DateTime.UtcNow.AddDays(-7).Month, DateTime.UtcNow.AddDays(-7).Day);
                             while (daystart <= current)
                             {
                                 VisitCountChartPoint p = new VisitCountChartPoint();
@@ -184,10 +184,10 @@ namespace VTracker.Controllers
                             wdp.RefererList.AddRange(vw.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
                         case ReportDateRangeType.Last6Months:
-                            var vm = visits.Where(t => t.DateCreated >= DateTime.Now.AddMonths(-6)).ToList();
+                            var vm = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddMonths(-6)).ToList();
                             wdp.VisitCount = vm.Count;
-                            daystart = new DateTime(DateTime.Now.AddMonths(-6).Year, DateTime.Now.AddMonths(-6).Month, 1);
-                            current = DateTime.Now;
+                            daystart = new DateTime(DateTime.UtcNow.AddMonths(-6).Year, DateTime.UtcNow.AddMonths(-6).Month, 1);
+                            current = DateTime.UtcNow;
                             while (daystart <= current)
                             {
                                 VisitCountChartPoint p = new VisitCountChartPoint();
@@ -212,10 +212,10 @@ namespace VTracker.Controllers
                             wdp.RefererList.AddRange(vm.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
                         case ReportDateRangeType.Last3Months:
-                            var v3m = visits.Where(t => t.DateCreated >= DateTime.Now.AddMonths(-3)).ToList();
+                            var v3m = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddMonths(-3)).ToList();
                             wdp.VisitCount = v3m.Count;
-                            daystart = new DateTime(DateTime.Now.AddMonths(-3).Year, DateTime.Now.AddMonths(-3).Month, 1);
-                            current = DateTime.Now;
+                            daystart = new DateTime(DateTime.UtcNow.AddMonths(-3).Year, DateTime.UtcNow.AddMonths(-3).Month, 1);
+                            current = DateTime.UtcNow;
                             while (daystart <= current)
                             {
                                 VisitCountChartPoint p = new VisitCountChartPoint();
@@ -240,9 +240,9 @@ namespace VTracker.Controllers
                             wdp.RefererList.AddRange(v3m.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
                         case ReportDateRangeType.Last30Days:
-                            var v30d = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-30)).ToList();
+                            var v30d = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddDays(-30)).ToList();
                             wdp.VisitCount = v30d.Count;
-                            daystart = new DateTime(DateTime.Now.AddDays(-30).Year, DateTime.Now.AddDays(-30).Month, DateTime.Now.AddDays(-30).Day);
+                            daystart = new DateTime(DateTime.UtcNow.AddDays(-30).Year, DateTime.UtcNow.AddDays(-30).Month, DateTime.UtcNow.AddDays(-30).Day);
                             while (daystart <= current)
                             {
                                 VisitCountChartPoint p = new VisitCountChartPoint();
@@ -268,9 +268,9 @@ namespace VTracker.Controllers
                             break;
                         case ReportDateRangeType.Last15Days:
 
-                            var v15d = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-15)).ToList();
+                            var v15d = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddDays(-15)).ToList();
                             wdp.VisitCount = v15d.Count;
-                            daystart = new DateTime(DateTime.Now.AddDays(-15).Year, DateTime.Now.AddDays(-15).Month, DateTime.Now.AddDays(-15).Day);
+                            daystart = new DateTime(DateTime.UtcNow.AddDays(-15).Year, DateTime.UtcNow.AddDays(-15).Month, DateTime.UtcNow.AddDays(-15).Day);
                             while (daystart <= current)
                             {
                                 VisitCountChartPoint p = new VisitCountChartPoint();
@@ -295,10 +295,10 @@ namespace VTracker.Controllers
                             wdp.RefererList.AddRange(v15d.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                             break;
                         case ReportDateRangeType.Last12Months:
-                            var v12m = visits.Where(t => t.DateCreated >= DateTime.Now.AddMonths(-12)).ToList();
+                            var v12m = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddMonths(-12)).ToList();
                             wdp.VisitCount = v12m.Count;
-                            daystart = new DateTime(DateTime.Now.AddMonths(-12).Year, DateTime.Now.AddMonths(-12).Month, 1);
-                            current = DateTime.Now;
+                            daystart = new DateTime(DateTime.UtcNow.AddMonths(-12).Year, DateTime.UtcNow.AddMonths(-12).Month, 1);
+                            current = DateTime.UtcNow;
                             while (daystart <= current)
                             {
                                 VisitCountChartPoint p = new VisitCountChartPoint();
@@ -339,13 +339,13 @@ namespace VTracker.Controllers
             {
 
                 var visits = visitRepository.GetVisits(id);
-                DateTime current = DateTime.Now;
+                DateTime current = DateTime.UtcNow;
                 Dictionary<string, int> browsers = new Dictionary<string, int>();
                 switch (wdp.Range)
                 {
                     case ReportDateRangeType.Today:
-                        var vt = visits.Where(t => t.DateCreated >= DateTime.Now.AddHours(-1 * DateTime.Now.Hour)).ToList();
-                        DateTime daystart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                        var vt = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddHours(-1 * DateTime.UtcNow.Hour)).ToList();
+                        DateTime daystart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day);
                         wdp.VisitCount = vt.Count;
                         while (daystart <= current)
                         {
@@ -374,12 +374,12 @@ namespace VTracker.Controllers
                         wdp.RefererList.AddRange(vt.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                         break;
                     case ReportDateRangeType.Yesterday:
-                        var vty = visits.Where(t => t.DateCreated >= new DateTime(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month, DateTime.Now.AddDays(-1).Day)
-                        && t.DateCreated < new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day)
+                        var vty = visits.Where(t => t.DateCreated >= new DateTime(DateTime.UtcNow.AddDays(-1).Year, DateTime.UtcNow.AddDays(-1).Month, DateTime.UtcNow.AddDays(-1).Day)
+                        && t.DateCreated < new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day)
                         ).ToList();
-                        DateTime daystarty = new DateTime(DateTime.Now.AddDays(-1).Year, DateTime.Now.AddDays(-1).Month, DateTime.Now.AddDays(-1).Day);
+                        DateTime daystarty = new DateTime(DateTime.UtcNow.AddDays(-1).Year, DateTime.UtcNow.AddDays(-1).Month, DateTime.UtcNow.AddDays(-1).Day);
                         wdp.VisitCount = vty.Count;
-                        while (daystarty <= new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day))
+                        while (daystarty <= new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day))
                         {
                             VisitCountChartPoint p = new VisitCountChartPoint();
                             p.X = daystarty.ToString("h:m tt");
@@ -406,9 +406,9 @@ namespace VTracker.Controllers
                         wdp.RefererList.AddRange(vty.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                         break;
                     case ReportDateRangeType.LastHour:
-                        var vlh = visits.Where(t => t.DateCreated >= DateTime.Now.AddMinutes(-60)).ToList();
+                        var vlh = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddMinutes(-60)).ToList();
                         wdp.VisitCount = vlh.Count;
-                        DateTime past60min = DateTime.Now.AddMinutes(-60);
+                        DateTime past60min = DateTime.UtcNow.AddMinutes(-60);
                         while (past60min <= current)
                         {
                             VisitCountChartPoint p = new VisitCountChartPoint();
@@ -433,9 +433,9 @@ namespace VTracker.Controllers
                         wdp.RefererList.AddRange(vlh.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                         break;
                     case ReportDateRangeType.Last7Days:
-                        var vw = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-7)).ToList();
+                        var vw = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddDays(-7)).ToList();
                         wdp.VisitCount = vw.Count;
-                        daystart = new DateTime(DateTime.Now.AddDays(-7).Year, DateTime.Now.AddDays(-7).Month, DateTime.Now.AddDays(-7).Day);
+                        daystart = new DateTime(DateTime.UtcNow.AddDays(-7).Year, DateTime.UtcNow.AddDays(-7).Month, DateTime.UtcNow.AddDays(-7).Day);
                         while (daystart <= current)
                         {
                             VisitCountChartPoint p = new VisitCountChartPoint();
@@ -460,10 +460,10 @@ namespace VTracker.Controllers
                         wdp.RefererList.AddRange(vw.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                         break;
                     case ReportDateRangeType.Last6Months:
-                        var vm = visits.Where(t => t.DateCreated >= DateTime.Now.AddMonths(-6)).ToList();
+                        var vm = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddMonths(-6)).ToList();
                         wdp.VisitCount = vm.Count;
-                        daystart = new DateTime(DateTime.Now.AddMonths(-6).Year, DateTime.Now.AddMonths(-6).Month, 1);
-                        current = DateTime.Now;
+                        daystart = new DateTime(DateTime.UtcNow.AddMonths(-6).Year, DateTime.UtcNow.AddMonths(-6).Month, 1);
+                        current = DateTime.UtcNow;
                         while (daystart <= current)
                         {
                             VisitCountChartPoint p = new VisitCountChartPoint();
@@ -488,10 +488,10 @@ namespace VTracker.Controllers
                         wdp.RefererList.AddRange(vm.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                         break;
                     case ReportDateRangeType.Last3Months:
-                        var v3m = visits.Where(t => t.DateCreated >= DateTime.Now.AddMonths(-3)).ToList();
+                        var v3m = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddMonths(-3)).ToList();
                         wdp.VisitCount = v3m.Count;
-                        daystart = new DateTime(DateTime.Now.AddMonths(-3).Year, DateTime.Now.AddMonths(-3).Month, 1);
-                        current = DateTime.Now;
+                        daystart = new DateTime(DateTime.UtcNow.AddMonths(-3).Year, DateTime.UtcNow.AddMonths(-3).Month, 1);
+                        current = DateTime.UtcNow;
                         while (daystart <= current)
                         {
                             VisitCountChartPoint p = new VisitCountChartPoint();
@@ -516,9 +516,9 @@ namespace VTracker.Controllers
                         wdp.RefererList.AddRange(v3m.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                         break;
                     case ReportDateRangeType.Last30Days:
-                        var v30d = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-30)).ToList();
+                        var v30d = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddDays(-30)).ToList();
                         wdp.VisitCount = v30d.Count;
-                        daystart = new DateTime(DateTime.Now.AddDays(-30).Year, DateTime.Now.AddDays(-30).Month, DateTime.Now.AddDays(-30).Day);
+                        daystart = new DateTime(DateTime.UtcNow.AddDays(-30).Year, DateTime.UtcNow.AddDays(-30).Month, DateTime.UtcNow.AddDays(-30).Day);
                         while (daystart <= current)
                         {
                             VisitCountChartPoint p = new VisitCountChartPoint();
@@ -544,9 +544,9 @@ namespace VTracker.Controllers
                         break;
                     case ReportDateRangeType.Last15Days:
 
-                        var v15d = visits.Where(t => t.DateCreated >= DateTime.Now.AddDays(-15)).ToList();
+                        var v15d = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddDays(-15)).ToList();
                         wdp.VisitCount = v15d.Count;
-                        daystart = new DateTime(DateTime.Now.AddDays(-15).Year, DateTime.Now.AddDays(-15).Month, DateTime.Now.AddDays(-15).Day);
+                        daystart = new DateTime(DateTime.UtcNow.AddDays(-15).Year, DateTime.UtcNow.AddDays(-15).Month, DateTime.UtcNow.AddDays(-15).Day);
                         while (daystart <= current)
                         {
                             VisitCountChartPoint p = new VisitCountChartPoint();
@@ -571,10 +571,10 @@ namespace VTracker.Controllers
                         wdp.RefererList.AddRange(v15d.GroupBy(t => t.Referer).Select(t => new RefererData { Referer = t.Key, Count = t.Count() }).ToList());
                         break;
                     case ReportDateRangeType.Last12Months:
-                        var v12m = visits.Where(t => t.DateCreated >= DateTime.Now.AddMonths(-12)).ToList();
+                        var v12m = visits.Where(t => t.DateCreated >= DateTime.UtcNow.AddMonths(-12)).ToList();
                         wdp.VisitCount = v12m.Count;
-                        daystart = new DateTime(DateTime.Now.AddMonths(-12).Year, DateTime.Now.AddMonths(-12).Month, 1);
-                        current = DateTime.Now;
+                        daystart = new DateTime(DateTime.UtcNow.AddMonths(-12).Year, DateTime.UtcNow.AddMonths(-12).Month, 1);
+                        current = DateTime.UtcNow;
                         while (daystart <= current)
                         {
                             VisitCountChartPoint p = new VisitCountChartPoint();

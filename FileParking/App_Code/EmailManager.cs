@@ -15,7 +15,8 @@ namespace FileParking.Models
         ChangePassword = 4,
         Reminder = 5,
         Communication = 6,
-        Notification = 7
+        Notification = 7,
+        FileShare = 8
     }
 
     public class EmailManager
@@ -41,10 +42,10 @@ namespace FileParking.Models
             return msg;
         }
 
-        public static string GetFileShareEmail(string from, int count, int totalsize, string expiry, string links)
+        public static string GetFileShareEmail(string from, int count, string links, string message)
         {
             string msg = Utility.FileShareEmail.Replace("[from]", from).Replace("[count]", count.ToString())
-                .Replace("[totalsize]", totalsize.ToString()).Replace("[expiry]", expiry).Replace("[links]", links);
+                .Replace("[links]", links).Replace("[message]", message);
 
             return msg;
         }
@@ -113,12 +114,12 @@ namespace FileParking.Models
 
                 string emessage = Utility.EmailSkeleton;
                 emessage = emessage.Replace("[root]", Utility.SiteURL);
-                //emessage = emessage.Replace("[newsletteremail]", Utility.NewsletterEmail);
                 emessage = emessage.Replace("[message]", body);
                 emessage = emessage.Replace("[id]", em.ID.ToString());
                 emessage = emessage.Replace("[toaddress]", toAddress);
                 emessage = emessage.Replace("[sitename]", Utility.SiteName);
-                //emessage = emessage.Replace("[emailsignature]", Utility.GetSiteSetting("emailsignature"));
+                emessage = emessage.Replace("[noreply]", noreply);
+                emessage = emessage.Replace("[marketingline]", PlanManager.FreePlanDisplayString);
                 em.Message = emessage;
 
                 em = AddMessage(em.ID, toAddress, fromAddress, subject, emessage, messageType, emailGroup,ccaddresses, recieverName, senderName, memberId);
