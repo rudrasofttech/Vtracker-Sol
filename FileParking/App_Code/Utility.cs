@@ -14,7 +14,7 @@ namespace FileParking.Models
         {
             get
             {
-                return "File Parking";
+                return "Quick Share";
             }
         }
 
@@ -30,7 +30,7 @@ namespace FileParking.Models
         {
             get
             {
-                return "http://www.fileparking.com";
+                return "http://quickshare.rudrasofttech.com";
             }
         }
 

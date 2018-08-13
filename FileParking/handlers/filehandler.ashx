@@ -161,7 +161,7 @@ public class parkedfilehandler : IHttpHandler
                 foreach (DownloadLink item in links)
                 {
                     builder.Append("<li>");
-                    builder.Append(string.Format("<a href='{1}'>{0}</a>", item.FileName, string.Format("{0}/download.ashx?id={1}", Utility.SiteURL, item.Id)));
+                    builder.Append(string.Format("<a href='{1}' style='color:#9BC1BC;text-decoration:none;'>{0}</a>", item.FileName, string.Format("{0}/download.ashx?id={1}", Utility.SiteURL, item.Id)));
                     builder.Append(string.Format("<span  style='font-size:12px; padding:0px 5px;'> {0}</span>", dm.GetFileSize(item.FileName)));
                     builder.Append("</li>");
                 }

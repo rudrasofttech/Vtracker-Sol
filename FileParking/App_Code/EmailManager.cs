@@ -119,7 +119,7 @@ namespace FileParking.Models
                 emessage = emessage.Replace("[toaddress]", toAddress);
                 emessage = emessage.Replace("[sitename]", Utility.SiteName);
                 emessage = emessage.Replace("[noreply]", noreply);
-                emessage = emessage.Replace("[marketingline]", PlanManager.FreePlanDisplayString);
+                emessage = emessage.Replace("[marketingline]", PlanManager.PlanDisplayString);
                 em.Message = emessage;
 
                 em = AddMessage(em.ID, toAddress, fromAddress, subject, emessage, messageType, emailGroup,ccaddresses, recieverName, senderName, memberId);

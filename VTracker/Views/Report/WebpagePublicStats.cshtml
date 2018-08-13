@@ -39,7 +39,7 @@
         buildery.Append(",");
     }
     ynewvaluevisit = buildery.ToString().TrimEnd(",".ToCharArray());
-
+    buildery.Clear();
     foreach (var point in Model.BrowserData)
     {
         builder.Append("'");
@@ -119,7 +119,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6" style="max-height:460px;">
+            <div class="col-md-12" style="max-height:460px;">
                 <div class="card">
                     <div class="header">
                         <h4 class="title">Browsers</h4>
@@ -159,18 +159,17 @@
                                         else
                                         {
                                             <td>
-                                                @if (Server.UrlDecode(item.Referer).IndexOf("?") > -1)
-                                                {
-                                                    <span>
-                                                        @Html.Raw(Server.UrlDecode(item.Referer).Substring(0, Server.UrlDecode(item.Referer).IndexOf("?")))
-                                                    </span>
-                                                }
-                                                else
-                                                {
-                                                    <span>
-                                                        @Html.Raw(Server.UrlDecode(item.Referer))
-                                                    </span>
-                                                }
+                                                <span style="overflow-wrap:break-word; max-width:100%; display:block;" title="">
+                                                    @if (item.Referer.Length > 150)
+        {
+                                            @Html.Raw(Server.UrlDecode(item.Referer.Substring(0, 150)) + "...")
+}
+else
+{
+                                            @Html.Raw(Server.UrlDecode(item.Referer))
+}
+                                                </span>
+                                                <a target="_blank" href="@Html.Raw(Server.UrlDecode(item.Referer))" title="@Html.Raw(Server.UrlDecode(item.Referer))">visit the page</a>
                                             </td>
                                         }
                                         <td>@item.Count</td>
@@ -225,7 +224,7 @@
 
         var dataPreferences = {
             labels: [@Html.Raw(browserlabel)],
-            series: [@Html.Raw(browserpoint)]
+            series: [ [@Html.Raw(browserpoint)] ]
         };
 
         var optionsPreferences = {
@@ -233,22 +232,22 @@
                 return value[0]
             }
         };
-        var responsiveOptionsPie = [
-            ['screen and (min-width: 640px)', {
-                chartPadding: 30,
-                labelOffset: 100,
-                labelDirection: 'explode',
-                labelInterpolationFnc: function (value) {
-                    return value;
-                }
-            }],
-            ['screen and (min-width: 1024px)', {
-                labelOffset: 80,
-                chartPadding: 20
-            }]
-        ];
+        //var responsiveOptionsPie = [
+        //    ['screen and (min-width: 640px)', {
+        //        chartPadding: 30,
+        //        labelOffset: 100,
+        //        labelDirection: 'explode',
+        //        labelInterpolationFnc: function (value) {
+        //            return value;
+        //        }
+        //    }],
+        //    ['screen and (min-width: 1024px)', {
+        //        labelOffset: 80,
+        //        chartPadding: 20
+        //    }]
+        //];
 
-         new Chartist.Pie('#chartPreferences', dataPreferences, optionsPreferences, responsiveOptionsPie);
+         new Chartist.Bar('#chartPreferences', dataPreferences, optionsPreferences);
 
     </script>
 }

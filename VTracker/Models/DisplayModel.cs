@@ -16,6 +16,11 @@ namespace VTracker.Models
         {
             return string.Format("~/report/webpagepublicstats/{0}?path={1}&range={2}", websiteid, path, rangeType);
         }
+
+        public static string GetWebsitePublicStatsURL(int websiteid, ReportDateRangeType rangeType)
+        {
+            return string.Format("~/report/websitepublicstats/{0}?range={1}", websiteid, rangeType);
+        }
     }
 
     public enum ReportDateRangeType

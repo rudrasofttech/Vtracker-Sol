@@ -122,7 +122,7 @@ public class mplanhandler : IHttpHandler
                     Amount = obj.Amount.ToString(),
                     Term = obj.Term,
                     Limit = obj.Limit,
-                    FileSize = (obj.FileSize / 1024).ToString() + " Gb"
+                    FileSize = string.Format("{0} GB", obj.FileSize)
                 } }));
         }
         catch

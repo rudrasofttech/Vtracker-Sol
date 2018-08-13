@@ -58,6 +58,7 @@ var LoginForm = /** @class */ (function () {
             console.log(data);
             if (data.success) {
                 user = new UserIdentity(data.email, data.id);
+                $("#memberidhdn").val(data.id);
                 instance.formDom.find(".step2").show();
                 instance.formDom.find(".step1").hide();
                 Message.Display("OTP sent to your mail address.", "info");
@@ -294,6 +295,9 @@ var MainApp = /** @class */ (function () {
         }).done(function (data) {
             if (data.success) {
                 instance.remaininglimit(data.remaining);
+                if (data.remaining <= 0) {
+                    Message.Display("File limit reached, you cannot upload any more files.", "error");
+                }
             }
             else {
                 Message.Display("Could not fetch remaining limit", "error");
@@ -336,7 +340,7 @@ app = new MainApp();
 user = null;
 user = new UserIdentity('raj@gmail.com', '11310605-0FAA-467F-A5AC-211BB2BD0EA2');
 user.isValidated = true;
-user.token = 'AFE77E11-61D5-4566-9CAC-4B821BF30D6F';
+user.token = 'C33FEF53-A374-47A0-A87E-8FBEB2E5FD3B';
 app.bind();
 ko.applyBindings(app);
 app.mainappdom.trigger("uservalidated", app.mainappdom);

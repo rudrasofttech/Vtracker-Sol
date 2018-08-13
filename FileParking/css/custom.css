@@ -1,13 +1,16 @@
 ﻿body {
     font-family: Montserrat,Helvetica,Arial,sans-serif !important;
-    color: #777;
-    background: #F4F1BB;
+    /*color: #777;*/
+    color: #1D3557;
+    /*background: #F4F1BB;*/
+    background: #F1FAEE;
+
 }
 
     body .sitename {
         text-align: center;
         margin: 15px 0px 15px 0px;
-        color:#fff;
+        color: #fff;
     }
 
     body .empty {
@@ -18,6 +21,7 @@
         background-color: #fff;
         border-radius: 5px;
         padding: 15px;
+        border: 2px solid #A8DADC;
     }
 
     body.bg1, body.bg1 .navbar-fixed-top {
@@ -63,7 +67,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 
 .btn {
     border-radius: 4px;
-    background: #5CA4A9;
+    background: #457B9D;
     box-shadow: none;
     color: #fff;
     text-shadow: none;
@@ -79,8 +83,12 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     text-align: center;
 }
 
+.alert-error {
+    background: #E63946 !important;
+}
+
 .input {
-    border: 1px solid #ccc5b9 !important;
+    border: 2px solid #1D3557 !important;
     color: #66615b !important;
     font-size: 14px;
     -webkit-transition: background-color .3s ease 0s;
@@ -129,15 +137,16 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     margin-top: 20px;
 }
 
-    #filelist > table tr{
-        cursor:pointer;
+    #filelist > table tr {
+        cursor: pointer;
     }
-    .fixed-bottom {
-        position: fixed;
-        bottom: 0px;
-        display: block;
-        width: 100%;
-    }
+
+.fixed-bottom {
+    position: fixed;
+    bottom: 0px;
+    display: block;
+    width: 100%;
+}
 
 .template-upload .start, .template-upload .cancel {
     display: inline-block;
@@ -170,7 +179,21 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 
 
 .view2 .drive > .card {
-    min-height: calc(100vh - 135px);
+    height: calc(100vh - 135px);
+    overflow-y:auto;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color:transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    border-radius:4px;
 }
 
 body {
@@ -203,22 +226,30 @@ body {
 }
 
 
-.multiple_emails-input{
-    box-shadow:none !important;
-    -webkit-box-shadow:none !important;
+.multiple_emails-input {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
 }
 
-.multiple_emails-container ul{
-    max-height:100px;
-    max-width:100%;
-    overflow-y:auto;
-    margin-left:0px;
+.multiple_emails-container {
+    border: 2px solid #1D3557 !important;
 }
 
-    .multiple_emails-container ul > li span.email_name{
-        word-break:break-word;
+    .multiple_emails-container ul {
+        max-height: 100px;
+        max-width: 100%;
+        overflow-y: auto;
+        margin-left: 0px;
     }
 
-    input.error{
-        border-color:red;
-    }
+        .multiple_emails-container ul > li span.email_name {
+            word-break: break-word;
+        }
+
+input.error {
+    border-color: red;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: #F4F1BB !important;
+}

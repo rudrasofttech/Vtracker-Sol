@@ -1,18 +1,242 @@
 ﻿@model VTracker.Models.WebsiteDisplayPublic
 
+
+
+@using System.Text;
+@using VTracker.Models;
+
 @{
-    Layout = null;
+    ViewBag.Title = "::Public Stats::";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+
+    string xvaluevisit = "", yvaluevisit = "", yreturnvaluevisit = "", ynewvaluevisit = "", browserlabel = "", browserpoint = "";
+    StringBuilder builder = new StringBuilder();
+    StringBuilder buildery = new StringBuilder();
+    foreach (var point in Model.VisitsData)
+    {
+        builder.Append("'");
+        builder.Append(point.X);
+        builder.Append("',");
+
+        buildery.Append(point.Y);
+        buildery.Append(",");
+    }
+
+    xvaluevisit = builder.ToString().TrimEnd(",".ToCharArray());
+    yvaluevisit = buildery.ToString().TrimEnd(",".ToCharArray());
+    builder.Clear();
+    buildery.Clear();
+
+    foreach (var point in Model.ReturnVisitsData)
+    {
+        buildery.Append(point.Y);
+        buildery.Append(",");
+    }
+    yreturnvaluevisit = buildery.ToString().TrimEnd(",".ToCharArray());
+    buildery.Clear();
+    foreach (var point in Model.NewVisitsData)
+    {
+        buildery.Append(point.Y);
+        buildery.Append(",");
+    }
+    ynewvaluevisit = buildery.ToString().TrimEnd(",".ToCharArray());
+    buildery.Clear();
+    foreach (var point in Model.BrowserData)
+    {
+        builder.Append("'");
+        builder.Append(point.Label);
+        builder.Append("',");
+
+        buildery.Append(point.Percentage);
+        buildery.Append(",");
+    }
+
+    browserlabel = builder.ToString().TrimEnd(",".ToCharArray());
+    browserpoint = buildery.ToString().TrimEnd(",".ToCharArray());
+
+    builder.Clear();
+    buildery.Clear();
+
 }
 
-<!DOCTYPE html>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar bar1"></span>
+                <span class="icon-bar bar2"></span>
+                <span class="icon-bar bar3"></span>
+            </button>
+            <a class="navbar-brand" href="#">Dashboard</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>WebsitePublicStats</title>
-</head>
-<body>
-    <div> 
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="ti-bell"></i>
+                        <p>Date Range</p>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.LastHour))">Last Hour</a></li>
+                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Today))">Today</a></li>
+                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Yesterday))">Yesterday</a></li>
+                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Last7Days))">Last 7 Days</a></li>
+                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Last15Days))">Last 15 Days</a></li>
+                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Last30Days))">Last 30 Days</a></li>
+                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Last3Months))">Last 3 Months</a></li>
+                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Last6Months))">Last 6 Months</a></li>
+                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Last12Months))">Last 12 Months</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+
+        </div>
     </div>
-</body>
-</html>
+</nav>
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12" style="max-height:460px;">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">@Model.VisitCount Visits</h4>
+                        <p class="category">In @Model.VisitChartDescription</p>
+                    </div>
+                    <div class="content">
+                        <div id="chartVisit" class="ct-chart ct-perfect-fourth"></div>
+                        <div class="footer">
+                            <div class="chart-legend">
+                                <i class="fa fa-circle text-info"></i> All
+                                <i class="fa fa-circle text-danger"></i> Return
+                                <i class="fa fa-circle text-warning"></i> New
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" style="max-height:460px;">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Browsers</h4>
+                        <p class="category">In @Model.VisitChartDescription</p>
+                    </div>
+                    <div class="content">
+                        <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Visit Referer</h4>
+                        <p class="category">In @Model.VisitChartDescription</p>
+                    </div>
+
+                    <div class="content table-responsive table-full-width">
+                        <table class="table table-striped browserdata">
+                            <thead>
+                                <tr>
+                                    <th style="width:80%">Referer</th>
+                                    <th style="width:20%">Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (RefererData item in Model.RefererList.OrderByDescending(t => t.Count))
+                                {
+                                    <tr>
+                                        @if (string.IsNullOrEmpty(item.Referer))
+                                        {
+                                            <td>None</td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                
+                                                    <span style="overflow-wrap:break-word; max-width:100%; display:block;" title="">
+                                                        @if (item.Referer.Length > 150)
+                                                        {
+                                                            @Html.Raw(Server.UrlDecode(item.Referer.Substring(0, 150)) + "...")
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.Raw(Server.UrlDecode(item.Referer))
+                                                        }
+                                                    </span>
+                                                    <a target="_blank" href="@Html.Raw(Server.UrlDecode(item.Referer))" title="@Html.Raw(Server.UrlDecode(item.Referer))">visit the page</a>
+                                            </td>
+                                        }
+                                        <td style="width:20%">@item.Count</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+
+        var dataVisits = {
+            labels: [ @Html.Raw(xvaluevisit) ],
+            series: [
+                [@Html.Raw(yvaluevisit)],
+                [@Html.Raw(ynewvaluevisit)],
+                [@Html.Raw(yreturnvaluevisit)]
+            ]
+        };
+
+
+        var options = {
+            seriesBarDistance: 10,
+            axisX: {
+                showGrid: false
+            },
+            height: "245px",
+            axisY: {
+                onlyInteger: true
+            }
+        };
+
+        var responsiveLH = [
+            ['screen and (max-width: 640px)', {
+                axisX: {
+                    labelInterpolationFnc: function (value) {
+                        return value[0];
+                    }
+                }
+            }]
+        ];
+
+        Chartist.Line('#chartVisit', dataVisits, options, responsiveLH);
+
+        var dataPreferences = {
+            labels: [@Html.Raw(browserlabel)],
+            series: [ [@Html.Raw(browserpoint)] ]
+        };
+
+        var optionsPreferences = {
+            axisX: {
+                labelInterpolationFnc: function (value, index) {
+                    return  value;
+                }
+            }
+        };
+         new Chartist.Bar('#chartPreferences', dataPreferences, optionsPreferences);
+
+    </script>
+}

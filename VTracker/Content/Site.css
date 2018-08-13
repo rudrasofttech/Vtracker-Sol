@@ -15,3 +15,22 @@
         overflow-wrap: break-word;
         max-width:100%;
     }
+
+table.fixedheader {
+    border-collapse: collapse;
+}
+
+    table.fixedheader > thead {
+        display: block;
+        overflow: auto;
+    }
+
+    table.fixedheader > tbody {
+        display: block;
+        max-height: 500px;
+        overflow: auto;
+    }
+
+    table.fixedheader > tbody > tr > td {
+        overflow-wrap:break-word;
+    }

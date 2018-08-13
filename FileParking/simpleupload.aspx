@@ -7,15 +7,15 @@
     <div class="row-fluid fileupload-buttonbar">
         <div class="span12" style="text-align: center;">
             <!-- The fileinput-button span is used to style the file input field as button -->
-            <span class="btn btn-action fileinput-button"><i class="icon-plus"></i><span>Add files...</span>
+            <span class="btn btn-action fileinput-button"><i class="fa fa-plus-circle" aria-hidden="true"></i><span>Add files...</span>
                 <!--Enable selecting a complete folder structure, this is currently only supported by Google Chrome-->
                 <input type="file" name="files[]" multiple />
             </span>
             <button type="submit" class="btn btn-action start">
-                <i class="icon-upload"></i><span>Start</span>
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i><span>Start</span>
             </button>
             <button type="reset" class="btn btn-action cancel">
-                <i class="icon-ban-circle"></i><span>Cancel</span>
+                <i class="fa fa-ban" aria-hidden="true"></i><span>Cancel</span>
             </button>
         </div>
     </div>
@@ -40,8 +40,9 @@
     <!--<div id="dropzone" class="fade well">Drop files here</div>-->
 
     <br />
-    <div class="container-fluid files">
-    </div>
+    
+        <div class="container-fluid files">
+        </div>
 </div>
 
 <script id="template-upload" type="text/x-tmpl">
@@ -53,12 +54,12 @@
                 <div class="span4" style="text-align:right;">
                 {% if (o.files.valid && !i) { %}
                     <div class="start"><button class="btn btn-action">
-                        <i class="icon-upload"></i>
+                        <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                     </button></div>
                 {% } %}
                 {% if (!i) { %}
                     <div class="cancel"><button class="btn btn-action">
-                        <i class="icon-ban-circle"></i>
+                        <i class="fa fa-ban" aria-hidden="true"></i>
                     </button></div>
                 {% } %}
                 </div>
@@ -320,7 +321,7 @@
                 typeof window[fileuploadadd] == 'function' && window[fileuploadadd](e, data);
                 console.log(e);
                 console.log(data);
-                
+
                 if (app.remaininglimit() < data.files.length) {
                     data.files.slice(0, data.files.length - app.remaininglimit());
                 }

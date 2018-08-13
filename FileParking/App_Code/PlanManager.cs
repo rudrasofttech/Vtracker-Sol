@@ -38,18 +38,40 @@ namespace FileParking.Models
                     Name = "Free",
                     Price = 0,
                     Term = 2,
-                    FileSize = (1024 * 5)
+                    FileSize = 5
                 };
             }
         }
 
-        public static string FreePlanDisplayString
+        public static string PlanDisplayString
         {
             get
             {
-                return string.Format("Store or share upto {0} GB for free, get more with <a href='{1}'>pro account</a>.", 
-                    (FreePlan.FileSize / 1024) * FreePlan.Limit,
-                    Utility.SiteURL);
+                Plan p = ProPlan;
+                return string.Format("Share upto {0} GB for free, Store upto {2} GB with <a href='{1}'>pro account</a> for just {3}$ / year only.",
+                    FreePlan.FileSize * FreePlan.Limit,
+                    Utility.SiteURL,
+                    p.Limit * p.FileSize, p.Price.ToString("#0.#"));
+            }
+        }
+
+        public static Plan ProPlan
+        {
+            get
+            {
+                if(CacheManager.Get<Plan>("ProPlan") == null)
+                {
+                    using (FileParkingDataContext dc = new FileParkingDataContext())
+                    {
+                        Plan p = dc.Plans.Where(t => t.Price > 0).OrderByDescending(t => t.Price).FirstOrDefault();
+                        if(p != null)
+                        {
+                            CacheManager.AddSliding("ProPlan", p, 60);
+                        }
+                    }
+                }
+
+                return CacheManager.Get<Plan>("ProPlan");
             }
         }
 
@@ -90,6 +112,6 @@ namespace FileParking.Models
             }
         }
 
-        
+
     }
 }
