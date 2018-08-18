@@ -5,12 +5,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title></title>
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
-    <meta name="viewport" content="width=device-width" />
+    <title><%: Utility.SiteName %></title>
+    <!--<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />-->
 
     <link href="css/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <!--<link href="css/bootstrap-responsive.min.css" rel="stylesheet" />-->
     <link href="css/custom.css" rel="stylesheet" />
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,300,700' rel='stylesheet' type='text/css' />
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet" />
@@ -20,7 +20,7 @@
     <link href="css/multiple-emails.css" rel="stylesheet" />
 
 </head>
-<body id="mainapp" class="curls1">
+<body id="mainapp" class="curls1" data-isworking="false">
     <div class="container">
         <div class="row-fluid navbar-fixed-top" style="background-color: #1D3557;">
             <div class="span4">
@@ -29,7 +29,8 @@
                 <h1 class="sitename"><%: Utility.SiteName %></h1>
             </div>
             <div class="span4" style="text-align: right; padding: 20px 10px;">
-                <!--<a href="#planModal" role="button" data-toggle="modal" class="btn btn-info" data-bind="visible: shouldshowplans">Plans</a>-->
+                <span class="label label-success" data-bind="visible: shouldshowlogout" id="loggedInLabel"></span>
+                <a href="javascript:return;"  data-bind="click: logout, visible: shouldshowlogout" class="logout">Sign Out</a>
             </div>
         </div>
         <div class="view1 card" id="loginfrm">

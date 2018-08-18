@@ -92,6 +92,7 @@ class LoginForm {
             console.log(data);
             if (data.success) {
                 user = new UserIdentity(data.email, data.id);
+                
                 $("#memberidhdn").val(data.id);
                 instance.formDom.find(".step2").show();
                 instance.formDom.find(".step1").hide();
@@ -117,6 +118,7 @@ class LoginForm {
                     if (data.success) {
                         user.isValidated = data.isValidated;
                         user.token = data.token;
+                        localStorage.setItem("token", user.token);
                         instance.mainappdom.trigger("uservalidated", this.mainappdom);
 
                     } else {
@@ -197,6 +199,7 @@ class MainApp {
     public files: KnockoutObservableArray<ParkedFile>;
     public plans: KnockoutObservableArray<Plan>;
     public shouldshowplans: KnockoutObservable<boolean>;
+    public shouldshowlogout: KnockoutObservable<boolean>;
     public activeplan: KnockoutObservable<MemberPlan>;
     public remaininglimit: KnockoutObservable<number>;
 
@@ -206,10 +209,24 @@ class MainApp {
         this.loginFrm = new LoginForm(this.mainappdom);
         this.files = ko.observableArray([]);
         this.shouldshowplans = ko.observable(true);
+        this.shouldshowlogout = ko.observable(false);
         this.activeplan = ko.observable(null);
         this.remaininglimit = ko.observable(null);
     }
-
+    removeCanceledFile(f: string) {
+        var instance = this;
+        Loader.Show();
+        var jqxhr = $.getJSON("handlers/filehandler.ashx", { a: "remove", token: user.token, f: f }, function () {
+        }).done(function (data) {
+            if (data.success) {
+                console.log("Cancelled file removed successfully.")
+            } 
+        }).fail(function () {
+            
+        }).always(function () {
+            Loader.Hide();
+        });
+    }
     removeFile(d: ParkedFile) {
         if (confirm("Are you sure you want to delete this file?")) {
             var instance = this;
@@ -230,6 +247,17 @@ class MainApp {
                 Loader.Hide();
             });
         }
+    }
+
+    logout() {
+        if ($("body").data("isworking") == "true") {
+            if (!confirm("File Upload is in progress, this action will stop it, do you wish to continue?")) {
+                return;
+            }
+        }
+        
+        localStorage.clear();
+        location.reload();
     }
 
     shareFiles() {
@@ -362,8 +390,10 @@ class MainApp {
     }
 
     onUserValidated(event, _mainappdom) {
+        $("#loggedInLabel").html(user.email);
         app.uploadFrm = new FileUploadForm(_mainappdom);
         app.uploadFrm.loadForm();
+        app.shouldshowlogout(true);
         app.viewshouldchange();
         app.loadActivePlan();
         app.loadRemainingLimit();
@@ -372,6 +402,7 @@ class MainApp {
 
     onAuthExpired(event) {
         user = null;
+        app.shouldshowlogout(false);
         app.viewshouldchange();
     }
 
@@ -389,12 +420,39 @@ class MainApp {
 
 app = new MainApp();
 user = null;
-user = new UserIdentity('raj@gmail.com', '11310605-0FAA-467F-A5AC-211BB2BD0EA2');
-user.isValidated = true;
-user.token = 'C33FEF53-A374-47A0-A87E-8FBEB2E5FD3B';
 
 app.bind();
 ko.applyBindings(app);
 
-app.mainappdom.trigger("uservalidated", app.mainappdom);
-//app.mainappdom.trigger("loadfiles");
+if (localStorage.getItem('token')) {
+    $.getJSON('handlers/userhandler.ashx', { a: 'validatetoken', token: localStorage.getItem('token') }, function () {
+        console.log("success");
+    })
+        .done(function (data) {
+            if (data.success) {
+                user = new UserIdentity(data.email, data.id);
+                user.isValidated = data.isValidated;
+                user.token = data.token;
+                localStorage.setItem("token", user.token);
+                app.mainappdom.trigger("uservalidated", app.mainappdom);
+
+            } else {
+                //ask for login
+                app.mainappdom.trigger("authexpired");
+            }
+        })
+        .fail(function () {
+            //ask for login
+            app.mainappdom.trigger("authexpired");
+        }).always(function () {
+            Loader.Hide();
+        });
+} else {
+    app.mainappdom.trigger("authexpired");
+}
+
+window.onbeforeunload = function (e) {
+    if ($("body").data("isworking") == "true") {
+        return 'File Upload is in progress, this action will stop it, do you wish to continue?';
+    }
+};

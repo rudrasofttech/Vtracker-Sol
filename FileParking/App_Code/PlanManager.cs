@@ -37,8 +37,8 @@ namespace FileParking.Models
                     Limit = 10,
                     Name = "Free",
                     Price = 0,
-                    Term = 2,
-                    FileSize = 5
+                    Term = 3,
+                    FileSize = 10
                 };
             }
         }

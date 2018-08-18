@@ -4,13 +4,15 @@
     color: #1D3557;
     /*background: #F4F1BB;*/
     background: #F1FAEE;
-
+    min-width:1000px;
 }
 
     body .sitename {
         text-align: center;
-        margin: 15px 0px 15px 0px;
+        margin: 8px 0px 8px 0px;
         color: #fff;
+        font-weight: 900;
+        font-size: 2.5em;
     }
 
     body .empty {
@@ -19,9 +21,9 @@
 
     body .card {
         background-color: #fff;
-        border-radius: 5px;
+        border-radius: 0px;
         padding: 15px;
-        border: 2px solid #A8DADC;
+        border: 1px solid #A8DADC;
     }
 
     body.bg1, body.bg1 .navbar-fixed-top {
@@ -62,7 +64,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-    border-radius: 4px;
+    border-radius: 0px;
 }
 
 .btn {
@@ -88,7 +90,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 }
 
 .input {
-    border: 2px solid #1D3557 !important;
+    border: 1px solid #1D3557 !important;
     color: #66615b !important;
     font-size: 14px;
     -webkit-transition: background-color .3s ease 0s;
@@ -232,7 +234,8 @@ body {
 }
 
 .multiple_emails-container {
-    border: 2px solid #1D3557 !important;
+    border: 1px solid #1D3557 !important;
+    border-radius:0px !important;
 }
 
     .multiple_emails-container ul {
@@ -252,4 +255,10 @@ input.error {
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
     background-color: #F4F1BB !important;
+}
+
+
+.logout{
+    color:#fff;
+    font-size:0.8em;
 }

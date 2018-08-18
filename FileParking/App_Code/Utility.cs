@@ -46,6 +46,7 @@ namespace FileParking.Models
         {
             get
             {
+                return System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("~/emailtemplates/emailskeleton.html"));
                 if (CacheManager.Get<string>("emailskeleton") == null)
                 {
                     CacheManager.AddSliding("emailskeleton", System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("~/emailtemplates/emailskeleton.html")), 180);

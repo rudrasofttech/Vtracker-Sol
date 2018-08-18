@@ -36,6 +36,9 @@ public class userhandler : IHttpHandler
             case "validate":
                 context.Response.Write(Validate());
                 break;
+            case "validatetoken":
+                context.Response.Write(ValidateToken());
+                break;
             default:
                 context.Response.Write("");
                 break;
@@ -103,6 +106,29 @@ public class userhandler : IHttpHandler
                     //create user directory
                     System.IO.Directory.CreateDirectory(userFolderAbsolute);
                 }
+                return js.Serialize(new { email = m.Email, id = m.PublicID, isValidated = true, token = m.AuthToken.HasValue ? m.AuthToken.Value.ToString() : "", success = true });
+            }
+            else
+            {
+                return js.Serialize(new { success = false, message = "Unable to validate the account." });
+            }
+        }
+        else
+        {
+            return js.Serialize(new { success = false, message = "No Email Provided." });
+        }
+
+    }
+
+    public string ValidateToken()
+    {
+        JavaScriptSerializer js = new JavaScriptSerializer();
+        if (Context.Request["token"] != null)
+        {
+            string token = Context.Request["token"].Trim();
+            Member m = MemberManager.GetUserByToken(new Guid(token));
+            if (m != null)
+            {
                 return js.Serialize(new { email = m.Email, id = m.PublicID, isValidated = true, token = m.AuthToken.HasValue ? m.AuthToken.Value.ToString() : "", success = true });
             }
             else

@@ -40,9 +40,9 @@
     <!--<div id="dropzone" class="fade well">Drop files here</div>-->
 
     <br />
-    
-        <div class="container-fluid files">
-        </div>
+
+    <div class="container-fluid files">
+    </div>
 </div>
 
 <script id="template-upload" type="text/x-tmpl">
@@ -348,6 +348,7 @@
             })
             .bind('fileuploadprogressall', function (e, data) {
                 typeof window[fileuploadprogressall] == 'function' && window[fileuploadprogressall](e, data);
+                $("body").data("isworking", "true");
             })
             .bind('fileuploadstart', function (e) {
                 typeof window[fileuploadstart] == 'function' && window[fileuploadstart](e, data);
@@ -375,6 +376,7 @@
             })
             .bind('fileuploadadded', function (e, data) {
                 typeof window[fileuploadadded] == 'function' && window[fileuploadadded](e, data);
+
             })
             .bind('fileuploadsent', function (e, data) {
                 typeof window[fileuploadsent] == 'function' && window[fileuploadsent](e, data);
@@ -384,17 +386,25 @@
                 try {
                     app.mainappdom.trigger("loadfiles");
                 } catch{ }
-                console.log(data);
+                $("body").data("isworking", "false");
             })
             .bind('fileuploadfailed', function (e, data) {
                 typeof window[fileuploadfailed] == 'function' && window[fileuploadfailed](e, data);
-                console.log(data);
+                //console.log(data);
+                $("body").data("isworking", "false");
+                for (var k in data.files) {
+                    app.removeCanceledFile(data.files[k].name);
+                };
+                
             })
             .bind('fileuploadstarted', function (e) {
                 typeof window[fileuploadstarted] == 'function' && window[fileuploadstarted](e, data);
             })
-            .bind('fileuploadstopped', function (e) {
+            .bind('fileuploadstopped', function (e, data) {
                 typeof window[fileuploadstopped] == 'function' && window[fileuploadstopped](e, data);
+                //console.log(data);
+
+                $("body").data("isworking", "false");
             });
     });
 
