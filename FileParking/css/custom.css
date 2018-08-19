@@ -231,6 +231,7 @@ body {
 .multiple_emails-input {
     box-shadow: none !important;
     -webkit-box-shadow: none !important;
+    height:25px !important;
 }
 
 .multiple_emails-container {
@@ -243,6 +244,7 @@ body {
         max-width: 100%;
         overflow-y: auto;
         margin-left: 0px;
+        margin-bottom:0px;
     }
 
         .multiple_emails-container ul > li span.email_name {
@@ -258,7 +260,11 @@ input.error {
 }
 
 
-.logout{
+.logout, .logout:hover{
     color:#fff;
     font-size:0.8em;
+}
+
+.btn .fa{
+    margin-right:5px;
 }

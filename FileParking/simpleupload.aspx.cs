@@ -226,22 +226,25 @@ public partial class simpleupload : System.Web.UI.Page
                 Response.TrySkipIisCustomErrors = true;
                 Response.End();
             }
+
+            MemberPlan obj = PlanManager.GetUserActivePlan(m.Id);
+            Token = Request["token"];
+            AcceptFileTypes = ".*";
+            EnableChunkedUploads = true;
+            SequentialUploads = false;
+            Resume = true;
+            AutoRetry = true;
+            MaxRetries = 100;
+            MaxChunkSize = 15000000;
+            RetryTimeout = 500;
+            LimitConcurrentUploads = 3;
+            ForceIframeTransport = false;
+            AutoUpload = false;
+            MaxNumberOfFiles = obj.Limit;
+            MaxFileSize = -1;
+            MinFileSize = -1;
+            PreviewAsCanvas = false;
         }
-        Token = Request["token"];
-        AcceptFileTypes = ".*";
-        EnableChunkedUploads = true;
-        SequentialUploads = false;
-        Resume = true;
-        AutoRetry = true;
-        MaxRetries = 100;
-        MaxChunkSize = 15000000;
-        RetryTimeout = 500;
-        LimitConcurrentUploads = 3;
-        ForceIframeTransport = false;
-        AutoUpload = false;
-        MaxNumberOfFiles = 1000;
-        MaxFileSize = -1;
-        MinFileSize = -1;
-        PreviewAsCanvas = false;
+        
     }
 }

@@ -215,11 +215,11 @@ var MainApp = /** @class */ (function () {
     };
     MainApp.prototype.shareFiles = function () {
         if ($(".filechk:checked").length == 0) {
-            alert("Please choose a file");
+            Message.Display("Please choose a file! Try again.", "error");
             return;
         }
-        if ($('#toemailtxt').val() == "") {
-            alert("Provide an email");
+        if ($('#toemailtxt').val().trim() == "") {
+            Message.Display("Provide an email.", "error");
             $('.multiple_emails-input').focus();
             return;
         }
