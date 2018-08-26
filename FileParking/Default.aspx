@@ -30,7 +30,7 @@
             </div>
             <div class="span4" style="text-align: right; padding: 20px 10px;">
                 <span class="label label-success" data-bind="visible: shouldshowlogout" id="loggedInLabel"></span>
-                <a href="javascript:return;"  data-bind="click: logout, visible: shouldshowlogout" class="logout">Sign Out</a>
+                <a href="javascript:return;" data-bind="click: logout, visible: shouldshowlogout" class="logout">Sign Out</a>
             </div>
         </div>
         <div class="view1 card" id="loginfrm">
@@ -64,7 +64,9 @@
                     <!-- ko if: activeplan() != null-->
                     <div class="card" style="margin-top: 30px;">
                         <h4 class="bold"><span data-bind="text: activeplan().name"></span>&nbsp;User</h4>
-                        <h5><span class="bold" data-bind="text: activeplan().limit"></span>&nbsp;Files Limit</h5>
+                        <h5><span class="bold" data-bind="text: activeplan().limit"></span>&nbsp;Files Limit
+                            
+                            <span class="label label-success" data-bind="text: remainingLimitDisplay()"></span> </h5>
                         <h6><span class="bold" data-bind="text: activeplan().filesize"></span>&nbsp;per File Limit</h6>
                         <h6>Parked for <span class="bold" data-bind="text: activeplan().term"></span>&nbsp;days</h6>
                         <div data-bind="visible: shouldshowplans">
@@ -92,7 +94,7 @@
                                 <th>Size</th>
                                 <th>Create Date</th>
                                 <th>Expiry Date</th>
-                                <th></th>
+                                <th colspan="2"></th>
                             </tr>
                             <tbody data-bind="foreach: files">
                                 <tr onclick="$(this).find('.filechk').prop('checked', !($(this).find('.filechk').is(':checked')))">
@@ -103,6 +105,9 @@
                                     <td data-bind="text: size"></td>
                                     <td data-bind="text: created"></td>
                                     <td data-bind="text: expiry"></td>
+                                    <td>
+                                        <button class="btn btn-small" data-bind="click: $parent.downloadFileLink" title="Get File Download Link"><i class="fa fa-cloud-download" aria-hidden="true"></i></button>
+                                    </td>
                                     <td>
                                         <button class="btn btn-small" data-bind="click: $parent.removeFile"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                     </td>
@@ -125,6 +130,18 @@
         </div>
         <div class="progress progress-striped active" id="commonloading" style="">
             <div class="bar" style="width: 100%;"></div>
+        </div>
+    </div>
+    <div id="downloadModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <h3 id="myModalLabel">Download Link</h3>
+        </div>
+        <div class="modal-body">
+            <h5><a href="#" id="dlink" target="_blank"></a></h5>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            
         </div>
     </div>
     <div id="planModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="planModalLabel" aria-hidden="true">
@@ -183,7 +200,7 @@
                                         transactions: [
                                             {
                                                 amount: { total: '<%: ProPlan.Price.ToString("#0.0") %>', currency: 'USD' },
-                        description: '<%: Utility.SiteName %> <%: ProPlan.Name %> Plan.',
+                                                description: '<%: Utility.SiteName %> <%: ProPlan.Name %> Plan.',
                                                 custom: user.id
                                             }
                                         ]
@@ -193,7 +210,7 @@
                                 // Wait for the payment to be authorized by the customer
 
                                 onAuthorize: function (data, actions) {
-                                    
+
                                     return actions.payment.execute().then(function (data) {
                                         console.log(data);
                                         window.alert('Payment Complete!');

@@ -336,7 +336,7 @@ public class parkedfilehandler : IHttpHandler
                         dc.SubmitChanges();
                     }
 
-                    return js.Serialize(new { success = false, dl = string.Format("{0}/download.ashx?id={1}", Utility.SiteURL, dl.Id) });
+                    return js.Serialize(new { success = true, dl = string.Format("{0}/download.ashx?id={1}", Utility.SiteURL, dl.Id) });
                 }
             }
             else

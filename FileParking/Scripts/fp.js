@@ -168,6 +168,7 @@ var MainApp = /** @class */ (function () {
         this.shouldshowlogout = ko.observable(false);
         this.activeplan = ko.observable(null);
         this.remaininglimit = ko.observable(null);
+        this.remainingLimitDisplay = ko.observable(null);
     }
     MainApp.prototype.removeCanceledFile = function (f) {
         var instance = this;
@@ -193,6 +194,7 @@ var MainApp = /** @class */ (function () {
                         return f.name() == data.name;
                     });
                     app.remaininglimit(data.remaining);
+                    app.remainingLimitDisplay(data.remaining + " Remaining");
                 }
                 else {
                     Message.Display("Could fetch files", "error");
@@ -203,6 +205,25 @@ var MainApp = /** @class */ (function () {
                 Loader.Hide();
             });
         }
+    };
+    MainApp.prototype.downloadFileLink = function (d) {
+        var instance = this;
+        Loader.Show();
+        var jqxhr = $.getJSON("handlers/filehandler.ashx", { a: "link", token: user.token, f: d.name }, function () {
+        }).done(function (data) {
+            if (data.success) {
+                $("#dlink").html(data.dl);
+                $("#dlink").attr("href", data.dl);
+                $('#downloadModal').modal('show');
+            }
+            else {
+                Message.Display("Could not generate download link.", "error");
+            }
+        }).fail(function () {
+            Message.Display("Something went wrong! Try again.", "error");
+        }).always(function () {
+            Loader.Hide();
+        });
     };
     MainApp.prototype.logout = function () {
         if ($("body").data("isworking") == "true") {
@@ -275,6 +296,7 @@ var MainApp = /** @class */ (function () {
         }).done(function (data) {
             if (data.success) {
                 instance.remaininglimit(data.remaining);
+                instance.remainingLimitDisplay(data.remaining + " Remaining");
                 instance.files.removeAll();
                 for (var k in data.files) {
                     var f = data.files[k];
@@ -319,6 +341,7 @@ var MainApp = /** @class */ (function () {
         }).done(function (data) {
             if (data.success) {
                 instance.remaininglimit(data.remaining);
+                instance.remainingLimitDisplay(data.remaining + " Remaining");
                 if (data.remaining <= 0) {
                     Message.Display("File limit reached, you cannot upload any more files.", "error");
                 }

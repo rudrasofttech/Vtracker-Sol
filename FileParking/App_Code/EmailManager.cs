@@ -21,7 +21,7 @@ namespace FileParking.Models
 
     public class EmailManager
     {
-        public const string noreply = "noreply@fileparking.com";
+        public const string noreply = "noreply@rudrasofttech.com";
 
         public EmailManager()
         {

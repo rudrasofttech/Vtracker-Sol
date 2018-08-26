@@ -202,6 +202,7 @@ class MainApp {
     public shouldshowlogout: KnockoutObservable<boolean>;
     public activeplan: KnockoutObservable<MemberPlan>;
     public remaininglimit: KnockoutObservable<number>;
+    public remainingLimitDisplay: KnockoutObservable<string>;
 
     constructor() {
         this.mainappdom = $("#mainapp");
@@ -212,6 +213,7 @@ class MainApp {
         this.shouldshowlogout = ko.observable(false);
         this.activeplan = ko.observable(null);
         this.remaininglimit = ko.observable(null);
+        this.remainingLimitDisplay = ko.observable(null);
     }
     removeCanceledFile(f: string) {
         var instance = this;
@@ -238,6 +240,7 @@ class MainApp {
                         return f.name() == data.name;
                     });
                     app.remaininglimit(data.remaining);
+                    app.remainingLimitDisplay(data.remaining + " Remaining");
                 } else {
                     Message.Display("Could fetch files", "error");
                 }
@@ -247,6 +250,25 @@ class MainApp {
                 Loader.Hide();
             });
         }
+    }
+
+    downloadFileLink(d: ParkedFile) {
+        var instance = this;
+        Loader.Show();
+        var jqxhr = $.getJSON("handlers/filehandler.ashx", { a: "link", token: user.token, f: d.name }, function () {
+        }).done(function (data) {
+            if (data.success) {
+                $("#dlink").html(data.dl);
+                $("#dlink").attr("href", data.dl);
+                $('#downloadModal').modal('show');
+            } else {
+                Message.Display("Could not generate download link.", "error");
+            }
+        }).fail(function () {
+            Message.Display("Something went wrong! Try again.", "error");
+        }).always(function () {
+            Loader.Hide();
+        });
     }
 
     logout() {
@@ -325,6 +347,7 @@ class MainApp {
         }).done(function (data) {
             if (data.success) {
                 instance.remaininglimit(data.remaining);
+                instance.remainingLimitDisplay(data.remaining + " Remaining");
                 instance.files.removeAll();
                 for (var k in data.files) {
                     var f = data.files[k];
@@ -371,6 +394,7 @@ class MainApp {
         }).done(function (data) {
             if (data.success) {
                 instance.remaininglimit(data.remaining);
+                instance.remainingLimitDisplay(data.remaining + " Remaining");
                 if (data.remaining <= 0) {
                     Message.Display("File limit reached, you cannot upload any more files.", "error");
                 }

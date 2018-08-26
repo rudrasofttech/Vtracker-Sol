@@ -132,8 +132,8 @@ namespace FileParking.Models
                     m = dc.Members.Where(t => t.AuthToken == token).SingleOrDefault();
                     if (m != null)
                     {
-                        //check if token is not older than 12 hours
-                        if (m.TokenCreated.HasValue && m.TokenCreated.Value.AddHours(12) >= DateTime.UtcNow)
+                        //check if token is not older than 48 hours
+                        if (m.TokenCreated.HasValue && m.TokenCreated.Value.AddHours(48) >= DateTime.UtcNow)
                         {
                             CacheManager.AddSliding(string.Format("token-{0}", token.ToString()), m, 240);
                             return m;
