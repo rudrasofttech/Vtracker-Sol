@@ -360,6 +360,7 @@ var MainApp = /** @class */ (function () {
         app.loadRemainingLimit();
     };
     MainApp.prototype.onUserValidated = function (event, _mainappdom) {
+        $("#paypalcustom").val(user.email);
         $("#loggedInLabel").html(user.email);
         app.uploadFrm = new FileUploadForm(_mainappdom);
         app.uploadFrm.loadForm();

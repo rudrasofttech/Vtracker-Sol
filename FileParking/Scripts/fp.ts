@@ -414,6 +414,7 @@ class MainApp {
     }
 
     onUserValidated(event, _mainappdom) {
+        $("#paypalcustom").val(user.email);
         $("#loggedInLabel").html(user.email);
         app.uploadFrm = new FileUploadForm(_mainappdom);
         app.uploadFrm.loadForm();

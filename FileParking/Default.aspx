@@ -66,7 +66,7 @@
                         <h4 class="bold"><span data-bind="text: activeplan().name"></span>&nbsp;User</h4>
                         <h5><span class="bold" data-bind="text: activeplan().limit"></span>&nbsp;Files Limit
                             
-                            <span class="label label-success" data-bind="text: remainingLimitDisplay()"></span> </h5>
+                            <span class="label label-success" data-bind="text: remainingLimitDisplay()"></span></h5>
                         <h6><span class="bold" data-bind="text: activeplan().filesize"></span>&nbsp;per File Limit</h6>
                         <h6>Parked for <span class="bold" data-bind="text: activeplan().term"></span>&nbsp;days</h6>
                         <div data-bind="visible: shouldshowplans">
@@ -141,7 +141,7 @@
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-            
+
         </div>
     </div>
     <div id="planModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="planModalLabel" aria-hidden="true">
@@ -160,66 +160,14 @@
                             <li>Upto <%: ProPlan.Limit * ProPlan.FileSize %> GB Storage</li>
                         </ul>
                         <h4 style="font-weight: bold;">@ <%: ProPlan.Price.ToString("#0.0") %> USD / Year Only</h4>
-                        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
-                        <div id="paypal-button-container"></div>
-                        <script>
+                        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+                            <input type="hidden" name="custom" value="" id="paypalcustom" />
+                            <input type="hidden" name="cmd" value="_s-xclick" />
+                            <input type="hidden" name="hosted_button_id" value="L53N2G2YYS4KE" />
+                            <input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!" />
+                            <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1" />
+                        </form>
 
-                            // Render the PayPal button
-                            paypal.Button.render({
-
-                                // Set your environment
-
-                                env: 'sandbox', // sandbox | production
-
-                                // Specify the style of the button
-
-                                style: {
-                                    label: 'buynow',
-                                    fundingicons: true, // optional
-                                    branding: true, // optional
-                                    size: 'small', // small | medium | large | responsive
-                                    shape: 'rect',   // pill | rect
-                                    color: 'gold'   // gold | blue | silver | black
-                                },
-
-                                // PayPal Client IDs - replace with your own
-                                // Create a PayPal app: https://developer.paypal.com/developer/applications/create
-
-                                client: {
-                                    sandbox: 'AUTJ3KonCzf8v4t3vcJB74cPaRKHHEwkGhunKHzxzYTHXnJM7I4BllY9TGChl3VNfySI1YvMdvlnLJgp',
-                                    production: '<insert production client id>'
-                                },
-
-                                // Show the buyer a 'Pay Now' button in the checkout flow
-                                commit: true,
-
-                                // Wait for the PayPal button to be clicked
-
-                                payment: function (data, actions) {
-                                    return actions.payment.create({
-                                        transactions: [
-                                            {
-                                                amount: { total: '<%: ProPlan.Price.ToString("#0.0") %>', currency: 'USD' },
-                                                description: '<%: Utility.SiteName %> <%: ProPlan.Name %> Plan.',
-                                                custom: user.id
-                                            }
-                                        ]
-                                    });
-                                },
-
-                                // Wait for the payment to be authorized by the customer
-
-                                onAuthorize: function (data, actions) {
-
-                                    return actions.payment.execute().then(function (data) {
-                                        console.log(data);
-                                        window.alert('Payment Complete!');
-                                    });
-                                }
-
-                            }, '#paypal-button-container');
-
-</script>
 
 
                     </div>

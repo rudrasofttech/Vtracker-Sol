@@ -12,18 +12,18 @@
     <link href="@Url.Content("~/Content/themify-icons.css")" rel="stylesheet" />
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body>
+<body ng-app="VtrackerApp">
     <div class="wrapper">
         <div class="sidebar" data-background-color="white" data-active-color="danger">
 
             <!--
-            Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black"
-            Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
-        -->
+                Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black"
+                Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
+            -->
 
             <div class="sidebar-wrapper">
                 <div class="logo">
-                    <a href="#" class="simple-text">
+                    <a href="/" class="simple-text">
                         VTracker
                     </a>
                 </div>
@@ -35,7 +35,7 @@
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    <!--<li>
+                    <li>
                         <a href="user.html">
                             <i class="ti-user"></i>
                             <p>User Profile</p>
@@ -76,7 +76,8 @@
                             <i class="ti-export"></i>
                             <p>Upgrade to PRO</p>
                         </a>
-                    </li>-->
+                    </li>
+                    @Html.Partial("_LoginPartial")
                 </ul>
             </div>
         </div>
@@ -115,8 +116,11 @@
             </footer>
         </div>
     </div>
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
-        @RenderSection("scripts", required: false)
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @* Add Angular Library Here *@
+    @Scripts.Render("~/bundles/angular")
+    <script src="~/Scripts/vapp.js"></script>
+    @RenderSection("scripts", required: false)
 </body>
 </html>
