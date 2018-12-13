@@ -2,18 +2,24 @@
 @using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-        @Html.AntiForgeryToken()
 
-        <li>
-            <a href="@Url.Content("~/Manage/Index")">
-                <i class="ti-user"></i>
-                <p>@Html.Raw("Hello " + User.Identity.GetUserName() + "!")</p>
+    <li>
+        <a href="@Url.Content("~/Manage/Index")">
+            <i class="ti-user"></i>
+            <p>@Html.Raw("Hello " + User.Identity.GetUserName() + "!")</p>
+        </a>
+    </li>
+    <li>
+        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <a href="javascript:document.getElementById('logoutForm').submit()">
+                <i class="ti-control-eject"></i> <p>Log off</p>
             </a>
-        </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="ti-control-eject"></i> <p>Log off</p></a></li>
-    }
+        }
+    </li>
+
 }
 else
 {
@@ -25,8 +31,9 @@ else
     </li>
     <li>
         <a href="@Url.Content("~/Account/Login")" id="loginLink">
-        <i class="ti-control-play"></i>
-        <p>Log in</p></a>
+            <i class="ti-control-play"></i>
+            <p>Log in</p>
+        </a>
     </li>
 }
 

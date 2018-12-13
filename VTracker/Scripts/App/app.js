@@ -7,24 +7,24 @@ vApp.config(['$routeProvider', function ($routeProvider) {
             redirectTo: '/home'
         })
         .when('/home', {
-            templateUrl: '/template/home.html',
+            templateUrl: '/templates/home.html',
             controller: 'homeController'
         })
         .when('/register', {
-            templateUrl: '/template/register.html',
+            templateUrl: '/templates/register.html',
             controller: 'authenticateController'
         })
         .when('/login', {
-            templateUrl: '/template/login.html',
+            templateUrl: '/templates/login.html',
             controller: 'loginController'
         })
         .when('/unauthorized', {
-            templateUrl: '/template/unauthorize.html',
+            templateUrl: '/templates/unauthorize.html',
             controller: 'unauthorizeController'
-        })
+        });
 }]);
 
-vApp.constant('serviceBasePath', 'http://localhost:25419');
+vApp.constant('serviceBasePath', 'http://localhost:53501');
 
 //controllers
 vApp.controller('homeController', ['$scope', 'dataService', function ($scope, dataService) {
@@ -32,36 +32,36 @@ vApp.controller('homeController', ['$scope', 'dataService', function ($scope, da
     $scope.data = "";
     dataService.GetAnonymousData().then(function (data) {
         $scope.data = data;
-    })
+    });
 }]);
 vApp.controller('authenticateController', ['$scope', 'dataService', function ($scope, dataService) {
     //FETCH DATA FROM SERVICES
     $scope.data = "";
     dataService.GetAuthenticateData().then(function (data) {
         $scope.data = data;
-    })
+    });
 }]);
 vApp.controller('authorizeController', ['$scope', 'dataService', function ($scope, dataService) {
     //FETCH DATA FROM SERVICES
     $scope.data = "";
     dataService.GetAuthorizeData().then(function (data) {
         $scope.data = data;
-    })
+    });
 }]);
 vApp.controller('loginController', ['$scope', 'accountService', '$location', function ($scope, accountService, $location) {
     //FETCH DATA FROM SERVICES
     $scope.account = {
         username: '',
         password: ''
-    }
+    };
     $scope.message = "";
     $scope.login = function () {
         accountService.login($scope.account).then(function (data) {
             $location.path('/home');
         }, function (error) {
             $scope.message = error.error_description;
-        })
-    }
+        });
+    };
 }]);
 vApp.controller('unauthorizeController', ['$scope', function ($scope) {
     //FETCH DATA FROM SERVICES
@@ -73,35 +73,35 @@ vApp.factory('dataService', ['$http', 'serviceBasePath', function ($http, servic
     fac.GetAnonymousData = function () {
         return $http.get(serviceBasePath + '/api/data/forall').then(function (response) {
             return response.data;
-        })
-    }
+        });
+    };
 
     fac.GetAuthenticateData = function () {
         return $http.get(serviceBasePath + '/api/data/authenticate').then(function (response) {
             return response.data;
-        })
-    }
+        });
+    };
 
     fac.GetAuthorizeData = function () {
         return $http.get(serviceBasePath + '/api/data/authorize').then(function (response) {
             return response.data;
-        })
-    }
+        });
+    };
     return fac;
-}])
+}]);
 vApp.factory('userService', function () {
     var fac = {};
     fac.CurrentUser = null;
     fac.SetCurrentUser = function (user) {
         fac.CurrentUser = user;
         sessionStorage.user = angular.toJson(user);
-    }
+    };
     fac.GetCurrentUser = function () {
         fac.CurrentUser = angular.fromJson(sessionStorage.user);
         return fac.CurrentUser;
-    }
+    };
     return fac;
-})
+});
 vApp.factory('accountService', ['$http', '$q', 'serviceBasePath', 'userService', function ($http, $q, serviceBasePath, userService) {
     var fac = {};
     fac.login = function (user) {
@@ -112,7 +112,7 @@ vApp.factory('accountService', ['$http', '$q', 'serviceBasePath', 'userService',
                 p.push(key + '=' + encodeURIComponent(obj[key]));
             }
             return p.join('&');
-        }
+        };
 
         var defer = $q.defer();
         $http({
@@ -125,13 +125,13 @@ vApp.factory('accountService', ['$http', '$q', 'serviceBasePath', 'userService',
             defer.resolve(response.data);
         }, function (error) {
             defer.reject(error.data);
-        })
+        });
         return defer.promise;
-    }
+    };
     fac.logout = function () {
         userService.CurrentUser = null;
         userService.SetCurrentUser(userService.CurrentUser);
-    }
+    };
     return fac;
 }]);
 
@@ -141,7 +141,7 @@ vApp.config(['$httpProvider', function ($httpProvider) {
         return {
             request: function (config) {
                 var currentUser = userService.GetCurrentUser();
-                if (currentUser != null) {
+                if (currentUser !== null) {
                     config.headers['Authorization'] = 'Bearer ' + currentUser.access_token;
                 }
                 return config;
@@ -158,8 +158,8 @@ vApp.config(['$httpProvider', function ($httpProvider) {
                 return $q.reject(rejection);
             }
 
-        }
-    }
+        };
+    };
     var params = ['userService', '$q', '$location'];
     interceptor.$inject = params;
     $httpProvider.interceptors.push(interceptor);

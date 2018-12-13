@@ -9,6 +9,33 @@ namespace VTracker.Controllers
 {
     public class AccountController : Controller
     {
+        private ApplicationUserManager userManager;
+        private RoleManager<ApplicationRole> roleManager;
+
+        public AccountController()
+        {
+            ApplicationDbContext dbcontext = ApplicationDbContext.Create();
+            userManager = new ApplicationUserManager(new ApplicationUserStore(dbcontext));
+            roleManager = new RoleManager<ApplicationRole>(new ApplicationRoleStore(dbcontext));
+        }
+        //
+        // GET: /Account/Login
+        [AllowAnonymous]
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Login(LoginViewModel model)
+        {
+            return View(model);
+        }
+
         //
         // GET: /Account/Register
         [AllowAnonymous]

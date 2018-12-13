@@ -12,7 +12,7 @@
     <link href="@Url.Content("~/Content/themify-icons.css")" rel="stylesheet" />
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body ng-app="VtrackerApp">
+<body>
     <div class="wrapper">
         <div class="sidebar" data-background-color="white" data-active-color="danger">
 
@@ -65,7 +65,7 @@
                             <p>Maps</p>
                         </a>
                     </li>
-                    <li>
+                    @*<li>
                         <a href="notifications.html">
                             <i class="ti-bell"></i>
                             <p>Notifications</p>
@@ -76,16 +76,16 @@
                             <i class="ti-export"></i>
                             <p>Upgrade to PRO</p>
                         </a>
-                    </li>
+                    </li>*@
                     @Html.Partial("_LoginPartial")
                 </ul>
             </div>
         </div>
 
         <div class="main-panel">
-
-            @RenderBody()
-
+            
+                    @RenderBody()
+                
             <footer class="footer">
                 <div class="container-fluid">
                     <nav class="pull-left">
@@ -118,9 +118,7 @@
     </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @* Add Angular Library Here *@
-    @Scripts.Render("~/bundles/angular")
-    <script src="~/Scripts/vapp.js"></script>
+    
     @RenderSection("scripts", required: false)
 </body>
 </html>
