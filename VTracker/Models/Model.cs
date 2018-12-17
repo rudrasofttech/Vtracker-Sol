@@ -14,12 +14,53 @@ namespace VTracker.Models
         Deleted = 3
     }
 
+    public enum MemberWebsiteRole
+    {
+        SuperAdmin,
+        Admin,
+        Editor,
+        Viewer
+    }
+
     public enum ActivityName
     {
         Click = 1,
         WindowBlur = 2,
         WindowFocus = 3,
         ScrollBottom = 4
+    }
+
+    public class Member
+    {
+        public int ID { get; set; }
+        [MaxLength(50)]
+        public string FirstName { get; set; }
+        [MaxLength(50)]
+        public string LastName { get; set; }
+        [Required, MaxLength(250)]
+        public string Email { get; set; }
+        [Required, MaxLength(250)]
+        public string Password { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateModified { get; set; }
+        public RecordStatus Status { get; set; }
+
+        public Guid PublicId { get; set; }
+        public Guid AuthToken { get; set; }
+        public DateTime TokenCreated { get; set; }
+    }
+
+    public class MemberWebsiteRelation {
+        public int ID { get; set; }
+        public Member Member
+        {
+            get;set;
+        }
+        public Website Website { get; set; }
+
+        public MemberWebsiteRole Role { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateModified { get; set; }
     }
 
     public class Website
@@ -35,7 +76,8 @@ namespace VTracker.Models
         public virtual ICollection<Webpage> Webpages { get; set; }
     }
 
-    public class Webpage {
+    public class Webpage
+    {
         [Column(Order = 1)]
         public int ID { get; set; }
         [Column(Order = 2), Required, MaxLength(1024)]
@@ -53,7 +95,8 @@ namespace VTracker.Models
         public virtual Website Website { get; set; }
     }
 
-    public class Visit {
+    public class Visit
+    {
         public int ID { get; set; }
         [Required, MaxLength(20)]
         public string IPAddress { get; set; }
@@ -64,12 +107,12 @@ namespace VTracker.Models
         public string CountryAbbr { get; set; }
         [Required(AllowEmptyStrings = true)]
         public string Referer { get; set; }
-        
+
         [Required(AllowEmptyStrings = true), MaxLength(50)]
         public string WebsiteVisitorReferenceID { get; set; }
-        
+
         public Guid ClientCookie { get; set; }
-        
+
         public DateTime LastPingDate { get; set; }
         [Required(AllowEmptyStrings = true), MaxLength(50)]
         public string BrowserName { get; set; }
@@ -102,7 +145,7 @@ namespace VTracker.Models
         /// Initial Horizontal scroll  position when page is loaded
         /// </summary>
         public int? ScrollLeft { get; set; }
-        
+
     }
 
     public class VisitActivity
@@ -133,10 +176,13 @@ namespace VTracker.Models
         public DbSet<Visit> Visits { get; set; }
         public DbSet<VisitPage> VisitPages { get; set; }
         public DbSet<VisitActivity> VisitPageActivities { get; set; }
+        public DbSet<Member> Members { get; set; }
+        public DbSet<MemberWebsiteRelation> MemberWebsiteRelations { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
     }
+
 }
