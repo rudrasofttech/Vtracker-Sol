@@ -232,7 +232,9 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AuthorizeAttribute.cs" />
+    <Compile Include="Models\CacheManager.cs" />
     <Compile Include="Models\DisplayModel.cs" />
+    <Compile Include="Models\MemberManager.cs" />
     <Compile Include="Models\Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
