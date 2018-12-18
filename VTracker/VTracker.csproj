@@ -225,6 +225,10 @@
     <Compile Include="Migrations\201812171541039_MemberWebsite1.Designer.cs">
       <DependentUpon>201812171541039_MemberWebsite1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812180816411_memberchanged.cs" />
+    <Compile Include="Migrations\201812180816411_memberchanged.Designer.cs">
+      <DependentUpon>201812180816411_memberchanged.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AuthorizeAttribute.cs" />
@@ -360,6 +364,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812171541039_MemberWebsite1.resx">
       <DependentUpon>201812171541039_MemberWebsite1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812180816411_memberchanged.resx">
+      <DependentUpon>201812180816411_memberchanged.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

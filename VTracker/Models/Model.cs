@@ -46,8 +46,8 @@ namespace VTracker.Models
         public RecordStatus Status { get; set; }
 
         public Guid PublicId { get; set; }
-        public Guid AuthToken { get; set; }
-        public DateTime TokenCreated { get; set; }
+        public Guid? AuthToken { get; set; }
+        public DateTime? TokenCreated { get; set; }
     }
 
     public class MemberWebsiteRelation {
