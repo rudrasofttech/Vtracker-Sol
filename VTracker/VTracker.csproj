@@ -136,7 +136,6 @@
     <Compile Include="Controllers\RecordVisitController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DAL\MemberRepository.cs" />
     <Compile Include="DAL\MemberWebsiteRepository.cs" />
     <Compile Include="DAL\VisitRepository.cs" />
@@ -240,7 +239,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\animate.min.css" />
+    <Content Include="Content\base.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\clean.css" />
+    <Content Include="Content\img\datepicker_b.png" />
+    <Content Include="Content\img\datepicker_bl.png" />
+    <Content Include="Content\img\datepicker_br.png" />
+    <Content Include="Content\img\datepicker_l.png" />
+    <Content Include="Content\img\datepicker_r.png" />
+    <Content Include="Content\img\datepicker_t.png" />
+    <Content Include="Content\img\datepicker_tl.png" />
+    <Content Include="Content\img\datepicker_tr.png" />
     <Content Include="Content\paper-dashboard.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\themify-icons.css" />
@@ -256,25 +265,18 @@
     <Content Include="fonts\themify.woff" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\App\home-controller.js" />
-    <Content Include="Scripts\App\app.js" />
     <Content Include="Scripts\bootstrap-checkbox-radio.js" />
     <Content Include="Scripts\bootstrap-notify.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\chartist.min.js" />
+    <Content Include="Scripts\datepicker.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\paper-dashboard.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="templates\dashboard.html" />
-    <Content Include="templates\error.html" />
-    <Content Include="templates\home.html" />
-    <Content Include="templates\login.html" />
-    <Content Include="templates\register.html" />
-    <Content Include="templates\unauthorize.html" />
     <Content Include="vt.js" />
     <Content Include="vtinit.js" />
     <Content Include="Web.config">
@@ -300,6 +302,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Scripts\App\" />
     <Folder Include="Views\RecordVisit\" />
   </ItemGroup>
   <ItemGroup>

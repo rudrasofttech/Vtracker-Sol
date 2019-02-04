@@ -68,28 +68,22 @@
                 <span class="icon-bar bar2"></span>
                 <span class="icon-bar bar3"></span>
             </button>
-            <a class="navbar-brand" href="#">Dashboard</a>
+            <a class="navbar-brand" href="#" style="text-transform:uppercase;">@Model.WebsiteName</a>
         </div>
         <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav">
 
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="ti-bell"></i>
-                        <p>Date Range</p>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.LastHour))">Last Hour</a></li>
-                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Today))">Today</a></li>
-                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Yesterday))">Yesterday</a></li>
-                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Last7Days))">Last 7 Days</a></li>
-                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Last15Days))">Last 15 Days</a></li>
-                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Last30Days))">Last 30 Days</a></li>
-                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Last3Months))">Last 3 Months</a></li>
-                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Last6Months))">Last 6 Months</a></li>
-                        <li><a href="@Url.Content(Utility.GetWebsitePublicStatsURL(Model.WebsiteId, ReportDateRangeType.Last12Months))">Last 12 Months</a></li>
-                    </ul>
+                <li>
+                    <div id="date-range" style="display:inline-block">
+                        <div id="date-range-field">
+                            <span></span>
+                            <a href="#">&#9660;</a>
+                        </div>
+                        <div id="datepicker-calendar"></div>
+                    </div>
+                    <input type="hidden" id="starthdn" value="@Model.Start.ToString("yyyy/M/d")" />
+                    <input type="hidden" id="endhdn" value="@Model.End.ToString("yyyy/M/d")" />
+                    <button class="btn btn-info btn-fill btn-sm" style="display:inline-block" onclick="Go()">Go</button>
                 </li>
 
             </ul>
@@ -137,48 +131,73 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="header">
+                        <h4 class="title">Most Visited Pages </h4>
+                        <p class="category">In @Model.VisitChartDescription</p>
+                    </div>
+                    <div class="content table-responsive table-full-width">
+                        <div style="padding:15px">
+                            <table class="table table-striped browserdata" id="vptable">
+                                <thead>
+                                    <tr>
+                                        <th style="width:80%">Page</th>
+                                        <th style="width:20%">Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (WebpageVisits item in Model.MPages.OrderByDescending(t => t.Count).Take(50))
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.Page
+                                            </td>
+                                            <td style="width:20%">@item.Count</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
                         <h4 class="title">Visit Referer</h4>
                         <p class="category">In @Model.VisitChartDescription</p>
                     </div>
 
                     <div class="content table-responsive table-full-width">
-                        <table class="table table-striped browserdata">
-                            <thead>
-                                <tr>
-                                    <th style="width:80%">Referer</th>
-                                    <th style="width:20%">Count</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (RefererData item in Model.RefererList.OrderByDescending(t => t.Count))
-                                {
+                        <div style="padding:15px">
+                            <table class="table table-striped browserdata" id="reftable">
+                                <thead>
                                     <tr>
-                                        @if (string.IsNullOrEmpty(item.Referer))
-                                        {
-                                            <td>None</td>
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                                
-                                                    <span style="overflow-wrap:break-word; max-width:100%; display:block;" title="">
-                                                        @if (item.Referer.Length > 150)
-                                                        {
-                                                            @Html.Raw(Server.UrlDecode(item.Referer.Substring(0, 150)) + "...")
-                                                        }
-                                                        else
-                                                        {
-                                                            @Html.Raw(Server.UrlDecode(item.Referer))
-                                                        }
-                                                    </span>
-                                                    <a target="_blank" href="@Html.Raw(Server.UrlDecode(item.Referer))" title="@Html.Raw(Server.UrlDecode(item.Referer))">visit the page</a>
-                                            </td>
-                                        }
-                                        <td style="width:20%">@item.Count</td>
+                                        <th style="width:80%">Referer</th>
+                                        <th style="width:20%">Count</th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach (RefererData item in Model.RefererList.OrderByDescending(t => t.Count))
+                                    {
+                                        <tr>
+                                            @if (string.IsNullOrEmpty(item.Referer))
+                                            {
+                                                <td>Empty</td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    @Html.Raw(item.Referer)
+                                                </td>
+                                            }
+                                            <td style="width:20%">@item.Count</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        
 
                     </div>
                 </div>
@@ -187,9 +206,93 @@
     </div>
 </div>
 
-
+@section Styles{
+    <link href="@Url.Content("~/Content/base.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/clean.css")" rel="stylesheet" />
+    <link href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet"/>
+}
 @section Scripts{
+    <script type="text/javascript" src="@Url.Content("~/Scripts/datepicker.js")"></script>
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script>
+        $(document).ready(function () {
+            $('#vptable').DataTable({
+                "lengthMenu": [[10, 25, -1], [10, 25, "All"]],
+                "order": [[1, "desc"]]
+            });
+            $("#reftable").DataTable({
+                "lengthMenu": [[10, 25, -1], [10, 25, "All"]],
+                "order": [[1, "desc"]]
+            });
+        /* Special date widget */
+
+        var to = new Date($("#endhdn").val());
+            var from = new Date($("#starthdn").val());
+
+        $('#datepicker-calendar').DatePicker({
+            inline: true,
+            date: [from, to],
+            calendars: 3,
+            mode: 'range',
+            current: new Date(to.getFullYear(), to.getMonth() - 1, 1),
+            onChange: function (dates, el) {
+                // update the range display
+                $('#date-range-field span').text(dates[0].getDate() + ' ' + dates[0].getMonthName(true) + ', ' + dates[0].getFullYear() + ' - ' +
+                    dates[1].getDate() + ' ' + dates[1].getMonthName(true) + ', ' + dates[1].getFullYear());
+                $("#starthdn").val(dates[0].getFullYear() + "/" + dates[0].getMonthName(true) + "/" + dates[0].getDate());
+                $("#endhdn").val(dates[1].getFullYear() + "/" + dates[1].getMonthName(true) + "/" + dates[1].getDate());
+            }
+        });
+
+        // initialize the special date dropdown field
+        $('#date-range-field span').text(from.getDate() + ' ' + from.getMonthName(true) + ', ' + from.getFullYear() + ' - ' +
+            to.getDate() + ' ' + to.getMonthName(true) + ', ' + to.getFullYear());
+
+        // bind a click handler to the date display field, which when clicked
+        // toggles the date picker calendar, flips the up/down indicator arrow,
+        // and keeps the borders looking pretty
+        $('#date-range-field').bind('click', function () {
+            $('#datepicker-calendar').toggle();
+            if ($('#date-range-field a').text().charCodeAt(0) == 9660) {
+                // switch to up-arrow
+                $('#date-range-field a').html('&#9650;');
+                $('#date-range-field').css({ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 });
+                $('#date-range-field a').css({ borderBottomRightRadius: 0 });
+            } else {
+                // switch to down-arrow
+                $('#date-range-field a').html('&#9660;');
+                $('#date-range-field').css({ borderBottomLeftRadius: 5, borderBottomRightRadius: 5 });
+                $('#date-range-field a').css({ borderBottomRightRadius: 5 });
+            }
+            return false;
+        });
+
+        // global click handler to hide the widget calendar when it's open, and
+        // some other part of the document is clicked.  Note that this works best
+        // defined out here rather than built in to the datepicker core because this
+        // particular example is actually an 'inline' datepicker which is displayed
+        // by an external event, unlike a non-inline datepicker which is automatically
+        // displayed/hidden by clicks within/without the datepicker element and datepicker respectively
+        $('html').click(function () {
+            if ($('#datepicker-calendar').is(":visible")) {
+                $('#datepicker-calendar').hide();
+                $('#date-range-field a').html('&#9660;');
+                $('#date-range-field').css({ borderBottomLeftRadius: 5, borderBottomRightRadius: 5 });
+                $('#date-range-field a').css({ borderBottomRightRadius: 5 });
+            }
+        });
+
+        // stop the click propagation when clicking on the calendar element
+        // so that we don't close it
+        $('#datepicker-calendar').click(function (event) {
+            event.stopPropagation();
+        });
+      });
+      /* End special page widget */
+
+        function Go() {
+            location.href = "@Url.Content(string.Format("~/report/websitepublicstats/{0}?start=",Model.WebsiteId))" + $("#starthdn").val() + "&end=" + $("#endhdn").val();
+        }
 
         var dataVisits = {
             labels: [ @Html.Raw(xvaluevisit) ],

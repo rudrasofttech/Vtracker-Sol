@@ -11,6 +11,7 @@ namespace VTracker.DAL
     {
         IEnumerable<Visit> GetVisits();
         IEnumerable<Visit> GetVisits(int websiteId);
+        IEnumerable<Visit> GetVisits(int websiteId, DateTime start, DateTime end);
         IEnumerable<Visit> GetVisitsByWebpage(int webpageId);
         Visit GetVisitByID(int id);
         Visit GetVisitByCC(Guid cc);
@@ -22,6 +23,8 @@ namespace VTracker.DAL
         IEnumerable<VisitPage> GetVisitPages(int visitId);
         VisitPage GetVisitPageByID(int id);
         VisitPage GetVisitPageByVisitAndWebpage(int visitId, int webpageId);
+        List<VisitPage> GetVisitPagesByWebsiteIdAndDateRange(int websiteId, DateTime start, DateTime end);
+        List<Tuple<Visit, Webpage>> GetVisitAndWebpageByWebsite(int websiteId, DateTime? start, DateTime? end);
         void InsertVisitPage(VisitPage w);
         void DeleteVisitPage(int id);
         void UpdateVisitPage(VisitPage w);
@@ -146,6 +149,8 @@ namespace VTracker.DAL
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+        #endregion
+
 
         public IEnumerable<VisitActivity> GetVisitPageActivities(int visitId)
         {
@@ -178,8 +183,34 @@ namespace VTracker.DAL
             context.Entry(w).State = EntityState.Modified;
         }
 
+        public IEnumerable<Visit> GetVisits(int websiteId, DateTime start, DateTime end)
+        {
+            return context.Visits.Where(t => t.Website.ID == websiteId && t.DateCreated >= start && t.DateCreated <= end).OrderByDescending(t => t.DateCreated).ToList();
+        }
 
-        #endregion
+        public List<VisitPage> GetVisitPagesByWebsiteIdAndDateRange(int websiteId, DateTime start, DateTime end)
+        {
+            return context.VisitPages.Where(t => t.visit.Website.ID == websiteId 
+            && t.DateCreated >= start 
+            && t.DateCreated <= end).ToList();
+        }
+
+     
+
+        public List<Tuple<Visit, Webpage>> GetVisitAndWebpageByWebsite(int websiteId, DateTime? start, DateTime? end)
+        {
+            var list = context.VisitPages.Where(t => t.visit.Website.ID == websiteId
+            && (start.HasValue && t.DateCreated >= start.Value)
+            && (end.HasValue && t.DateCreated <= end.Value)).Select(t => new { V = t.visit, WP = t.webpage }).Distinct();
+
+            List<Tuple<Visit, Webpage>> result = new List<Tuple<Visit, Webpage>>();
+            foreach(var i in list)
+            {
+                result.Add(new Tuple<Visit, Webpage>(i.V, i.WP));
+            }
+
+            return result;
+        }
 
     }
 }

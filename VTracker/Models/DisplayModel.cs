@@ -35,6 +35,14 @@ namespace VTracker.Models
         Last6Months = 7,
         Last12Months = 12
     }
+
+    public enum ReportDateRangeCustomType
+    {
+        Day = 1,
+        Days = 2,
+        Months = 3
+    }
+
     public class WebpageDisplayPublic
     {
 
@@ -61,7 +69,6 @@ namespace VTracker.Models
 
     public class WebsiteDisplayPublic
     {
-
         public WebsiteDisplayPublic()
         {
             VisitsData = new List<VisitCountChartPoint>();
@@ -69,9 +76,14 @@ namespace VTracker.Models
             RefererList = new List<RefererData>();
             NewVisitsData = new List<VisitCountChartPoint>();
             ReturnVisitsData = new List<VisitCountChartPoint>();
+            MPages = new List<WebpageVisits>();
+            WebsiteName = string.Empty;
         }
+        public string WebsiteName { get; set; }
         public int WebsiteId { get; set; }
-        public ReportDateRangeType Range { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+        public ReportDateRangeCustomType Range { get; set; }
         public int VisitCount { get; set; }
         public List<VisitCountChartPoint> VisitsData { get; set; }
         public List<VisitCountChartPoint> NewVisitsData { get; set; }
@@ -79,9 +91,14 @@ namespace VTracker.Models
         public List<PieChartPoint> BrowserData { get; set; }
         public string VisitChartDescription { get; set; }
         public List<RefererData> RefererList { get; set; }
-
+        //most visited pages
+        public List<WebpageVisits> MPages { get; set; }
     }
-
+    public struct WebpageVisits
+    {
+        public string Page { get; set; }
+        public int Count { get; set; }
+    }
     public class VisitCountChartPoint
     {
         public string X { get; set; }

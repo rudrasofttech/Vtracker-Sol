@@ -1,12 +1,11 @@
 ﻿
-@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
 
     <li>
         <a href="@Url.Content("~/Manage/Index")">
             <i class="ti-user"></i>
-            <p>@Html.Raw("Hello " + User.Identity.GetUserName() + "!")</p>
+            <p>Hello</p>
         </a>
     </li>
     <li>
