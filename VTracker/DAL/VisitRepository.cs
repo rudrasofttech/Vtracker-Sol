@@ -13,6 +13,7 @@ namespace VTracker.DAL
         IEnumerable<Visit> GetVisits(int websiteId);
         IEnumerable<Visit> GetVisits(int websiteId, DateTime start, DateTime end);
         IEnumerable<Visit> GetVisitsByWebpage(int webpageId);
+        IEnumerable<Visit> GetVisitsByWebpage(int webpageId, DateTime? start, DateTime? end);
         Visit GetVisitByID(int id);
         Visit GetVisitByCC(Guid cc);
         void InsertVisit(Visit w);
@@ -123,6 +124,12 @@ namespace VTracker.DAL
         public VisitPage GetLastVisitedPageofVisit(int visitId)
         {
             return context.VisitPages.Where(t => t.visit.ID == visitId).OrderByDescending(t => t.ID).FirstOrDefault();
+        }
+
+        public IEnumerable<Visit> GetVisitsByWebpage(int webpageId, DateTime? start, DateTime? end)
+        {
+            return context.VisitPages.Where(t => t.webpage.ID == webpageId
+            && t.visit.DateCreated >= start && t.visit.DateCreated <= end).OrderBy(t => t.DateCreated).Select(t => t.visit).Distinct();
         }
 
         public IEnumerable<Visit> GetVisitsByWebpage(int webpageId)

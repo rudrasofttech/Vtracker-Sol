@@ -12,9 +12,9 @@ namespace VTracker.Models
         //seconds
         public const int PulseInterval = 5;
 
-        public static string GetWebpagePublicStatsURL(int websiteid, string path, ReportDateRangeType rangeType)
+        public static string GetWebpagePublicStatsURL(int websiteid, string path)
         {
-            return string.Format("~/report/webpagepublicstats/{0}?path={1}&range={2}", websiteid, path, rangeType);
+            return string.Format("~/report/webpagepublicstats/{0}?path={1}", websiteid, path);
         }
 
         public static string GetWebsitePublicStatsURL(int websiteid, ReportDateRangeType rangeType)
@@ -54,10 +54,14 @@ namespace VTracker.Models
             NewVisitsData = new List<VisitCountChartPoint>();
             ReturnVisitsData = new List<VisitCountChartPoint>();
         }
+        public string WebsiteName { get; set; }
+        
         public int WebsiteId { get; set; }
         public string Path { get; set; }
-        public ReportDateRangeType Range { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
         public int VisitCount { get; set; }
+        public ReportDateRangeCustomType Range { get; set; }
         public List<VisitCountChartPoint> VisitsData { get; set; }
         public List<VisitCountChartPoint> NewVisitsData { get; set; }
         public List<VisitCountChartPoint> ReturnVisitsData { get; set; }
