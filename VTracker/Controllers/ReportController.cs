@@ -92,11 +92,14 @@ namespace VTracker.Controllers
                     foreach (var item in visits)
                     {
                         string refstr = "";
+                        
                         if (!string.IsNullOrEmpty(item.Referer))
                         {
                             Uri referurl = new Uri(HttpUtility.UrlDecode(item.Referer));
                             refstr = referurl.Host;
                         }
+
+                        
 
                         RefererData rd = wdp.RefererList.SingleOrDefault(t => t.Referer == refstr);
                         if (rd != null)
@@ -107,6 +110,7 @@ namespace VTracker.Controllers
                         {
                             wdp.RefererList.Add(new RefererData() { Count = 1, Referer = refstr });
                         }
+                        
                     }
                     DateTime daystart = wdp.Start;
                     switch (wdp.Range)
@@ -238,10 +242,16 @@ namespace VTracker.Controllers
                 foreach(var item in vt)
                 {
                     string refstr = "";
+                    string screens = "";
                     if (!string.IsNullOrEmpty(item.Referer))
                     {
                         Uri referurl = new Uri(HttpUtility.UrlDecode(item.Referer));
                         refstr = referurl.Host;
+                    }
+
+                    if (item.ScreenWidth != null && item.ScreenHeight != null)
+                    {
+                        screens = string.Format("{0} X {1}", item.ScreenWidth, item.ScreenHeight);
                     }
 
                     RefererData rd = wdp.RefererList.SingleOrDefault(t => t.Referer == refstr);
@@ -252,6 +262,16 @@ namespace VTracker.Controllers
                     else
                     {
                         wdp.RefererList.Add(new RefererData() { Count = 1, Referer = refstr });
+                    }
+
+                    ScreenSizeData ssd = wdp.ScreenSizes.SingleOrDefault(t => t.Screen == screens);
+                    if(ssd != null)
+                    {
+                        ssd.Count++;
+                    }
+                    else
+                    {
+                        wdp.ScreenSizes.Add(new ScreenSizeData() { Count = 1, Screen = screens });
                     }
                 }
                 DateTime daystart = wdp.Start;

@@ -59,7 +59,7 @@
 
 }
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle">
@@ -68,11 +68,10 @@
                 <span class="icon-bar bar2"></span>
                 <span class="icon-bar bar3"></span>
             </button>
-            <a class="navbar-brand" href="#" style="text-transform:uppercase;">@Model.WebsiteName</a>
+            <a class="navbar-brand" href="@Url.Content("~/report/websitepublicstats/" + Model.WebsiteId)" style="text-transform:uppercase;">@Model.WebsiteName</a>
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-
                 <li>
                     <div id="date-range" style="display:inline-block">
                         <div id="date-range-field">
@@ -91,7 +90,7 @@
         </div>
     </div>
 </nav>
-<div class="content">
+<div class="content" style="margin-top:50px;">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12" style="max-height:460px;">
@@ -113,22 +112,9 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12" style="max-height:460px;">
-                <div class="card">
-                    <div class="header">
-                        <h4 class="title">Browsers</h4>
-                        <p class="category">In @Model.VisitChartDescription</p>
-                    </div>
-                    <div class="content">
-                        <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
-                    </div>
-                </div>
-            </div>
 
-        </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="header">
                         <h4 class="title">Most Visited Pages </h4>
@@ -148,20 +134,19 @@
                                     {
                                         <tr>
                                             <td>
-                                                @item.Page
+                                                <a href="@Url.Content(string.Format("~/report/WebpagePublicStats?id={0}&path=http://www.dumy.com{1}", Model.WebsiteId, item.Page))">@item.Page</a>
                                             </td>
                                             <td style="width:20%">@item.Count</td>
                                         </tr>
                                     }
                                 </tbody>
                             </table>
-                            </div>
                         </div>
                     </div>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
+        
+            <div class="col-md-6">
                 <div class="card">
                     <div class="header">
                         <h4 class="title">Visit Referer</h4>
@@ -197,8 +182,57 @@
                                 </tbody>
                             </table>
                         </div>
-                        
-
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Browsers</h4>
+                        <p class="category">In @Model.VisitChartDescription</p>
+                    </div>
+                    <div class="content">
+                        <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" >
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Screen Size</h4>
+                        <p class="category">In @Model.VisitChartDescription</p>
+                    </div>
+                    <div class="content table-responsive table-full-width">
+                        <div style="padding:15px">
+                            <table class="table table-striped browserdata" id="ssdtable">
+                                <thead>
+                                    <tr>
+                                        <th style="width:80%">Width X Height</th>
+                                        <th style="width:20%">Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (ScreenSizeData item in Model.ScreenSizes.OrderByDescending(t => t.Count))
+                                    {
+                                        <tr>
+                                            @if (string.IsNullOrEmpty(item.Screen))
+                                            {
+                                                <td>Empty</td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    @Html.Raw(item.Screen)
+                                                </td>
+                                            }
+                                            <td style="width:20%">@item.Count</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -209,14 +243,14 @@
 @section Styles{
     <link href="@Url.Content("~/Content/base.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Content/clean.css")" rel="stylesheet" />
-    <link href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet"/>
+    <link href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
 }
 @section Scripts{
     <script type="text/javascript" src="@Url.Content("~/Scripts/datepicker.js")"></script>
     <script type="text/javascript" src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#vptable').DataTable({
+            $('#vptable, #ssdtable').DataTable({
                 "lengthMenu": [[10, 25, -1], [10, 25, "All"]],
                 "order": [[1, "desc"]]
             });

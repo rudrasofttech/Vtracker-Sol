@@ -81,6 +81,7 @@ namespace VTracker.Models
             NewVisitsData = new List<VisitCountChartPoint>();
             ReturnVisitsData = new List<VisitCountChartPoint>();
             MPages = new List<WebpageVisits>();
+            ScreenSizes = new List<ScreenSizeData>();
             WebsiteName = string.Empty;
         }
         public string WebsiteName { get; set; }
@@ -95,6 +96,7 @@ namespace VTracker.Models
         public List<PieChartPoint> BrowserData { get; set; }
         public string VisitChartDescription { get; set; }
         public List<RefererData> RefererList { get; set; }
+        public List<ScreenSizeData> ScreenSizes { get; set; }
         //most visited pages
         public List<WebpageVisits> MPages { get; set; }
     }
@@ -118,6 +120,12 @@ namespace VTracker.Models
     public class RefererData
     {
         public string Referer { get; set; }
+        public int Count { get; set; }
+    }
+
+    public class ScreenSizeData
+    {
+        public string Screen { get; set; }
         public int Count { get; set; }
     }
 }
