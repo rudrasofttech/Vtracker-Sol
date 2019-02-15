@@ -14,6 +14,7 @@ namespace VTracker.DAL
         IEnumerable<Visit> GetVisits(int websiteId, DateTime start, DateTime end);
         IEnumerable<Visit> GetVisitsByWebpage(int webpageId);
         IEnumerable<Visit> GetVisitsByWebpage(int webpageId, DateTime? start, DateTime? end);
+        int GetVisitCount();
         Visit GetVisitByID(int id);
         Visit GetVisitByCC(Guid cc);
         void InsertVisit(Visit w);
@@ -31,6 +32,8 @@ namespace VTracker.DAL
         void UpdateVisitPage(VisitPage w);
         VisitPage GetLastVisitedPageofVisit(int visitId);
 
+        int GetActivityCount();
+        IEnumerable<VisitActivity> GetAcitivites();
         IEnumerable<VisitActivity> GetVisitPageActivities(int visitId);
         VisitActivity GetVisitPageActivityByID(int id);
         IEnumerable<VisitActivity> GetVisitPageActivityByVisitAndWebpage(int visitId, int webpageId);
@@ -63,6 +66,11 @@ namespace VTracker.DAL
         public IEnumerable<Visit> GetVisits()
         {
             return context.Visits.ToList();
+        }
+
+        public int GetVisitCount()
+        {
+            return context.Visits.Count();
         }
 
         public IEnumerable<Visit> GetVisits(int websiteId)
@@ -219,5 +227,14 @@ namespace VTracker.DAL
             return result;
         }
 
+        public IEnumerable<VisitActivity> GetAcitivites()
+        {
+            return context.VisitPageActivities.ToList();
+        }
+
+        public int GetActivityCount()
+        {
+            return context.VisitPageActivities.Count();
+        }
     }
 }

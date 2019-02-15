@@ -128,4 +128,15 @@ namespace VTracker.Models
         public string Screen { get; set; }
         public int Count { get; set; }
     }
+
+    public class HomepageData
+    {
+        public HomepageData()
+        {
+            Websites = new List<Website>();
+        }
+        public List<Website> Websites { get; set; }
+        public int VisitCount { get; set; }
+        public int ActivityCount { get; set; }
+    }
 }
