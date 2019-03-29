@@ -76,6 +76,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Runtime.Serialization" />
@@ -236,6 +237,7 @@
     <Compile Include="Models\DisplayModel.cs" />
     <Compile Include="Models\MemberManager.cs" />
     <Compile Include="Models\Model.cs" />
+    <Compile Include="Models\WebsiteToImage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -306,6 +308,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Scripts\App\" />
     <Folder Include="Views\RecordVisit\" />
+    <Folder Include="wpi\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
