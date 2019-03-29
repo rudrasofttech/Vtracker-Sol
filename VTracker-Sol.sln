@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27428.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VTracker", "VTracker\VTracker.csproj", "{E00DCECD-5726-4FC3-9F26-6561B79E6192}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "FileParking", "FileParking\", "{1E0C12ED-FD5F-4C87-8EC8-98D04D87A03A}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "FileParking(4)", "FileParking\", "{1E0C12ED-FD5F-4C87-8EC8-98D04D87A03A}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_52713"
@@ -29,6 +29,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "FileParking", "FileParking\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClutterFreeHTML", "ClutterFreeHTML\ClutterFreeHTML.csproj", "{C1383B8B-8679-4477-A3D8-1D51E8664676}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Utilities.csproj", "{3261966E-2231-4533-857C-DA03C8C412D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{C1383B8B-8679-4477-A3D8-1D51E8664676}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1383B8B-8679-4477-A3D8-1D51E8664676}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1383B8B-8679-4477-A3D8-1D51E8664676}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3261966E-2231-4533-857C-DA03C8C412D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3261966E-2231-4533-857C-DA03C8C412D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3261966E-2231-4533-857C-DA03C8C412D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3261966E-2231-4533-857C-DA03C8C412D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
