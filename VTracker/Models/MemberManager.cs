@@ -8,11 +8,11 @@ namespace VTracker.Models
 {
     public class MemberManager
     {
-        private IWebsiteRepository websiteRepository;
-        private IVisitRepository visitRepository;
-        private IWebpageRepository webpageRepository;
+        //private IWebsiteRepository websiteRepository;
+        //private IVisitRepository visitRepository;
+        //private IWebpageRepository webpageRepository;
         public IMemberRepository memberRepository;
-        private IMemberWebsiteRepository memberWebsiteRepository;
+        //private IMemberWebsiteRepository memberWebsiteRepository;
         private VisitTrackerContext context;
 
         public MemberManager()

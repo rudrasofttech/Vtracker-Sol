@@ -134,7 +134,7 @@
                                     {
                                         <tr>
                                             <td>
-                                                <a href="@Url.Content(string.Format("~/report/WebpagePublicStats?id={0}&path=http://www.dumy.com{1}", Model.WebsiteId, item.Page))">@item.Page</a>
+                                                <a href="@Url.Content(string.Format("~/report/WebpagePublicStats?id={0}&path=http://www.dumy.com{1}&start={2}&end={3}", Model.WebsiteId, item.Page, Model.Start.ToString(), Model.End.ToString()))">@item.Page</a>
                                             </td>
                                             <td style="width:20%">@item.Count</td>
                                         </tr>

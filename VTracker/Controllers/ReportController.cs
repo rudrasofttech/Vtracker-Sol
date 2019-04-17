@@ -47,7 +47,7 @@ namespace VTracker.Controllers
             return Content(count.ToString());
         }
 
-        
+
         public ActionResult WebpagePublicStats(int id, string path, DateTime? start, DateTime? end)
         {
             if (!start.HasValue)
@@ -85,6 +85,9 @@ namespace VTracker.Controllers
                 if (wp != null)
                 {
                     var visits = visitRepository.GetVisitsByWebpage(wp.ID, start, end);
+                    var visitact = visitRepository.GetVisitPageActivities(visits.Select(t => t.ID).ToList(), wp.ID);
+
+
                     wdp.BrowserData.AddRange(GetBrowserUsage(visits.ToList()));
                     wdp.VisitCount = visits.ToList().Count;
                     DateTime current = DateTime.UtcNow;
@@ -92,14 +95,14 @@ namespace VTracker.Controllers
                     foreach (var item in visits)
                     {
                         string refstr = "";
-                        
+
                         if (!string.IsNullOrEmpty(item.Referer))
                         {
                             Uri referurl = new Uri(HttpUtility.UrlDecode(item.Referer));
                             refstr = referurl.Host;
                         }
 
-                        
+
 
                         RefererData rd = wdp.RefererList.SingleOrDefault(t => t.Referer == refstr);
                         if (rd != null)
@@ -110,7 +113,7 @@ namespace VTracker.Controllers
                         {
                             wdp.RefererList.Add(new RefererData() { Count = 1, Referer = refstr });
                         }
-                        
+
                     }
                     DateTime daystart = wdp.Start;
                     switch (wdp.Range)
@@ -139,7 +142,7 @@ namespace VTracker.Controllers
                                 daystart = daystart.AddHours(1);
                             }
 
-                            
+
                             break;
 
 
@@ -165,7 +168,7 @@ namespace VTracker.Controllers
                                 daystart = daystart.AddDays(1);
                             }
 
-                            
+
                             break;
                         case ReportDateRangeCustomType.Months:
 
@@ -189,11 +192,21 @@ namespace VTracker.Controllers
 
                                 daystart = daystart.AddDays(15);
                             }
-                            
+
                             break;
                     }
+                    HeatMapGenerator hmg = new HeatMapGenerator(Server.MapPath("~/Content/img/palette.bmp"));
+                    hmg.ws = w;
+                    hmg.wp = wp;
+                    hmg.Activities = visitact.Where(t => t.Activity == ActivityName.Click).ToList();
+                    hmg.GenerateMap();
+                    wdp.HeatMapPath = hmg.HeatMapPath;
                 }
+
+
             }
+
+
             return View(wdp);
         }
 
@@ -201,7 +214,7 @@ namespace VTracker.Controllers
         {
             if (!start.HasValue)
             {
-                start = new DateTime( DateTime.UtcNow.AddDays(-15).Year, DateTime.UtcNow.AddDays(-15).Month, DateTime.UtcNow.AddDays(-15).Day);
+                start = new DateTime(DateTime.UtcNow.AddDays(-15).Year, DateTime.UtcNow.AddDays(-15).Month, DateTime.UtcNow.AddDays(-15).Day);
             }
             if (!end.HasValue)
             {
@@ -211,10 +224,11 @@ namespace VTracker.Controllers
             wdp.WebsiteId = id;
             wdp.Start = start.Value;
             wdp.End = new DateTime(end.Value.Year, end.Value.Month, end.Value.Day, 23, 59, 59);
-            if(wdp.Start.Year == wdp.End.Year && wdp.Start.Month == wdp.End.Month && wdp.Start.Day == wdp.End.Day)
+            if (wdp.Start.Year == wdp.End.Year && wdp.Start.Month == wdp.End.Month && wdp.Start.Day == wdp.End.Day)
             {
                 wdp.Range = ReportDateRangeCustomType.Day;
-            }else if(wdp.End.Subtract(wdp.Start).TotalDays < 60)
+            }
+            else if (wdp.End.Subtract(wdp.Start).TotalDays < 60)
             {
                 wdp.Range = ReportDateRangeCustomType.Days;
             }
@@ -230,16 +244,16 @@ namespace VTracker.Controllers
                 var visits = visitRepository.GetVisits(id, wdp.Start, wdp.End);
                 var visitpages = visitRepository.GetVisitAndWebpageByWebsite(id, wdp.Start, wdp.End);
                 var pages = webpageRepository.GetWebpages(w.ID);
-               
-                foreach(var p in pages)
+
+                foreach (var p in pages)
                 {
                     wdp.MPages.Add(new WebpageVisits() { Count = visitpages.Count(t => t.Item2.ID == p.ID), Page = p.Path });
                 }
                 Dictionary<string, int> browsers = new Dictionary<string, int>();
                 var vt = visits.Where(t => t.DateCreated >= wdp.Start && t.DateCreated <= wdp.End).ToList();
                 wdp.VisitCount = vt.Count;
-               
-                foreach(var item in vt)
+
+                foreach (var item in vt)
                 {
                     string refstr = "";
                     string screens = "";
@@ -265,7 +279,7 @@ namespace VTracker.Controllers
                     }
 
                     ScreenSizeData ssd = wdp.ScreenSizes.SingleOrDefault(t => t.Screen == screens);
-                    if(ssd != null)
+                    if (ssd != null)
                     {
                         ssd.Count++;
                     }
@@ -300,13 +314,13 @@ namespace VTracker.Controllers
 
                             daystart = daystart.AddHours(1);
                         }
-                        
+
                         wdp.BrowserData.AddRange(GetBrowserUsage(vt));
-                         break;
+                        break;
 
 
                     case ReportDateRangeCustomType.Days:
-                        
+
                         while (daystart <= wdp.End)
                         {
                             VisitCountChartPoint p = new VisitCountChartPoint();
@@ -326,12 +340,12 @@ namespace VTracker.Controllers
 
                             daystart = daystart.AddDays(1);
                         }
-                        
+
                         wdp.BrowserData.AddRange(GetBrowserUsage(vt));
                         break;
                     case ReportDateRangeCustomType.Months:
-                        
-                       
+
+
                         while (daystart <= wdp.End)
                         {
                             VisitCountChartPoint p = new VisitCountChartPoint();
@@ -352,7 +366,7 @@ namespace VTracker.Controllers
                             daystart = daystart.AddDays(15);
                         }
                         wdp.BrowserData.AddRange(GetBrowserUsage(vt));
-                         break;
+                        break;
                 }
             }
             return View(wdp);

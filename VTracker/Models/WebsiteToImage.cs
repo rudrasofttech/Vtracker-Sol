@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace VTracker.Models
+namespace VTracker
 {
     public class WebsiteToImage
     {
@@ -37,10 +37,10 @@ namespace VTracker.Models
 
         private void _Generate()
         {
-            var browser = new WebBrowser { ScrollBarsEnabled = false };
+            var browser = new WebBrowser { ScrollBarsEnabled = false, ScriptErrorsSuppressed = true };
             browser.Navigate(m_Url);
             browser.DocumentCompleted += WebBrowser_DocumentCompleted;
-
+            
             while (browser.ReadyState != WebBrowserReadyState.Complete)
             {
                 Application.DoEvents();
@@ -53,9 +53,9 @@ namespace VTracker.Models
         {
             // Capture 
             var browser = (WebBrowser)sender;
-            browser.ClientSize = new Size(browser.Document.Body.ScrollRectangle.Width, browser.Document.Body.ScrollRectangle.Bottom);
+            //browser.ClientSize = new Size(browser.Document.Body.ScrollRectangle.Width, browser.Document.Body.ScrollRectangle.Bottom);
             browser.ScrollBarsEnabled = false;
-            m_Bitmap = new Bitmap(browser.Document.Body.ScrollRectangle.Width, browser.Document.Body.ScrollRectangle.Bottom);
+            m_Bitmap = new Bitmap(browser.Width, browser.Bottom);
             browser.BringToFront();
             browser.DrawToBitmap(m_Bitmap, browser.Bounds);
 

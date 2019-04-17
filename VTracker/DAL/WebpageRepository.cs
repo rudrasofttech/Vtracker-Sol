@@ -9,6 +9,7 @@ namespace VTracker.DAL
 {
     public interface IWebpageRepository : IDisposable
     {
+        int GetWebpageCount();
         IEnumerable<Webpage> GetWebpages(int? websiteId);
         Webpage GetWebpageByID(int Id);
         Webpage GetWebpage(int websiteId, string path, string query);
@@ -62,6 +63,11 @@ namespace VTracker.DAL
         public void InsertWebpage(Webpage w)
         {
             context.Webpages.Add(w);
+        }
+
+        public int GetWebpageCount()
+        {
+            return context.Webpages.Count();
         }
 
         public void DeleteWebpage(int Id)

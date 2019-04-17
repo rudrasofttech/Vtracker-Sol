@@ -53,9 +53,10 @@ namespace VTracker.Models
             RefererList = new List<RefererData>();
             NewVisitsData = new List<VisitCountChartPoint>();
             ReturnVisitsData = new List<VisitCountChartPoint>();
+            HeatMapPath = string.Empty;
         }
         public string WebsiteName { get; set; }
-        
+        public string HeatMapPath { get; set; }
         public int WebsiteId { get; set; }
         public string Path { get; set; }
         public DateTime Start { get; set; }
@@ -133,9 +134,18 @@ namespace VTracker.Models
     {
         public HomepageData()
         {
-            Websites = new List<Website>();
+            Stats = new List<WebsiteStats>();
         }
-        public List<Website> Websites { get; set; }
+        public List<WebsiteStats> Stats { get; set; }
+        public int VisitCount { get; set; }
+        public int ActivityCount { get; set; }
+        public int WebsiteCount { get; set; }
+        public int WebpageCount { get; set; }
+    }
+
+    public class WebsiteStats
+    {
+        public Website Site { get; set; }
         public int VisitCount { get; set; }
         public int ActivityCount { get; set; }
     }

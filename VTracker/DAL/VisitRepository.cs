@@ -15,6 +15,7 @@ namespace VTracker.DAL
         IEnumerable<Visit> GetVisitsByWebpage(int webpageId);
         IEnumerable<Visit> GetVisitsByWebpage(int webpageId, DateTime? start, DateTime? end);
         int GetVisitCount();
+        int GetVisitCount(int websiteId);
         Visit GetVisitByID(int id);
         Visit GetVisitByCC(Guid cc);
         void InsertVisit(Visit w);
@@ -33,8 +34,10 @@ namespace VTracker.DAL
         VisitPage GetLastVisitedPageofVisit(int visitId);
 
         int GetActivityCount();
+        int GetActivityCount(int websiteId);
         IEnumerable<VisitActivity> GetAcitivites();
         IEnumerable<VisitActivity> GetVisitPageActivities(int visitId);
+        IEnumerable<VisitActivity> GetVisitPageActivities(List<int> visitIds, int? webpageId);
         VisitActivity GetVisitPageActivityByID(int id);
         IEnumerable<VisitActivity> GetVisitPageActivityByVisitAndWebpage(int visitId, int webpageId);
         void InsertVisitPageActivity(VisitActivity w);
@@ -71,6 +74,11 @@ namespace VTracker.DAL
         public int GetVisitCount()
         {
             return context.Visits.Count();
+        }
+
+        public int GetVisitCount(int websiteId)
+        {
+            return context.Visits.Count( i => i.Website.ID == websiteId);
         }
 
         public IEnumerable<Visit> GetVisits(int websiteId)
@@ -172,6 +180,19 @@ namespace VTracker.DAL
             return context.VisitPageActivities.Where(t => t.visit.ID == visitId);
         }
 
+        public IEnumerable<VisitActivity> GetVisitPageActivities(List<int> visitIds, int? webpageId)
+        {
+            if (webpageId.HasValue)
+            {
+                return context.VisitPageActivities.Where(t => visitIds.Contains(t.visit.ID) && t.visitpage.webpage.ID == webpageId);
+            }
+            else
+            {
+                return context.VisitPageActivities.Where(t => visitIds.Contains(t.visit.ID));
+                
+            }
+        }
+
         public VisitActivity GetVisitPageActivityByID(int id)
         {
             return context.VisitPageActivities.Where(t => t.ID == id).FirstOrDefault();
@@ -235,6 +256,11 @@ namespace VTracker.DAL
         public int GetActivityCount()
         {
             return context.VisitPageActivities.Count();
+        }
+
+        public int GetActivityCount(int websiteId)
+        {
+            return context.VisitPageActivities.Count(i => i.visit.Website.ID == websiteId);
         }
     }
 }
