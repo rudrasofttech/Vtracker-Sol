@@ -29,8 +29,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "FileParking(4)", "FileParki
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClutterFreeHTML", "ClutterFreeHTML\ClutterFreeHTML.csproj", "{C1383B8B-8679-4477-A3D8-1D51E8664676}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Utilities.csproj", "{3261966E-2231-4533-857C-DA03C8C412D6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,10 +47,6 @@ Global
 		{C1383B8B-8679-4477-A3D8-1D51E8664676}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1383B8B-8679-4477-A3D8-1D51E8664676}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1383B8B-8679-4477-A3D8-1D51E8664676}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3261966E-2231-4533-857C-DA03C8C412D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3261966E-2231-4533-857C-DA03C8C412D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3261966E-2231-4533-857C-DA03C8C412D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3261966E-2231-4533-857C-DA03C8C412D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
