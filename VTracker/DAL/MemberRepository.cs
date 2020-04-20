@@ -12,7 +12,6 @@ namespace VTracker.DAL
         IEnumerable<Member> GetMembers();
         Member GetMemberByID(int id);
         Member GetMemberByPublicID(Guid id);
-        Member GetMemberByAuthToken(Guid id);
         Member GetMemberByEmail(string email);
         Member GetMember(string email, string password);
         void InsertMember(Member m);
@@ -97,9 +96,6 @@ namespace VTracker.DAL
             context.Entry(m).State = EntityState.Modified;
         }
 
-        public Member GetMemberByAuthToken(Guid id)
-        {
-            return context.Members.Where(t => t.AuthToken == id).FirstOrDefault();
-        }
+        
     }
 }

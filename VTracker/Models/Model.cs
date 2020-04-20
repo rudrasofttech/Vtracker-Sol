@@ -16,9 +16,8 @@ namespace VTracker.Models
 
     public enum MemberWebsiteRole
     {
-        SuperAdmin,
+        Owner,
         Admin,
-        Editor,
         Viewer
     }
 
@@ -46,8 +45,7 @@ namespace VTracker.Models
         public RecordStatus Status { get; set; }
 
         public Guid PublicId { get; set; }
-        public Guid? AuthToken { get; set; }
-        public DateTime? TokenCreated { get; set; }
+        
     }
 
     public class MemberWebsiteRelation {
@@ -183,6 +181,23 @@ namespace VTracker.Models
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
+    }
+
+    public class MemberListDTO
+    {
+        public List<Member> Members { get; set; }
+        public int TotalPages { get; set; }
+        public int Page { get; set; }
+
+        public MemberListDTO()
+        {
+            Members = new List<Member>();
+        }
+    }
+
+    public class RegisterDTO
+    {
+
     }
 
 }

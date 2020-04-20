@@ -30,8 +30,6 @@ namespace VTracker.Models
                 {
                     m.Status = RecordStatus.Active;
                     Guid token = Guid.NewGuid();
-                    m.AuthToken = token;
-                    m.TokenCreated = DateTime.UtcNow;
                     this.memberRepository.UpdateMember(m);
                     this.memberRepository.Save();
                     return m;
@@ -113,43 +111,6 @@ namespace VTracker.Models
             return memberRepository.GetMemberByPublicID(id);
         }
 
-        public Member GetUserByToken(Guid token)
-        {
-            Member m = CacheManager.Get<Member>(string.Format("token-{0}", token.ToString()));
-
-            if (m == null)
-            {
-
-                m = memberRepository.GetMemberByAuthToken(token);
-                if (m != null)
-                {
-                    //check if token is not older than 48 hours
-                    if (m.TokenCreated.HasValue && m.TokenCreated.Value.AddHours(5) >= DateTime.UtcNow)
-                    {
-                        CacheManager.AddSliding(string.Format("token-{0}", token.ToString()), m, 240);
-                        return m;
-                    }
-                    else { return null; }
-                }
-                else
-                {
-                    return null;
-                }
-
-            }
-            else
-            {
-                if (m.TokenCreated.HasValue && m.TokenCreated.Value.AddHours(12) >= DateTime.UtcNow)
-                {
-                    return m;
-                }
-                else
-                {
-                    CacheManager.Remove(string.Format("token-{0}", token.ToString()));
-                    return null;
-                }
-            }
-        }
 
         public List<Member> GetMemberList()
         {
