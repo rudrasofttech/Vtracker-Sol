@@ -1,11 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31424.327
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VTracker", "VTracker\VTracker.csproj", "{E00DCECD-5726-4FC3-9F26-6561B79E6192}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClutterFreeHTML", "ClutterFreeHTML\ClutterFreeHTML.csproj", "{C1383B8B-8679-4477-A3D8-1D51E8664676}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisitTracker.Models", "VisitTracker.Models\VisitTracker.Models.csproj", "{6C43B518-D1E2-44F1-9331-812D03245E8C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisitTracker.DataContext", "VisitTracker.DataContext\VisitTracker.DataContext.csproj", "{0D45958D-53A6-4F60-BC82-F18421A23FE3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisitTracker.Web", "VisitTracker.Web\VisitTracker.Web.csproj", "{956198E5-3C25-4CD3-BC47-1D50879E00F5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisitTracker.Blazor", "VisitTracker.Blazor\VisitTracker.Blazor.csproj", "{2020EC7F-F5D7-4BCA-9ED7-4D42E9FCD796}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +29,22 @@ Global
 		{C1383B8B-8679-4477-A3D8-1D51E8664676}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1383B8B-8679-4477-A3D8-1D51E8664676}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1383B8B-8679-4477-A3D8-1D51E8664676}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C43B518-D1E2-44F1-9331-812D03245E8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C43B518-D1E2-44F1-9331-812D03245E8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C43B518-D1E2-44F1-9331-812D03245E8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C43B518-D1E2-44F1-9331-812D03245E8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D45958D-53A6-4F60-BC82-F18421A23FE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D45958D-53A6-4F60-BC82-F18421A23FE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D45958D-53A6-4F60-BC82-F18421A23FE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D45958D-53A6-4F60-BC82-F18421A23FE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{956198E5-3C25-4CD3-BC47-1D50879E00F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{956198E5-3C25-4CD3-BC47-1D50879E00F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{956198E5-3C25-4CD3-BC47-1D50879E00F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{956198E5-3C25-4CD3-BC47-1D50879E00F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2020EC7F-F5D7-4BCA-9ED7-4D42E9FCD796}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2020EC7F-F5D7-4BCA-9ED7-4D42E9FCD796}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2020EC7F-F5D7-4BCA-9ED7-4D42E9FCD796}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2020EC7F-F5D7-4BCA-9ED7-4D42E9FCD796}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

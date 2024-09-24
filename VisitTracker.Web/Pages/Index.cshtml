@@ -1,0 +1,53 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="container-fluid">
+    <div class="row row-cols-2 row-cols-md-4 g-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Websites</h5>
+                    <p class="card-text fw-bold"><component type="typeof(VisitTracker.Web.Components.WebsiteCount)" render-mode="Static" /></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Webpages</h5>
+                    <p class="card-text fw-bold"><component type="typeof(VisitTracker.Web.Components.WebpageCount)" render-mode="Static" /></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Visits</h5>
+                    <p class="card-text fw-bold"><component type="typeof(VisitTracker.Web.Components.VisitCount)" render-mode="Static" /></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Activities</h5>
+                    <p class="card-text fw-bold"><component type="typeof(VisitTracker.Web.Components.ActivityCount)" render-mode="Static" /></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pt-3">
+        <h4>Websites</h4>
+        <p class="category">Best way to know what your visitors are doing on your website.</p>
+        <br />
+        <component type="typeof(VisitTracker.Web.Components.WebsiteList)" param-host="@Url.Content("~")" render-mode="Static" />
+    </div>
+</div>
+
+@section Scripts {
+    <script src="_framework/blazor.server.js"></script>
+}
+

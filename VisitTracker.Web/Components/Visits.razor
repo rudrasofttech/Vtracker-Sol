@@ -1,0 +1,44 @@
+﻿@using VisitTracker.Models;
+@using VisitTracker.DataContext;
+@inject VisitTracker.DataContext.VisitTrackerDBContext context;
+
+<h3>Visits</h3>
+<div class="container-fluid">
+    <div class="accordion" id="visitAccordion">
+
+        @foreach (var v in VisitList)
+        {
+            string accordionId = $"flush-visit{v.ID}";
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@accordionId" aria-expanded="false" aria-controls="@accordionId">
+                        @v.DateCreated, @v.VisitPages.Count Pages
+                    </button>
+                </h2>
+                <div id="@accordionId" class="accordion-collapse collapse" data-bs-parent="#visitAccordion">
+                    <div class="accordion-body">@v.DateCreated, @v.VisitPages.Count Pages</div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    VisitManager visitRepository;
+    public List<Visit> VisitList { get; set; } = [];
+    public int Page { get; set; } = 0;
+    public int PageSize { get; set; } = 50;
+
+    [Parameter]
+    public int WebsiteId { get; set; } = 1;
+    public DateTime? StartDate { get; set; } = DateTime.Now.AddDays(-30);
+
+    public DateTime? EndDate { get; set; } = DateTime.Now;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        visitRepository = new(context);
+        VisitList.AddRange(visitRepository.GetVisits(WebsiteId, StartDate, EndDate, Page, PageSize));
+    }
+}

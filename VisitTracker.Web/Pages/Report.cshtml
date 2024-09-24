@@ -1,0 +1,252 @@
+﻿@page
+@using System.Text
+@using VisitTracker.Models
+@model VisitTracker.Web.Pages.ReportModel
+@{
+    string xvaluevisit = "", yvaluevisit = "", yreturnvaluevisit = "", ynewvaluevisit = "", browserlabel = "", browserpoint = "";
+}
+@section Head {
+    <link rel="stylesheet" href="//cdn.datatables.net/2.1.3/css/dataTables.dataTables.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" />
+}
+<div class="sticky-top p-2 text-center bg-white">
+    <h1>
+        @Model.DisplayInfo.VisitCount visits recorded for @Model.DisplayInfo.WebsiteName
+    </h1>
+    <form class="row row-cols-lg-auto g-3 justify-content-center align-items-center my-2" method="get">
+        <input type="hidden" name="id" value="@Model.DisplayInfo.WebsiteId" />
+        <div class="col-12">
+            <input name="start" type="date" class="form-control" value="@Model.DisplayInfo.Start.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-12">
+            <input name="end" type="date" class="form-control" value="@Model.DisplayInfo.End.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Change</button>
+        </div>
+    </form>
+</div>
+<div class="my-4">
+    <div id="chartVisit" class="ct-chart ct-perfect-fourth" style="max-height:250px;"></div>
+    <div>
+        <span class="text-info me-2 fw-bold">All</span>
+        <span class="text-danger me-2 fw-bold">Return</span>
+        <span class="text-warning me-2 fw-bold">New</span>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="p-2">
+                <h4 class="title">Most Visited Pages </h4>
+                @* <p class="mb-2">In @Model.DisplayInfo.VisitChartDescription</p> *@
+                <table class="table table-striped browserdata" id="vptable">
+                    <thead>
+                        <tr>
+                            <th style="width:80%">Page</th>
+                            <th style="width:20%">Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (WebpageVisits item in Model.DisplayInfo.MPages.Where(t => t.Count > 0).OrderByDescending(t => t.Count))
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@item.AbsoluteUrl" target="_blank">@item.Page</a>
+                                </td>
+                                <td style="width:20%">
+                                    <a href="@Url.Content(string.Format($"~/pagereport?id={Model.DisplayInfo.WebsiteId}&path=https://{Model.DisplayInfo.WebsiteName}{item.Page}&start={0}&end={1}", Model.Start.HasValue ? Model.Start.Value.ToString("yyyy-MM-dd") : string.Empty, Model.End.HasValue ? Model.End.Value.ToString("yyyy-MM-dd") : string.Empty))">@item.Count</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="p-2">
+                <h4 class="title">Visit Referer</h4>
+                @* <p class="mb-2">In @Model.DisplayInfo.VisitChartDescription</p> *@
+                <table class="table table-striped" id="reftable">
+                    <thead>
+                        <tr>
+                            <th style="width:80%">Referer</th>
+                            <th style="width:20%">Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (RefererData item in Model.DisplayInfo.RefererList.OrderByDescending(t => t.Count))
+                        {
+                            <tr>
+                                @if (string.IsNullOrEmpty(item.Referer))
+                                {
+                                    <td>Empty</td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        @Html.Raw(item.Referer)
+                                    </td>
+                                }
+                                <td style="width:20%">@item.Count</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="p-2">
+                <h4 class="title">Browsers</h4>
+                @* <p class="mb-2">In @Model.DisplayInfo.VisitChartDescription</p> *@
+                <div>
+                    <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="p-2">
+                <h4 class="title">Screen Size</h4>
+                @* <p class="mb-2">In @Model.DisplayInfo.VisitChartDescription</p> *@
+                <table class="table table-striped" id="ssdtable">
+                    <thead>
+                        <tr>
+                            <th style="width:80%">Width X Height</th>
+                            <th style="width:20%">Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (ScreenSizeData item in Model.DisplayInfo.ScreenSizes.OrderByDescending(t => t.Count))
+                        {
+                            <tr>
+                                @if (string.IsNullOrEmpty(item.Screen))
+                                {
+                                    <td>Empty</td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        @Html.Raw(item.Screen)
+                                    </td>
+                                }
+                                <td style="width:20%">@item.Count</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="//cdn.datatables.net/2.1.3/js/dataTables.min.js"></script>
+    <script>
+        let vptable = new DataTable('#vptable', {
+            order: [[1, 'desc']]
+        });
+        let reftable = new DataTable('#reftable', {
+            order: [[1, 'desc']]
+        });
+        let ssdtable = new DataTable('#ssdtable', {
+            order: [[1, 'desc']]
+        });
+    </script>
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <script>
+        var dataVisits = {
+            labels: [@Html.Raw(xvaluevisit) ],
+            series: [
+                [@Html.Raw(yvaluevisit)],
+                [@Html.Raw(ynewvaluevisit)],
+                [@Html.Raw(yreturnvaluevisit)]
+            ]
+        };
+
+
+        var options = {
+            seriesBarDistance: 10,
+            axisX: {
+                showGrid: false
+            },
+            height: "245px",
+            axisY: {
+                onlyInteger: true
+            }
+        };
+
+        var responsiveLH = [
+            ['screen and (max-width: 640px)', {
+                axisX: {
+                    labelInterpolationFnc: function (value) {
+                        return value[0];
+                    }
+                }
+            }]
+        ];
+
+        Chartist.Line('#chartVisit', dataVisits, options, responsiveLH);
+
+        var dataPreferences = {
+            labels: [@Html.Raw(browserlabel)],
+            series: [[@Html.Raw(browserpoint)]]
+        };
+
+        var optionsPreferences = {
+            axisX: {
+                labelInterpolationFnc: function (value, index) {
+                    return value;
+                }
+            }
+        };
+        new Chartist.Bar('#chartPreferences', dataPreferences, optionsPreferences);
+    </script>
+}
+@{
+
+    StringBuilder builder = new StringBuilder();
+    StringBuilder buildery = new StringBuilder();
+    foreach (var point in Model.DisplayInfo.VisitsData)
+    {
+        builder.Append("'");
+        builder.Append(point.X);
+        builder.Append("',");
+
+        buildery.Append(point.Y);
+        buildery.Append(",");
+    }
+
+    xvaluevisit = builder.ToString().TrimEnd(",".ToCharArray());
+    yvaluevisit = buildery.ToString().TrimEnd(",".ToCharArray());
+    builder.Clear();
+    buildery.Clear();
+
+    foreach (var point in Model.DisplayInfo.ReturnVisitsData)
+    {
+        buildery.Append(point.Y);
+        buildery.Append(",");
+    }
+    yreturnvaluevisit = buildery.ToString().TrimEnd(",".ToCharArray());
+    buildery.Clear();
+    foreach (var point in Model.DisplayInfo.NewVisitsData)
+    {
+        buildery.Append(point.Y);
+        buildery.Append(",");
+    }
+    ynewvaluevisit = buildery.ToString().TrimEnd(",".ToCharArray());
+    buildery.Clear();
+    foreach (var point in Model.DisplayInfo.BrowserData)
+    {
+        builder.Append("'");
+        builder.Append(point.Label);
+        builder.Append("',");
+
+        buildery.Append(point.Percentage);
+        buildery.Append(",");
+    }
+
+    browserlabel = builder.ToString().TrimEnd(",".ToCharArray());
+    browserpoint = buildery.ToString().TrimEnd(",".ToCharArray());
+
+    builder.Clear();
+    buildery.Clear();
+}

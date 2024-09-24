@@ -1,0 +1,1046 @@
+2024-08-15 14:13:35.228 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Dashboard.cshtml'.
+2024-08-15 14:13:35.265 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Error.cshtml'.
+2024-08-15 14:13:35.267 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Index.cshtml'.
+2024-08-15 14:13:35.268 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/PageReport.cshtml'.
+2024-08-15 14:13:35.268 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Report.cshtml'.
+2024-08-15 14:13:35.269 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Shared/_ValidationScriptsPartial.cshtml'.
+2024-08-15 14:13:35.269 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_Host.cshtml'.
+2024-08-15 14:13:35.270 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_ViewImports.cshtml'.
+2024-08-15 14:13:35.270 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_ViewStart.cshtml'.
+2024-08-15 14:13:35.271 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Shared/_Layout.cshtml'.
+2024-08-15 14:13:35.278 +05:30 [DBG] Registered model binder providers, in the following order: ["Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DateTimeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.TryParseModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexObjectModelBinderProvider"]
+2024-08-15 14:13:35.315 +05:30 [INF] User profile is available. Using 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-08-15 14:13:35.489 +05:30 [DBG] Registered SignalR Protocol: json, implemented by Microsoft.AspNetCore.SignalR.Protocol.JsonHubProtocol.
+2024-08-15 14:13:35.491 +05:30 [DBG] Registered SignalR Protocol: blazorpack, implemented by Microsoft.AspNetCore.Components.Server.BlazorPack.BlazorPackHubProtocol.
+2024-08-15 14:13:35.629 +05:30 [DBG] Hosting starting
+2024-08-15 14:13:35.637 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-0121043b-7e03-4918-8bac-adb5591cb296.xml'.
+2024-08-15 14:13:35.650 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-5f0deabe-307a-44c8-bdcf-14899a81d3c8.xml'.
+2024-08-15 14:13:35.657 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-618188f8-7cd1-4076-a8f7-c8c11fbf8496.xml'.
+2024-08-15 14:13:35.664 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-62dda88e-2432-4e1f-83ba-9905015089a1.xml'.
+2024-08-15 14:13:35.666 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-7b903346-0dda-467d-be04-3227fb3187b7.xml'.
+2024-08-15 14:13:35.668 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-a8dac690-7753-4b06-be5e-ab941b16c127.xml'.
+2024-08-15 14:13:35.669 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-b3cc796f-6f67-43c9-b840-73c28dee79e2.xml'.
+2024-08-15 14:13:35.672 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-cdf8e96d-32b4-47f2-885f-f6053fb53db0.xml'.
+2024-08-15 14:13:35.674 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-e9ac0ddd-6f66-4daa-a77d-0911705d5dab.xml'.
+2024-08-15 14:13:35.681 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-ebaeaf83-f60e-4db3-96e7-52541bfc7a16.xml'.
+2024-08-15 14:13:35.683 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-eef0ae81-25a1-4195-bdfa-7b98736cf6ba.xml'.
+2024-08-15 14:13:35.685 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-ef1831e0-641c-4464-9217-2bf7cfad34c1.xml'.
+2024-08-15 14:13:35.687 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-f0261f94-62c8-49af-8f23-625fff591b07.xml'.
+2024-08-15 14:13:35.688 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-fc9fa2b2-9d25-496f-921f-53389f5b89a4.xml'.
+2024-08-15 14:13:35.699 +05:30 [DBG] Found key {0121043b-7e03-4918-8bac-adb5591cb296}.
+2024-08-15 14:13:35.711 +05:30 [DBG] Found key {5f0deabe-307a-44c8-bdcf-14899a81d3c8}.
+2024-08-15 14:13:35.713 +05:30 [DBG] Found key {618188f8-7cd1-4076-a8f7-c8c11fbf8496}.
+2024-08-15 14:13:35.714 +05:30 [DBG] Found key {62dda88e-2432-4e1f-83ba-9905015089a1}.
+2024-08-15 14:13:35.715 +05:30 [DBG] Found key {7b903346-0dda-467d-be04-3227fb3187b7}.
+2024-08-15 14:13:35.716 +05:30 [DBG] Found key {a8dac690-7753-4b06-be5e-ab941b16c127}.
+2024-08-15 14:13:35.717 +05:30 [DBG] Found key {b3cc796f-6f67-43c9-b840-73c28dee79e2}.
+2024-08-15 14:13:35.718 +05:30 [DBG] Found key {cdf8e96d-32b4-47f2-885f-f6053fb53db0}.
+2024-08-15 14:13:35.719 +05:30 [DBG] Found key {e9ac0ddd-6f66-4daa-a77d-0911705d5dab}.
+2024-08-15 14:13:35.721 +05:30 [DBG] Found key {ebaeaf83-f60e-4db3-96e7-52541bfc7a16}.
+2024-08-15 14:13:35.722 +05:30 [DBG] Found key {eef0ae81-25a1-4195-bdfa-7b98736cf6ba}.
+2024-08-15 14:13:35.723 +05:30 [DBG] Found key {ef1831e0-641c-4464-9217-2bf7cfad34c1}.
+2024-08-15 14:13:35.724 +05:30 [DBG] Found key {f0261f94-62c8-49af-8f23-625fff591b07}.
+2024-08-15 14:13:35.724 +05:30 [DBG] Found key {fc9fa2b2-9d25-496f-921f-53389f5b89a4}.
+2024-08-15 14:13:35.731 +05:30 [DBG] Considering key {a8dac690-7753-4b06-be5e-ab941b16c127} with expiration date 2024-10-11 11:37:18Z as default key.
+2024-08-15 14:13:35.734 +05:30 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2024-08-15 14:13:35.737 +05:30 [DBG] Decrypting secret element using Windows DPAPI.
+2024-08-15 14:13:35.739 +05:30 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2024-08-15 14:13:35.740 +05:30 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2024-08-15 14:13:35.742 +05:30 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2024-08-15 14:13:35.744 +05:30 [DBG] Using key {a8dac690-7753-4b06-be5e-ab941b16c127} as the default key.
+2024-08-15 14:13:35.745 +05:30 [DBG] Key ring with default key {a8dac690-7753-4b06-be5e-ab941b16c127} was loaded during application startup.
+2024-08-15 14:13:35.926 +05:30 [INF] Now listening on: https://localhost:7190
+2024-08-15 14:13:35.927 +05:30 [INF] Now listening on: http://localhost:5081
+2024-08-15 14:13:35.927 +05:30 [DBG] Loaded hosting startup assembly VisitTracker.Web
+2024-08-15 14:13:35.928 +05:30 [DBG] Loaded hosting startup assembly Microsoft.AspNetCore.Watch.BrowserRefresh
+2024-08-15 14:13:35.928 +05:30 [DBG] Loaded hosting startup assembly Microsoft.WebTools.BrowserLink.Net
+2024-08-15 14:13:35.929 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-15 14:13:35.929 +05:30 [INF] Hosting environment: Development
+2024-08-15 14:13:35.929 +05:30 [INF] Content root path: C:\Raj Kiran Singh\Vtracker-Sol\VisitTracker.Web
+2024-08-15 14:13:35.931 +05:30 [DBG] Hosting started
+2024-08-15 14:13:36.317 +05:30 [DBG] Connection id "0HN5T0PD5N0FV" received FIN.
+2024-08-15 14:13:36.322 +05:30 [DBG] Connection id "0HN5T0PD5N0FV" accepted.
+2024-08-15 14:13:36.324 +05:30 [DBG] Connection id "0HN5T0PD5N0FV" started.
+2024-08-15 14:13:36.397 +05:30 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Received an unexpected EOF or 0 bytes from the transport stream.
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+2024-08-15 14:13:36.411 +05:30 [DBG] Connection id "0HN5T0PD5N0FV" stopped.
+2024-08-15 14:13:36.413 +05:30 [DBG] Connection id "0HN5T0PD5N0FV" sending FIN because: "The Socket transport's send loop completed gracefully."
+2024-08-15 14:13:36.569 +05:30 [DBG] Connection id "0HN5T0PD5N0G0" accepted.
+2024-08-15 14:13:36.570 +05:30 [DBG] Connection id "0HN5T0PD5N0G0" started.
+2024-08-15 14:13:36.711 +05:30 [DBG] Connection 0HN5T0PD5N0G0 established using the following protocol: "Tls13"
+2024-08-15 14:13:36.836 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7190/ - null null
+2024-08-15 14:13:36.991 +05:30 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2024-08-15 14:13:37.002 +05:30 [DBG] The request path / does not match a supported file type
+2024-08-15 14:13:37.036 +05:30 [DBG] 1 candidate(s) found for the request path '/'
+2024-08-15 14:13:37.066 +05:30 [DBG] Endpoint '/Index' with route pattern '' is valid for the request path '/'
+2024-08-15 14:13:37.113 +05:30 [DBG] Request matched endpoint '/Index'
+2024-08-15 14:13:37.122 +05:30 [INF] Executing endpoint '/Index'
+2024-08-15 14:13:37.168 +05:30 [INF] Route matched with {page = "/Index", action = "", controller = ""}. Executing page /Index
+2024-08-15 14:13:37.172 +05:30 [DBG] Execution plan of authorization filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.AutoValidateAntiforgeryTokenAuthorizationFilter"]
+2024-08-15 14:13:37.173 +05:30 [DBG] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2024-08-15 14:13:37.179 +05:30 [DBG] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)"]
+2024-08-15 14:13:37.180 +05:30 [DBG] Execution plan of exception filters (in the following order): ["None"]
+2024-08-15 14:13:37.181 +05:30 [DBG] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2024-08-15 14:13:37.186 +05:30 [DBG] Executing page model factory for page VisitTracker.Web.Pages.Pages_Index (VisitTracker.Web)
+2024-08-15 14:13:37.371 +05:30 [DBG] An 'IServiceProvider' was created for internal use by Entity Framework.
+2024-08-15 14:13:37.398 +05:30 [DBG] Executed page model factory for page VisitTracker.Web.Pages.Pages_Index (VisitTracker.Web)
+2024-08-15 14:13:37.403 +05:30 [INF] Executing handler method VisitTracker.Web.Pages.IndexModel.OnGet - ModelState is "Valid"
+2024-08-15 14:13:37.411 +05:30 [INF] Serilog Working - 15-08-2024 2.13.37 PM
+2024-08-15 14:13:38.019 +05:30 [DBG] The property 'Visit.WebsiteID' was created in shadow state because there are no eligible CLR members with a matching name.
+2024-08-15 14:13:38.022 +05:30 [DBG] The property 'VisitActivity.visitID' was created in shadow state because there are no eligible CLR members with a matching name.
+2024-08-15 14:13:38.023 +05:30 [DBG] The property 'VisitActivity.visitpageID' was created in shadow state because there are no eligible CLR members with a matching name.
+2024-08-15 14:13:38.025 +05:30 [DBG] The property 'VisitPage.visitID' was created in shadow state because there are no eligible CLR members with a matching name.
+2024-08-15 14:13:38.027 +05:30 [DBG] The property 'VisitPage.webpageID' was created in shadow state because there are no eligible CLR members with a matching name.
+2024-08-15 14:13:38.028 +05:30 [DBG] The property 'Webpage.WebsiteID' was created in shadow state because there are no eligible CLR members with a matching name.
+2024-08-15 14:13:38.221 +05:30 [DBG] Entity Framework Core 8.0.7 initialized 'VisitTrackerDBContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:8.0.7' with options: None
+2024-08-15 14:13:38.281 +05:30 [DBG] Compiling query expression: 
+'DbSet<Website>()'
+2024-08-15 14:13:38.431 +05:30 [DBG] Generated query execution expression: 
+'queryContext => new SingleQueryingEnumerable<Website>(
+    (RelationalQueryContext)queryContext, 
+    RelationalCommandCache.QueryExpression(
+        Projection Mapping:
+            EmptyProjectionMember -> Dictionary<IProperty, int> { [Property: Website.ID (int) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: Website.ClientID (int?), 1], [Property: Website.DateCreated (DateTime) Required, 2], [Property: Website.DateModified (DateTime?), 3], [Property: Website.Name (string) Required MaxLength(50), 4], [Property: Website.Status (RecordStatus) Required, 5] }
+        SELECT w.ID, w.ClientID, w.DateCreated, w.DateModified, w.Name, w.Status
+        FROM dbo.Website AS w), 
+    null, 
+    Func<QueryContext, DbDataReader, ResultContext, SingleQueryResultCoordinator, Website>, 
+    VisitTracker.DataContext.VisitTrackerDBContext, 
+    False, 
+    False, 
+    True
+)'
+2024-08-15 14:13:38.454 +05:30 [DBG] Creating DbConnection.
+2024-08-15 14:13:38.480 +05:30 [DBG] Created DbConnection. (25ms).
+2024-08-15 14:13:38.484 +05:30 [DBG] Opening connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:13:38.751 +05:30 [DBG] Opened connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:13:38.755 +05:30 [DBG] Creating DbCommand for 'ExecuteReader'.
+2024-08-15 14:13:38.762 +05:30 [DBG] Created DbCommand for 'ExecuteReader' (4ms).
+2024-08-15 14:13:38.764 +05:30 [DBG] Initialized DbCommand for 'ExecuteReader' (9ms).
+2024-08-15 14:13:38.770 +05:30 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [w].[ID], [w].[ClientID], [w].[DateCreated], [w].[DateModified], [w].[Name], [w].[Status]
+FROM [dbo].[Website] AS [w]
+2024-08-15 14:13:38.796 +05:30 [INF] Executed DbCommand (23ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [w].[ID], [w].[ClientID], [w].[DateCreated], [w].[DateModified], [w].[Name], [w].[Status]
+FROM [dbo].[Website] AS [w]
+2024-08-15 14:13:38.824 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:13:38.849 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:13:38.850 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:13:38.850 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:13:38.853 +05:30 [DBG] Closing data reader to 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:13:38.858 +05:30 [DBG] A data reader for 'RSTVisitTracker' on server 'DESKTOP-R99M068' is being disposed after spending 57ms reading results.
+2024-08-15 14:13:38.861 +05:30 [DBG] Closing connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:13:38.865 +05:30 [DBG] Closed connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068' (4ms).
+2024-08-15 14:13:38.877 +05:30 [DBG] Compiling query expression: 
+'DbSet<VisitActivity>()
+    .Include(t => t.visit)
+    .Include(t => t.visit.Website)
+    .Count(i => i.visit.Website.ID == __websiteId_0)'
+2024-08-15 14:13:38.970 +05:30 [DBG] Generated query execution expression: 
+'queryContext => new SingleQueryingEnumerable<int>(
+    (RelationalQueryContext)queryContext, 
+    RelationalCommandCache.QueryExpression(
+        Projection Mapping:
+            EmptyProjectionMember -> 0
+        SELECT COUNT(*)
+        FROM dbo.VisitActivity AS v
+        INNER JOIN dbo.Visit AS v0 ON v.visitID == v0.ID
+        INNER JOIN dbo.Website AS w ON v0.WebsiteID == w.ID
+        WHERE w.ID == @__websiteId_0), 
+    null, 
+    Func<QueryContext, DbDataReader, ResultContext, SingleQueryResultCoordinator, int>, 
+    VisitTracker.DataContext.VisitTrackerDBContext, 
+    False, 
+    False, 
+    True
+)
+    .Single()'
+2024-08-15 14:13:38.980 +05:30 [DBG] Opening connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:13:38.984 +05:30 [DBG] Opened connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:13:38.986 +05:30 [DBG] Creating DbCommand for 'ExecuteReader'.
+2024-08-15 14:13:38.986 +05:30 [DBG] Created DbCommand for 'ExecuteReader' (0ms).
+2024-08-15 14:13:38.989 +05:30 [DBG] Initialized DbCommand for 'ExecuteReader' (3ms).
+2024-08-15 14:13:38.994 +05:30 [DBG] Executing DbCommand [Parameters=[@__websiteId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [dbo].[VisitActivity] AS [v]
+INNER JOIN [dbo].[Visit] AS [v0] ON [v].[visitID] = [v0].[ID]
+INNER JOIN [dbo].[Website] AS [w] ON [v0].[WebsiteID] = [w].[ID]
+WHERE [w].[ID] = @__websiteId_0
+2024-08-15 14:14:09.228 +05:30 [ERR] Failed executing DbCommand (30,237ms) [Parameters=[@__websiteId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [dbo].[VisitActivity] AS [v]
+INNER JOIN [dbo].[Visit] AS [v0] ON [v].[visitID] = [v0].[ID]
+INNER JOIN [dbo].[Website] AS [w] ON [v0].[WebsiteID] = [w].[ID]
+WHERE [w].[ID] = @__websiteId_0
+2024-08-15 14:14:09.231 +05:30 [DBG] Closing connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:14:09.232 +05:30 [DBG] Closed connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068' (0ms).
+2024-08-15 14:14:09.274 +05:30 [ERR] An exception occurred while iterating over the results of a query for context type 'VisitTracker.DataContext.VisitTrackerDBContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+ClientConnectionId:004667a4-3f4c-455c-91d5-b16e1bc6ee4e
+Error Number:-2,State:0,Class:11
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+ClientConnectionId:004667a4-3f4c-455c-91d5-b16e1bc6ee4e
+Error Number:-2,State:0,Class:11
+2024-08-15 14:14:09.490 +05:30 [INF] Executed page /Index in 32304.5579ms
+2024-08-15 14:14:09.537 +05:30 [INF] Executed endpoint '/Index'
+2024-08-15 14:14:09.565 +05:30 [ERR] HTTP GET / responded 500 in 32558.6345 ms
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+   at System.Linq.Enumerable.TryGetSingle[TSource](IEnumerable`1 source, Boolean& found)
+   at lambda_method132(Closure, QueryContext)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)
+   at VisitTracker.DataContext.VisitManager.GetActivityCount(Int32 websiteId) in C:\Raj Kiran Singh\Vtracker-Sol\VisitTracker.DataContext\VisitManager.cs:line 228
+   at VisitTracker.Web.Pages.IndexModel.OnGet() in C:\Raj Kiran Singh\Vtracker-Sol\VisitTracker.Web\Pages\Index.cshtml.cs:line 26
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.ExecutorFactory.VoidHandlerMethod.Execute(Object receiver, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeHandlerMethodAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeNextPageFilterAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+ClientConnectionId:004667a4-3f4c-455c-91d5-b16e1bc6ee4e
+Error Number:-2,State:0,Class:11
+2024-08-15 14:14:09.616 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+   at System.Linq.Enumerable.TryGetSingle[TSource](IEnumerable`1 source, Boolean& found)
+   at lambda_method132(Closure, QueryContext)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)
+   at VisitTracker.DataContext.VisitManager.GetActivityCount(Int32 websiteId) in C:\Raj Kiran Singh\Vtracker-Sol\VisitTracker.DataContext\VisitManager.cs:line 228
+   at VisitTracker.Web.Pages.IndexModel.OnGet() in C:\Raj Kiran Singh\Vtracker-Sol\VisitTracker.Web\Pages\Index.cshtml.cs:line 26
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.ExecutorFactory.VoidHandlerMethod.Execute(Object receiver, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeHandlerMethodAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeNextPageFilterAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+ClientConnectionId:004667a4-3f4c-455c-91d5-b16e1bc6ee4e
+Error Number:-2,State:0,Class:11
+2024-08-15 14:14:09.706 +05:30 [DBG] Response markup is scheduled to include Browser Link script injection.
+2024-08-15 14:14:09.712 +05:30 [DBG] Response markup is scheduled to include browser refresh script injection.
+2024-08-15 14:14:09.733 +05:30 [DBG] Response markup was updated to include Browser Link script injection.
+2024-08-15 14:14:09.734 +05:30 [DBG] Response markup was updated to include browser refresh script injection.
+2024-08-15 14:14:09.737 +05:30 [DBG] 'VisitTrackerDBContext' disposed.
+2024-08-15 14:14:09.738 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7190/_framework/aspnetcore-browser-refresh.js - null null
+2024-08-15 14:14:09.738 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7190/_vs/browserLink - null null
+2024-08-15 14:14:09.742 +05:30 [DBG] Disposing connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:14:09.779 +05:30 [DBG] Disposed connection to database '' on server '' (3ms).
+2024-08-15 14:14:09.780 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7190/_framework/aspnetcore-browser-refresh.js - 200 13768 application/javascript; charset=utf-8 41.2137ms
+2024-08-15 14:14:09.781 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7190/ - 500 null text/html; charset=utf-8 32949.9845ms
+2024-08-15 14:14:09.855 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7190/_vs/browserLink - 200 null text/javascript; charset=UTF-8 117.236ms
+2024-08-15 14:14:15.983 +05:30 [DBG] Connection id "0HN5T0PD5N0G0" received FIN.
+2024-08-15 14:14:15.989 +05:30 [DBG] Connection id "0HN5T0PD5N0G0" is closed. The last processed stream ID was 5.
+2024-08-15 14:14:15.989 +05:30 [DBG] The connection queue processing loop for 0HN5T0PD5N0G0 completed.
+2024-08-15 14:14:15.993 +05:30 [DBG] Connection id "0HN5T0PD5N0G0" sending FIN because: "The Socket transport's send loop completed gracefully."
+2024-08-15 14:14:16.013 +05:30 [DBG] Connection id "0HN5T0PD5N0G0" stopped.
+2024-08-15 14:14:38.008 +05:30 [DBG] Connection id "0HN5T0PD5N0G1" accepted.
+2024-08-15 14:14:38.015 +05:30 [DBG] Connection id "0HN5T0PD5N0G1" started.
+2024-08-15 14:14:38.021 +05:30 [DBG] Connection 0HN5T0PD5N0G1 established using the following protocol: "Tls13"
+2024-08-15 14:14:38.025 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7190/ - null null
+2024-08-15 14:14:38.034 +05:30 [DBG] The request path / does not match a supported file type
+2024-08-15 14:14:38.035 +05:30 [DBG] 1 candidate(s) found for the request path '/'
+2024-08-15 14:14:38.036 +05:30 [DBG] Endpoint '/Index' with route pattern '' is valid for the request path '/'
+2024-08-15 14:14:38.036 +05:30 [DBG] Request matched endpoint '/Index'
+2024-08-15 14:14:38.037 +05:30 [INF] Executing endpoint '/Index'
+2024-08-15 14:14:38.038 +05:30 [INF] Route matched with {page = "/Index", action = "", controller = ""}. Executing page /Index
+2024-08-15 14:14:38.038 +05:30 [DBG] Execution plan of authorization filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.AutoValidateAntiforgeryTokenAuthorizationFilter"]
+2024-08-15 14:14:38.039 +05:30 [DBG] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2024-08-15 14:14:38.040 +05:30 [DBG] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)"]
+2024-08-15 14:14:38.040 +05:30 [DBG] Execution plan of exception filters (in the following order): ["None"]
+2024-08-15 14:14:38.041 +05:30 [DBG] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2024-08-15 14:14:38.042 +05:30 [DBG] Executing page model factory for page VisitTracker.Web.Pages.Pages_Index (VisitTracker.Web)
+2024-08-15 14:14:38.044 +05:30 [DBG] Executed page model factory for page VisitTracker.Web.Pages.Pages_Index (VisitTracker.Web)
+2024-08-15 14:14:38.045 +05:30 [INF] Executing handler method VisitTracker.Web.Pages.IndexModel.OnGet - ModelState is "Valid"
+2024-08-15 14:14:38.045 +05:30 [INF] Serilog Working - 15-08-2024 2.14.38 PM
+2024-08-15 14:14:38.053 +05:30 [DBG] Entity Framework Core 8.0.7 initialized 'VisitTrackerDBContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:8.0.7' with options: None
+2024-08-15 14:14:38.054 +05:30 [DBG] Creating DbConnection.
+2024-08-15 14:14:38.055 +05:30 [DBG] Created DbConnection. (0ms).
+2024-08-15 14:14:38.055 +05:30 [DBG] Opening connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:14:38.056 +05:30 [DBG] Opened connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:14:38.056 +05:30 [DBG] Creating DbCommand for 'ExecuteReader'.
+2024-08-15 14:14:38.057 +05:30 [DBG] Created DbCommand for 'ExecuteReader' (0ms).
+2024-08-15 14:14:38.058 +05:30 [DBG] Initialized DbCommand for 'ExecuteReader' (1ms).
+2024-08-15 14:14:38.058 +05:30 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [w].[ID], [w].[ClientID], [w].[DateCreated], [w].[DateModified], [w].[Name], [w].[Status]
+FROM [dbo].[Website] AS [w]
+2024-08-15 14:14:38.061 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [w].[ID], [w].[ClientID], [w].[DateCreated], [w].[DateModified], [w].[Name], [w].[Status]
+FROM [dbo].[Website] AS [w]
+2024-08-15 14:14:38.062 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:14:38.062 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:14:38.063 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:14:38.063 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:14:38.064 +05:30 [DBG] Closing data reader to 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:14:38.065 +05:30 [DBG] A data reader for 'RSTVisitTracker' on server 'DESKTOP-R99M068' is being disposed after spending 3ms reading results.
+2024-08-15 14:14:38.065 +05:30 [DBG] Closing connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:14:38.066 +05:30 [DBG] Closed connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068' (0ms).
+2024-08-15 14:14:38.068 +05:30 [DBG] Opening connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:14:38.069 +05:30 [DBG] Opened connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:14:38.070 +05:30 [DBG] Creating DbCommand for 'ExecuteReader'.
+2024-08-15 14:14:38.070 +05:30 [DBG] Created DbCommand for 'ExecuteReader' (0ms).
+2024-08-15 14:14:38.070 +05:30 [DBG] Initialized DbCommand for 'ExecuteReader' (0ms).
+2024-08-15 14:14:38.071 +05:30 [DBG] Executing DbCommand [Parameters=[@__websiteId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [dbo].[VisitActivity] AS [v]
+INNER JOIN [dbo].[Visit] AS [v0] ON [v].[visitID] = [v0].[ID]
+INNER JOIN [dbo].[Website] AS [w] ON [v0].[WebsiteID] = [w].[ID]
+WHERE [w].[ID] = @__websiteId_0
+2024-08-15 14:15:08.199 +05:30 [ERR] Failed executing DbCommand (30,128ms) [Parameters=[@__websiteId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [dbo].[VisitActivity] AS [v]
+INNER JOIN [dbo].[Visit] AS [v0] ON [v].[visitID] = [v0].[ID]
+INNER JOIN [dbo].[Website] AS [w] ON [v0].[WebsiteID] = [w].[ID]
+WHERE [w].[ID] = @__websiteId_0
+2024-08-15 14:15:08.201 +05:30 [DBG] Closing connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:15:08.202 +05:30 [DBG] Closed connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068' (0ms).
+2024-08-15 14:15:08.227 +05:30 [ERR] An exception occurred while iterating over the results of a query for context type 'VisitTracker.DataContext.VisitTrackerDBContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+ClientConnectionId:004667a4-3f4c-455c-91d5-b16e1bc6ee4e
+Error Number:-2,State:0,Class:11
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+ClientConnectionId:004667a4-3f4c-455c-91d5-b16e1bc6ee4e
+Error Number:-2,State:0,Class:11
+2024-08-15 14:15:08.366 +05:30 [INF] Executed page /Index in 30323.9989ms
+2024-08-15 14:15:08.408 +05:30 [INF] Executed endpoint '/Index'
+2024-08-15 14:15:08.440 +05:30 [ERR] HTTP GET / responded 500 in 30404.9725 ms
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+   at System.Linq.Enumerable.TryGetSingle[TSource](IEnumerable`1 source, Boolean& found)
+   at lambda_method132(Closure, QueryContext)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)
+   at VisitTracker.DataContext.VisitManager.GetActivityCount(Int32 websiteId) in C:\Raj Kiran Singh\Vtracker-Sol\VisitTracker.DataContext\VisitManager.cs:line 228
+   at VisitTracker.Web.Pages.IndexModel.OnGet() in C:\Raj Kiran Singh\Vtracker-Sol\VisitTracker.Web\Pages\Index.cshtml.cs:line 26
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.ExecutorFactory.VoidHandlerMethod.Execute(Object receiver, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeHandlerMethodAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeNextPageFilterAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+ClientConnectionId:004667a4-3f4c-455c-91d5-b16e1bc6ee4e
+Error Number:-2,State:0,Class:11
+2024-08-15 14:15:08.485 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+   at System.Linq.Enumerable.TryGetSingle[TSource](IEnumerable`1 source, Boolean& found)
+   at lambda_method132(Closure, QueryContext)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)
+   at VisitTracker.DataContext.VisitManager.GetActivityCount(Int32 websiteId) in C:\Raj Kiran Singh\Vtracker-Sol\VisitTracker.DataContext\VisitManager.cs:line 228
+   at VisitTracker.Web.Pages.IndexModel.OnGet() in C:\Raj Kiran Singh\Vtracker-Sol\VisitTracker.Web\Pages\Index.cshtml.cs:line 26
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.ExecutorFactory.VoidHandlerMethod.Execute(Object receiver, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeHandlerMethodAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeNextPageFilterAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+ClientConnectionId:004667a4-3f4c-455c-91d5-b16e1bc6ee4e
+Error Number:-2,State:0,Class:11
+2024-08-15 14:15:08.528 +05:30 [DBG] Response markup is scheduled to include Browser Link script injection.
+2024-08-15 14:15:08.529 +05:30 [DBG] Response markup is scheduled to include browser refresh script injection.
+2024-08-15 14:15:08.531 +05:30 [DBG] Response markup was updated to include Browser Link script injection.
+2024-08-15 14:15:08.535 +05:30 [DBG] Response markup was updated to include browser refresh script injection.
+2024-08-15 14:15:08.535 +05:30 [DBG] 'VisitTrackerDBContext' disposed.
+2024-08-15 14:15:08.536 +05:30 [DBG] Disposing connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:15:08.536 +05:30 [DBG] Disposed connection to database '' on server '' (0ms).
+2024-08-15 14:15:08.537 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7190/ - 500 null text/html; charset=utf-8 30512.5144ms
+2024-08-15 14:15:08.542 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7190/_framework/aspnetcore-browser-refresh.js - null null
+2024-08-15 14:15:08.542 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7190/_vs/browserLink - null null
+2024-08-15 14:15:08.544 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7190/_framework/aspnetcore-browser-refresh.js - 200 13768 application/javascript; charset=utf-8 2.5669ms
+2024-08-15 14:15:08.576 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7190/_vs/browserLink - 200 null text/javascript; charset=UTF-8 34.0028ms
+2024-08-15 14:15:08.611 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7190/favicon.ico - null null
+2024-08-15 14:15:08.630 +05:30 [INF] The file /favicon.ico was not modified
+2024-08-15 14:15:08.631 +05:30 [DBG] Handled. Status code: 304 File: /favicon.ico
+2024-08-15 14:15:08.632 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7190/favicon.ico - 304 null image/x-icon 21.4856ms
+2024-08-15 14:15:11.050 +05:30 [DBG] Connection id "0HN5T0PD5N0G1" received FIN.
+2024-08-15 14:15:11.052 +05:30 [DBG] Connection id "0HN5T0PD5N0G1" is closed. The last processed stream ID was 7.
+2024-08-15 14:15:11.053 +05:30 [DBG] The connection queue processing loop for 0HN5T0PD5N0G1 completed.
+2024-08-15 14:15:11.054 +05:30 [DBG] Connection id "0HN5T0PD5N0G1" sending FIN because: "The Socket transport's send loop completed gracefully."
+2024-08-15 14:15:11.064 +05:30 [DBG] Connection id "0HN5T0PD5N0G1" stopped.
+2024-08-15 14:15:20.510 +05:30 [DBG] Connection id "0HN5T0PD5N0G2" accepted.
+2024-08-15 14:15:20.512 +05:30 [DBG] Connection id "0HN5T0PD5N0G2" started.
+2024-08-15 14:15:20.517 +05:30 [DBG] Connection 0HN5T0PD5N0G2 established using the following protocol: "Tls13"
+2024-08-15 14:15:20.534 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7190/ - null null
+2024-08-15 14:15:20.539 +05:30 [DBG] The request path / does not match a supported file type
+2024-08-15 14:15:20.540 +05:30 [DBG] 1 candidate(s) found for the request path '/'
+2024-08-15 14:15:20.541 +05:30 [DBG] Endpoint '/Index' with route pattern '' is valid for the request path '/'
+2024-08-15 14:15:20.542 +05:30 [DBG] Request matched endpoint '/Index'
+2024-08-15 14:15:20.543 +05:30 [INF] Executing endpoint '/Index'
+2024-08-15 14:15:20.544 +05:30 [INF] Route matched with {page = "/Index", action = "", controller = ""}. Executing page /Index
+2024-08-15 14:15:20.545 +05:30 [DBG] Execution plan of authorization filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.AutoValidateAntiforgeryTokenAuthorizationFilter"]
+2024-08-15 14:15:20.545 +05:30 [DBG] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2024-08-15 14:15:20.546 +05:30 [DBG] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)"]
+2024-08-15 14:15:20.547 +05:30 [DBG] Execution plan of exception filters (in the following order): ["None"]
+2024-08-15 14:15:20.547 +05:30 [DBG] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2024-08-15 14:15:20.548 +05:30 [DBG] Executing page model factory for page VisitTracker.Web.Pages.Pages_Index (VisitTracker.Web)
+2024-08-15 14:15:20.550 +05:30 [DBG] Executed page model factory for page VisitTracker.Web.Pages.Pages_Index (VisitTracker.Web)
+2024-08-15 14:15:20.552 +05:30 [INF] Executing handler method VisitTracker.Web.Pages.IndexModel.OnGet - ModelState is "Valid"
+2024-08-15 14:15:20.552 +05:30 [INF] Serilog Working - 15-08-2024 2.15.20 PM
+2024-08-15 14:15:20.590 +05:30 [DBG] Entity Framework Core 8.0.7 initialized 'VisitTrackerDBContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:8.0.7' with options: None
+2024-08-15 14:15:20.597 +05:30 [DBG] Creating DbConnection.
+2024-08-15 14:15:20.597 +05:30 [DBG] Created DbConnection. (0ms).
+2024-08-15 14:15:20.598 +05:30 [DBG] Opening connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:15:20.598 +05:30 [DBG] Opened connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:15:20.599 +05:30 [DBG] Creating DbCommand for 'ExecuteReader'.
+2024-08-15 14:15:20.599 +05:30 [DBG] Created DbCommand for 'ExecuteReader' (0ms).
+2024-08-15 14:15:20.600 +05:30 [DBG] Initialized DbCommand for 'ExecuteReader' (1ms).
+2024-08-15 14:15:20.601 +05:30 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [w].[ID], [w].[ClientID], [w].[DateCreated], [w].[DateModified], [w].[Name], [w].[Status]
+FROM [dbo].[Website] AS [w]
+2024-08-15 14:15:20.605 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [w].[ID], [w].[ClientID], [w].[DateCreated], [w].[DateModified], [w].[Name], [w].[Status]
+FROM [dbo].[Website] AS [w]
+2024-08-15 14:15:20.607 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:15:20.608 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:15:20.609 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:15:20.609 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:15:20.610 +05:30 [DBG] Closing data reader to 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:15:20.610 +05:30 [DBG] A data reader for 'RSTVisitTracker' on server 'DESKTOP-R99M068' is being disposed after spending 3ms reading results.
+2024-08-15 14:15:20.611 +05:30 [DBG] Closing connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:15:20.611 +05:30 [DBG] Closed connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068' (0ms).
+2024-08-15 14:15:20.612 +05:30 [DBG] Opening connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:15:20.613 +05:30 [DBG] Opened connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:15:20.613 +05:30 [DBG] Creating DbCommand for 'ExecuteReader'.
+2024-08-15 14:15:20.614 +05:30 [DBG] Created DbCommand for 'ExecuteReader' (0ms).
+2024-08-15 14:15:20.614 +05:30 [DBG] Initialized DbCommand for 'ExecuteReader' (0ms).
+2024-08-15 14:15:20.615 +05:30 [DBG] Executing DbCommand [Parameters=[@__websiteId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [dbo].[VisitActivity] AS [v]
+INNER JOIN [dbo].[Visit] AS [v0] ON [v].[visitID] = [v0].[ID]
+INNER JOIN [dbo].[Website] AS [w] ON [v0].[WebsiteID] = [w].[ID]
+WHERE [w].[ID] = @__websiteId_0
+2024-08-15 14:15:50.757 +05:30 [ERR] Failed executing DbCommand (30,142ms) [Parameters=[@__websiteId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [dbo].[VisitActivity] AS [v]
+INNER JOIN [dbo].[Visit] AS [v0] ON [v].[visitID] = [v0].[ID]
+INNER JOIN [dbo].[Website] AS [w] ON [v0].[WebsiteID] = [w].[ID]
+WHERE [w].[ID] = @__websiteId_0
+2024-08-15 14:15:50.760 +05:30 [DBG] Closing connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:15:50.761 +05:30 [DBG] Closed connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068' (0ms).
+2024-08-15 14:15:50.785 +05:30 [ERR] An exception occurred while iterating over the results of a query for context type 'VisitTracker.DataContext.VisitTrackerDBContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+ClientConnectionId:004667a4-3f4c-455c-91d5-b16e1bc6ee4e
+Error Number:-2,State:0,Class:11
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+ClientConnectionId:004667a4-3f4c-455c-91d5-b16e1bc6ee4e
+Error Number:-2,State:0,Class:11
+2024-08-15 14:15:50.969 +05:30 [INF] Executed page /Index in 30421.3577ms
+2024-08-15 14:15:51.014 +05:30 [INF] Executed endpoint '/Index'
+2024-08-15 14:15:51.042 +05:30 [ERR] HTTP GET / responded 500 in 30501.6796 ms
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+   at System.Linq.Enumerable.TryGetSingle[TSource](IEnumerable`1 source, Boolean& found)
+   at lambda_method132(Closure, QueryContext)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)
+   at VisitTracker.DataContext.VisitManager.GetActivityCount(Int32 websiteId) in C:\Raj Kiran Singh\Vtracker-Sol\VisitTracker.DataContext\VisitManager.cs:line 228
+   at VisitTracker.Web.Pages.IndexModel.OnGet() in C:\Raj Kiran Singh\Vtracker-Sol\VisitTracker.Web\Pages\Index.cshtml.cs:line 26
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.ExecutorFactory.VoidHandlerMethod.Execute(Object receiver, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeHandlerMethodAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeNextPageFilterAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+ClientConnectionId:004667a4-3f4c-455c-91d5-b16e1bc6ee4e
+Error Number:-2,State:0,Class:11
+2024-08-15 14:15:51.087 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+   at System.Linq.Enumerable.TryGetSingle[TSource](IEnumerable`1 source, Boolean& found)
+   at lambda_method132(Closure, QueryContext)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)
+   at VisitTracker.DataContext.VisitManager.GetActivityCount(Int32 websiteId) in C:\Raj Kiran Singh\Vtracker-Sol\VisitTracker.DataContext\VisitManager.cs:line 228
+   at VisitTracker.Web.Pages.IndexModel.OnGet() in C:\Raj Kiran Singh\Vtracker-Sol\VisitTracker.Web\Pages\Index.cshtml.cs:line 26
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.ExecutorFactory.VoidHandlerMethod.Execute(Object receiver, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeHandlerMethodAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeNextPageFilterAsync()
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+ClientConnectionId:004667a4-3f4c-455c-91d5-b16e1bc6ee4e
+Error Number:-2,State:0,Class:11
+2024-08-15 14:15:51.135 +05:30 [DBG] Response markup is scheduled to include Browser Link script injection.
+2024-08-15 14:15:51.135 +05:30 [DBG] Response markup is scheduled to include browser refresh script injection.
+2024-08-15 14:15:51.137 +05:30 [DBG] Response markup was updated to include Browser Link script injection.
+2024-08-15 14:15:51.138 +05:30 [DBG] Response markup was updated to include browser refresh script injection.
+2024-08-15 14:15:51.138 +05:30 [DBG] 'VisitTrackerDBContext' disposed.
+2024-08-15 14:15:51.139 +05:30 [DBG] Disposing connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:15:51.139 +05:30 [DBG] Disposed connection to database '' on server '' (0ms).
+2024-08-15 14:15:51.140 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7190/ - 500 null text/html; charset=utf-8 30606.8139ms
+2024-08-15 14:15:51.148 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7190/_framework/aspnetcore-browser-refresh.js - null null
+2024-08-15 14:15:51.148 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7190/_vs/browserLink - null null
+2024-08-15 14:15:51.150 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7190/_framework/aspnetcore-browser-refresh.js - 200 13768 application/javascript; charset=utf-8 2.2495ms
+2024-08-15 14:15:51.179 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7190/_vs/browserLink - 200 null text/javascript; charset=UTF-8 30.8299ms
+2024-08-15 14:15:56.102 +05:30 [DBG] Connection id "0HN5T0PD5N0G2" received FIN.
+2024-08-15 14:15:56.107 +05:30 [DBG] Connection id "0HN5T0PD5N0G2" is closed. The last processed stream ID was 5.
+2024-08-15 14:15:56.107 +05:30 [DBG] The connection queue processing loop for 0HN5T0PD5N0G2 completed.
+2024-08-15 14:15:56.111 +05:30 [DBG] Connection id "0HN5T0PD5N0G2" sending FIN because: "The Socket transport's send loop completed gracefully."
+2024-08-15 14:15:56.118 +05:30 [DBG] Connection id "0HN5T0PD5N0G2" stopped.
+2024-08-15 14:16:15.033 +05:30 [DBG] Connection id "0HN5T0PD5N0G3" accepted.
+2024-08-15 14:16:15.035 +05:30 [DBG] Connection id "0HN5T0PD5N0G3" started.
+2024-08-15 14:16:15.041 +05:30 [DBG] Connection 0HN5T0PD5N0G3 established using the following protocol: "Tls13"
+2024-08-15 14:16:15.046 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7190/ - null null
+2024-08-15 14:16:15.059 +05:30 [DBG] The request path / does not match a supported file type
+2024-08-15 14:16:15.060 +05:30 [DBG] 1 candidate(s) found for the request path '/'
+2024-08-15 14:16:15.061 +05:30 [DBG] Endpoint '/Index' with route pattern '' is valid for the request path '/'
+2024-08-15 14:16:15.062 +05:30 [DBG] Request matched endpoint '/Index'
+2024-08-15 14:16:15.062 +05:30 [INF] Executing endpoint '/Index'
+2024-08-15 14:16:15.062 +05:30 [INF] Route matched with {page = "/Index", action = "", controller = ""}. Executing page /Index
+2024-08-15 14:16:15.063 +05:30 [DBG] Execution plan of authorization filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.AutoValidateAntiforgeryTokenAuthorizationFilter"]
+2024-08-15 14:16:15.064 +05:30 [DBG] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2024-08-15 14:16:15.064 +05:30 [DBG] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)"]
+2024-08-15 14:16:15.065 +05:30 [DBG] Execution plan of exception filters (in the following order): ["None"]
+2024-08-15 14:16:15.065 +05:30 [DBG] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2024-08-15 14:16:15.066 +05:30 [DBG] Executing page model factory for page VisitTracker.Web.Pages.Pages_Index (VisitTracker.Web)
+2024-08-15 14:16:15.067 +05:30 [DBG] Executed page model factory for page VisitTracker.Web.Pages.Pages_Index (VisitTracker.Web)
+2024-08-15 14:16:15.067 +05:30 [INF] Executing handler method VisitTracker.Web.Pages.IndexModel.OnGet - ModelState is "Valid"
+2024-08-15 14:16:18.574 +05:30 [INF] Serilog Working - 15-08-2024 2.16.18 PM
+2024-08-15 14:16:19.910 +05:30 [DBG] Entity Framework Core 8.0.7 initialized 'VisitTrackerDBContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:8.0.7' with options: None
+2024-08-15 14:16:19.913 +05:30 [DBG] Creating DbConnection.
+2024-08-15 14:16:19.913 +05:30 [DBG] Created DbConnection. (0ms).
+2024-08-15 14:16:19.914 +05:30 [DBG] Opening connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:16:19.915 +05:30 [DBG] Opened connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:16:19.916 +05:30 [DBG] Creating DbCommand for 'ExecuteReader'.
+2024-08-15 14:16:19.918 +05:30 [DBG] Created DbCommand for 'ExecuteReader' (1ms).
+2024-08-15 14:16:19.919 +05:30 [DBG] Initialized DbCommand for 'ExecuteReader' (2ms).
+2024-08-15 14:16:19.920 +05:30 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [w].[ID], [w].[ClientID], [w].[DateCreated], [w].[DateModified], [w].[Name], [w].[Status]
+FROM [dbo].[Website] AS [w]
+2024-08-15 14:16:19.924 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [w].[ID], [w].[ClientID], [w].[DateCreated], [w].[DateModified], [w].[Name], [w].[Status]
+FROM [dbo].[Website] AS [w]
+2024-08-15 14:16:19.926 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:16:19.928 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:16:19.928 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:16:19.929 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:16:19.930 +05:30 [DBG] Closing data reader to 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:16:19.931 +05:30 [DBG] A data reader for 'RSTVisitTracker' on server 'DESKTOP-R99M068' is being disposed after spending 4ms reading results.
+2024-08-15 14:16:19.932 +05:30 [DBG] Closing connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:16:19.933 +05:30 [DBG] Closed connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068' (0ms).
+2024-08-15 14:16:22.027 +05:30 [DBG] Opening connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:16:22.031 +05:30 [DBG] Opened connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:16:22.032 +05:30 [DBG] Creating DbCommand for 'ExecuteReader'.
+2024-08-15 14:16:22.032 +05:30 [DBG] Created DbCommand for 'ExecuteReader' (0ms).
+2024-08-15 14:16:22.033 +05:30 [DBG] Initialized DbCommand for 'ExecuteReader' (1ms).
+2024-08-15 14:16:22.034 +05:30 [DBG] Executing DbCommand [Parameters=[@__websiteId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [dbo].[VisitActivity] AS [v]
+INNER JOIN [dbo].[Visit] AS [v0] ON [v].[visitID] = [v0].[ID]
+INNER JOIN [dbo].[Website] AS [w] ON [v0].[WebsiteID] = [w].[ID]
+WHERE [w].[ID] = @__websiteId_0
+2024-08-15 14:16:52.141 +05:30 [ERR] Failed executing DbCommand (30,107ms) [Parameters=[@__websiteId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [dbo].[VisitActivity] AS [v]
+INNER JOIN [dbo].[Visit] AS [v0] ON [v].[visitID] = [v0].[ID]
+INNER JOIN [dbo].[Website] AS [w] ON [v0].[WebsiteID] = [w].[ID]
+WHERE [w].[ID] = @__websiteId_0
+2024-08-15 14:16:52.145 +05:30 [DBG] Closing connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:16:52.145 +05:30 [DBG] Closed connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068' (0ms).
+2024-08-15 14:16:52.166 +05:30 [ERR] An exception occurred while iterating over the results of a query for context type 'VisitTracker.DataContext.VisitTrackerDBContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+ClientConnectionId:004667a4-3f4c-455c-91d5-b16e1bc6ee4e
+Error Number:-2,State:0,Class:11
+Microsoft.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+ ---> System.ComponentModel.Win32Exception (258): The wait operation timed out.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+ClientConnectionId:004667a4-3f4c-455c-91d5-b16e1bc6ee4e
+Error Number:-2,State:0,Class:11
+2024-08-15 14:17:23.590 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Dashboard.cshtml'.
+2024-08-15 14:17:23.621 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Error.cshtml'.
+2024-08-15 14:17:23.622 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Index.cshtml'.
+2024-08-15 14:17:23.622 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/PageReport.cshtml'.
+2024-08-15 14:17:23.623 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Report.cshtml'.
+2024-08-15 14:17:23.624 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Shared/_ValidationScriptsPartial.cshtml'.
+2024-08-15 14:17:23.624 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_Host.cshtml'.
+2024-08-15 14:17:23.624 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_ViewImports.cshtml'.
+2024-08-15 14:17:23.625 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/_ViewStart.cshtml'.
+2024-08-15 14:17:23.625 +05:30 [DBG] Initializing Razor view compiler with compiled view: '/Pages/Shared/_Layout.cshtml'.
+2024-08-15 14:17:23.632 +05:30 [DBG] Registered model binder providers, in the following order: ["Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DateTimeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.TryParseModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexObjectModelBinderProvider"]
+2024-08-15 14:17:23.669 +05:30 [INF] User profile is available. Using 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-08-15 14:17:23.746 +05:30 [DBG] Registered SignalR Protocol: json, implemented by Microsoft.AspNetCore.SignalR.Protocol.JsonHubProtocol.
+2024-08-15 14:17:23.747 +05:30 [DBG] Registered SignalR Protocol: blazorpack, implemented by Microsoft.AspNetCore.Components.Server.BlazorPack.BlazorPackHubProtocol.
+2024-08-15 14:17:23.821 +05:30 [DBG] Hosting starting
+2024-08-15 14:17:23.828 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-0121043b-7e03-4918-8bac-adb5591cb296.xml'.
+2024-08-15 14:17:23.831 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-5f0deabe-307a-44c8-bdcf-14899a81d3c8.xml'.
+2024-08-15 14:17:23.832 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-618188f8-7cd1-4076-a8f7-c8c11fbf8496.xml'.
+2024-08-15 14:17:23.833 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-62dda88e-2432-4e1f-83ba-9905015089a1.xml'.
+2024-08-15 14:17:23.834 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-7b903346-0dda-467d-be04-3227fb3187b7.xml'.
+2024-08-15 14:17:23.836 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-a8dac690-7753-4b06-be5e-ab941b16c127.xml'.
+2024-08-15 14:17:23.838 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-b3cc796f-6f67-43c9-b840-73c28dee79e2.xml'.
+2024-08-15 14:17:23.839 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-cdf8e96d-32b4-47f2-885f-f6053fb53db0.xml'.
+2024-08-15 14:17:23.839 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-e9ac0ddd-6f66-4daa-a77d-0911705d5dab.xml'.
+2024-08-15 14:17:23.840 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-ebaeaf83-f60e-4db3-96e7-52541bfc7a16.xml'.
+2024-08-15 14:17:23.841 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-eef0ae81-25a1-4195-bdfa-7b98736cf6ba.xml'.
+2024-08-15 14:17:23.842 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-ef1831e0-641c-4464-9217-2bf7cfad34c1.xml'.
+2024-08-15 14:17:23.843 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-f0261f94-62c8-49af-8f23-625fff591b07.xml'.
+2024-08-15 14:17:23.844 +05:30 [DBG] Reading data from file 'C:\Users\Raj Kiran Singh\AppData\Local\ASP.NET\DataProtection-Keys\key-fc9fa2b2-9d25-496f-921f-53389f5b89a4.xml'.
+2024-08-15 14:17:23.847 +05:30 [DBG] Found key {0121043b-7e03-4918-8bac-adb5591cb296}.
+2024-08-15 14:17:23.851 +05:30 [DBG] Found key {5f0deabe-307a-44c8-bdcf-14899a81d3c8}.
+2024-08-15 14:17:23.852 +05:30 [DBG] Found key {618188f8-7cd1-4076-a8f7-c8c11fbf8496}.
+2024-08-15 14:17:23.852 +05:30 [DBG] Found key {62dda88e-2432-4e1f-83ba-9905015089a1}.
+2024-08-15 14:17:23.853 +05:30 [DBG] Found key {7b903346-0dda-467d-be04-3227fb3187b7}.
+2024-08-15 14:17:23.853 +05:30 [DBG] Found key {a8dac690-7753-4b06-be5e-ab941b16c127}.
+2024-08-15 14:17:23.854 +05:30 [DBG] Found key {b3cc796f-6f67-43c9-b840-73c28dee79e2}.
+2024-08-15 14:17:23.854 +05:30 [DBG] Found key {cdf8e96d-32b4-47f2-885f-f6053fb53db0}.
+2024-08-15 14:17:23.855 +05:30 [DBG] Found key {e9ac0ddd-6f66-4daa-a77d-0911705d5dab}.
+2024-08-15 14:17:23.855 +05:30 [DBG] Found key {ebaeaf83-f60e-4db3-96e7-52541bfc7a16}.
+2024-08-15 14:17:23.856 +05:30 [DBG] Found key {eef0ae81-25a1-4195-bdfa-7b98736cf6ba}.
+2024-08-15 14:17:23.856 +05:30 [DBG] Found key {ef1831e0-641c-4464-9217-2bf7cfad34c1}.
+2024-08-15 14:17:23.856 +05:30 [DBG] Found key {f0261f94-62c8-49af-8f23-625fff591b07}.
+2024-08-15 14:17:23.857 +05:30 [DBG] Found key {fc9fa2b2-9d25-496f-921f-53389f5b89a4}.
+2024-08-15 14:17:23.861 +05:30 [DBG] Considering key {a8dac690-7753-4b06-be5e-ab941b16c127} with expiration date 2024-10-11 11:37:18Z as default key.
+2024-08-15 14:17:23.863 +05:30 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.XmlEncryption.DpapiXmlDecryptor, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2024-08-15 14:17:23.864 +05:30 [DBG] Decrypting secret element using Windows DPAPI.
+2024-08-15 14:17:23.867 +05:30 [DBG] Forwarded activator type request from Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60 to Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Culture=neutral, PublicKeyToken=adb9793829ddae60
+2024-08-15 14:17:23.869 +05:30 [DBG] Opening CNG algorithm 'AES' from provider 'null' with chaining mode CBC.
+2024-08-15 14:17:23.870 +05:30 [DBG] Opening CNG algorithm 'SHA256' from provider 'null' with HMAC.
+2024-08-15 14:17:23.871 +05:30 [DBG] Using key {a8dac690-7753-4b06-be5e-ab941b16c127} as the default key.
+2024-08-15 14:17:23.872 +05:30 [DBG] Key ring with default key {a8dac690-7753-4b06-be5e-ab941b16c127} was loaded during application startup.
+2024-08-15 14:17:24.023 +05:30 [DBG] Connection id "0HN5T0RH19G80" accepted.
+2024-08-15 14:17:24.025 +05:30 [DBG] Connection id "0HN5T0RH19G80" started.
+2024-08-15 14:17:24.027 +05:30 [INF] Now listening on: https://localhost:7190
+2024-08-15 14:17:24.027 +05:30 [INF] Now listening on: http://localhost:5081
+2024-08-15 14:17:24.028 +05:30 [DBG] Loaded hosting startup assembly VisitTracker.Web
+2024-08-15 14:17:24.028 +05:30 [DBG] Loaded hosting startup assembly Microsoft.AspNetCore.Watch.BrowserRefresh
+2024-08-15 14:17:24.029 +05:30 [DBG] Loaded hosting startup assembly Microsoft.WebTools.BrowserLink.Net
+2024-08-15 14:17:24.029 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-15 14:17:24.030 +05:30 [INF] Hosting environment: Development
+2024-08-15 14:17:24.030 +05:30 [INF] Content root path: C:\Raj Kiran Singh\Vtracker-Sol\VisitTracker.Web
+2024-08-15 14:17:24.032 +05:30 [DBG] Hosting started
+2024-08-15 14:17:24.057 +05:30 [DBG] Connection 0HN5T0RH19G80 established using the following protocol: "Tls13"
+2024-08-15 14:17:24.132 +05:30 [DBG] Connection id "0HN5T0RH19G81" accepted.
+2024-08-15 14:17:24.134 +05:30 [DBG] Connection id "0HN5T0RH19G81" started.
+2024-08-15 14:17:24.146 +05:30 [DBG] Connection id "0HN5T0RH19G82" accepted.
+2024-08-15 14:17:24.147 +05:30 [DBG] Connection id "0HN5T0RH19G82" started.
+2024-08-15 14:17:24.162 +05:30 [DBG] Connection id "0HN5T0RH19G81" received FIN.
+2024-08-15 14:17:24.162 +05:30 [DBG] Connection id "0HN5T0RH19G82" received FIN.
+2024-08-15 14:17:24.290 +05:30 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Received an unexpected EOF or 0 bytes from the transport stream.
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+2024-08-15 14:17:24.290 +05:30 [DBG] Failed to authenticate HTTPS connection.
+System.IO.IOException: Received an unexpected EOF or 0 bytes from the transport stream.
+   at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+2024-08-15 14:17:24.311 +05:30 [DBG] Connection id "0HN5T0RH19G82" stopped.
+2024-08-15 14:17:24.311 +05:30 [DBG] Connection id "0HN5T0RH19G81" stopped.
+2024-08-15 14:17:24.312 +05:30 [DBG] Connection id "0HN5T0RH19G81" sending FIN because: "The Socket transport's send loop completed gracefully."
+2024-08-15 14:17:24.312 +05:30 [DBG] Connection id "0HN5T0RH19G82" sending FIN because: "The Socket transport's send loop completed gracefully."
+2024-08-15 14:17:24.351 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7190/ - null null
+2024-08-15 14:17:24.455 +05:30 [DBG] Wildcard detected, all requests with hosts will be allowed.
+2024-08-15 14:17:24.460 +05:30 [DBG] The request path / does not match a supported file type
+2024-08-15 14:17:24.475 +05:30 [DBG] 1 candidate(s) found for the request path '/'
+2024-08-15 14:17:24.477 +05:30 [DBG] Endpoint '/Index' with route pattern '' is valid for the request path '/'
+2024-08-15 14:17:24.478 +05:30 [DBG] Request matched endpoint '/Index'
+2024-08-15 14:17:24.481 +05:30 [INF] Executing endpoint '/Index'
+2024-08-15 14:17:24.497 +05:30 [INF] Route matched with {page = "/Index", action = "", controller = ""}. Executing page /Index
+2024-08-15 14:17:24.499 +05:30 [DBG] Execution plan of authorization filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.AutoValidateAntiforgeryTokenAuthorizationFilter"]
+2024-08-15 14:17:24.500 +05:30 [DBG] Execution plan of resource filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2024-08-15 14:17:24.502 +05:30 [DBG] Execution plan of action filters (in the following order): ["Microsoft.AspNetCore.Mvc.ModelBinding.UnsupportedContentTypeFilter (Order: -3000)"]
+2024-08-15 14:17:24.503 +05:30 [DBG] Execution plan of exception filters (in the following order): ["None"]
+2024-08-15 14:17:24.504 +05:30 [DBG] Execution plan of result filters (in the following order): ["Microsoft.AspNetCore.Mvc.ViewFeatures.Filters.SaveTempDataFilter"]
+2024-08-15 14:17:24.507 +05:30 [DBG] Executing page model factory for page VisitTracker.Web.Pages.Pages_Index (VisitTracker.Web)
+2024-08-15 14:17:24.609 +05:30 [DBG] An 'IServiceProvider' was created for internal use by Entity Framework.
+2024-08-15 14:17:24.627 +05:30 [DBG] Executed page model factory for page VisitTracker.Web.Pages.Pages_Index (VisitTracker.Web)
+2024-08-15 14:17:24.631 +05:30 [INF] Executing handler method VisitTracker.Web.Pages.IndexModel.OnGet - ModelState is "Valid"
+2024-08-15 14:17:26.814 +05:30 [INF] Serilog Working - 15-08-2024 2.17.26 PM
+2024-08-15 14:17:28.549 +05:30 [DBG] The property 'Visit.WebsiteID' was created in shadow state because there are no eligible CLR members with a matching name.
+2024-08-15 14:17:28.552 +05:30 [DBG] The property 'VisitActivity.visitID' was created in shadow state because there are no eligible CLR members with a matching name.
+2024-08-15 14:17:28.553 +05:30 [DBG] The property 'VisitActivity.visitpageID' was created in shadow state because there are no eligible CLR members with a matching name.
+2024-08-15 14:17:28.553 +05:30 [DBG] The property 'VisitPage.visitID' was created in shadow state because there are no eligible CLR members with a matching name.
+2024-08-15 14:17:28.554 +05:30 [DBG] The property 'VisitPage.webpageID' was created in shadow state because there are no eligible CLR members with a matching name.
+2024-08-15 14:17:28.554 +05:30 [DBG] The property 'Webpage.WebsiteID' was created in shadow state because there are no eligible CLR members with a matching name.
+2024-08-15 14:17:28.691 +05:30 [DBG] Entity Framework Core 8.0.7 initialized 'VisitTrackerDBContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:8.0.7' with options: None
+2024-08-15 14:17:28.737 +05:30 [DBG] Compiling query expression: 
+'DbSet<Website>()'
+2024-08-15 14:17:28.856 +05:30 [DBG] Generated query execution expression: 
+'queryContext => new SingleQueryingEnumerable<Website>(
+    (RelationalQueryContext)queryContext, 
+    RelationalCommandCache.QueryExpression(
+        Projection Mapping:
+            EmptyProjectionMember -> Dictionary<IProperty, int> { [Property: Website.ID (int) Required PK AfterSave:Throw ValueGenerated.OnAdd, 0], [Property: Website.ClientID (int?), 1], [Property: Website.DateCreated (DateTime) Required, 2], [Property: Website.DateModified (DateTime?), 3], [Property: Website.Name (string) Required MaxLength(50), 4], [Property: Website.Status (RecordStatus) Required, 5] }
+        SELECT w.ID, w.ClientID, w.DateCreated, w.DateModified, w.Name, w.Status
+        FROM dbo.Website AS w), 
+    null, 
+    Func<QueryContext, DbDataReader, ResultContext, SingleQueryResultCoordinator, Website>, 
+    VisitTracker.DataContext.VisitTrackerDBContext, 
+    False, 
+    False, 
+    True
+)'
+2024-08-15 14:17:28.876 +05:30 [DBG] Creating DbConnection.
+2024-08-15 14:17:28.894 +05:30 [DBG] Created DbConnection. (16ms).
+2024-08-15 14:17:28.896 +05:30 [DBG] Opening connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:17:29.061 +05:30 [DBG] Opened connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:17:29.066 +05:30 [DBG] Creating DbCommand for 'ExecuteReader'.
+2024-08-15 14:17:29.074 +05:30 [DBG] Created DbCommand for 'ExecuteReader' (6ms).
+2024-08-15 14:17:29.076 +05:30 [DBG] Initialized DbCommand for 'ExecuteReader' (10ms).
+2024-08-15 14:17:29.081 +05:30 [DBG] Executing DbCommand [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [w].[ID], [w].[ClientID], [w].[DateCreated], [w].[DateModified], [w].[Name], [w].[Status]
+FROM [dbo].[Website] AS [w]
+2024-08-15 14:17:29.101 +05:30 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [w].[ID], [w].[ClientID], [w].[DateCreated], [w].[DateModified], [w].[Name], [w].[Status]
+FROM [dbo].[Website] AS [w]
+2024-08-15 14:17:29.131 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:17:29.156 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:17:29.158 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:17:29.159 +05:30 [DBG] Context 'VisitTrackerDBContext' started tracking 'Website' entity. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see key values.
+2024-08-15 14:17:29.162 +05:30 [DBG] Closing data reader to 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:17:29.169 +05:30 [DBG] A data reader for 'RSTVisitTracker' on server 'DESKTOP-R99M068' is being disposed after spending 60ms reading results.
+2024-08-15 14:17:29.172 +05:30 [DBG] Closing connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:17:29.177 +05:30 [DBG] Closed connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068' (5ms).
+2024-08-15 14:17:46.750 +05:30 [DBG] Compiling query expression: 
+'DbSet<VisitActivity>()
+    .Include(t => t.visit)
+    .Include(t => t.visit.Website)
+    .Count(i => i.visit.Website.ID == __websiteId_0)'
+2024-08-15 14:17:46.906 +05:30 [DBG] Generated query execution expression: 
+'queryContext => new SingleQueryingEnumerable<int>(
+    (RelationalQueryContext)queryContext, 
+    RelationalCommandCache.QueryExpression(
+        Projection Mapping:
+            EmptyProjectionMember -> 0
+        SELECT COUNT(*)
+        FROM dbo.VisitActivity AS v
+        INNER JOIN dbo.Visit AS v0 ON v.visitID == v0.ID
+        INNER JOIN dbo.Website AS w ON v0.WebsiteID == w.ID
+        WHERE w.ID == @__websiteId_0), 
+    null, 
+    Func<QueryContext, DbDataReader, ResultContext, SingleQueryResultCoordinator, int>, 
+    VisitTracker.DataContext.VisitTrackerDBContext, 
+    False, 
+    False, 
+    True
+)
+    .Single()'
+2024-08-15 14:17:46.919 +05:30 [DBG] Opening connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:17:46.922 +05:30 [DBG] Opened connection to database 'RSTVisitTracker' on server 'DESKTOP-R99M068'.
+2024-08-15 14:17:46.924 +05:30 [DBG] Creating DbCommand for 'ExecuteReader'.
+2024-08-15 14:17:46.925 +05:30 [DBG] Created DbCommand for 'ExecuteReader' (0ms).
+2024-08-15 14:17:46.929 +05:30 [DBG] Initialized DbCommand for 'ExecuteReader' (4ms).
+2024-08-15 14:17:46.933 +05:30 [DBG] Executing DbCommand [Parameters=[@__websiteId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [dbo].[VisitActivity] AS [v]
+INNER JOIN [dbo].[Visit] AS [v0] ON [v].[visitID] = [v0].[ID]
+INNER JOIN [dbo].[Website] AS [w] ON [v0].[WebsiteID] = [w].[ID]
+WHERE [w].[ID] = @__websiteId_0

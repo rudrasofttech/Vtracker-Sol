@@ -1,0 +1,15 @@
+﻿@using VisitTracker.DataContext;
+@inject VisitTracker.DataContext.VisitTrackerDBContext context;
+
+@Count.ToString("#,##0")
+
+@code {
+    public int Count { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        VisitManager visitRepository = new(context);
+        Count = visitRepository.GetActivityCount();
+    }
+}

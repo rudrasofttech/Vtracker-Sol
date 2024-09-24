@@ -1,0 +1,53 @@
+﻿@using VisitTracker.DataContext;
+@using VisitTracker.Models;
+@inject VisitTracker.DataContext.VisitTrackerDBContext context;
+@inject ILogger<VisitChart> logger;
+@attribute [StreamRendering(true)]
+
+<LineChart @ref="lineChart" />
+
+@code {
+    WebsiteManager websiteRepository;
+    VisitManager visitRepository;
+    WebpageManager webpageRepository;
+
+    [Parameter]
+    public int Id { get; set; }
+    [Parameter]
+    public DateTime Start { get; set; }
+    [Parameter]
+    public DateTime End { get; set; }
+
+    private LineChart lineChart = default!;
+    private LineChartOptions lineChartOptions = default!;
+    private ChartData chartData = default!;
+
+    protected override void OnInitialized()
+    {
+
+        websiteRepository = new(context);
+        visitRepository = new(context);
+        webpageRepository = new(context);
+
+        //var colors = ColorUtility.CategoricalTwelveColors;
+        var DisplayInfo = new WebsiteDisplayPublic(Id, Start, new DateTime(End.Year, End.Month, End.Day, 23, 59, 59));
+        var w = websiteRepository.GetWebsiteByID(Id);
+        if (w != null)
+        {
+            var visits = visitRepository.GetVisits(Id, DisplayInfo.Start, DisplayInfo.End);
+
+
+           
+           
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await lineChart.InitializeAsync(chartData, lineChartOptions);
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}

@@ -1,0 +1,60 @@
+﻿@using VisitTracker.Models;
+@using VisitTracker.DataContext;
+@inject VisitTracker.DataContext.VisitTrackerDBContext context;
+
+<table class="w-100 table">
+    <thead>
+        <tr>
+            <th scope="col">Website</th>
+            <th scope="col">Visits</th>
+            <th scope="col">Activities</th>
+            <th scope="col">Report</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var w in Stats)
+        {
+            <tr>
+                <td>
+                    <a href="http://@w.Site.Name" target="_blank">@w.Site.Name</a>
+                </td>
+                <td>
+                    @w.VisitCount.ToString("#,##0") Visits Tracked
+                </td>
+                <td class="col-md-3 text-right">
+                    @w.ActivityCount.ToString("#,##0") Recorded
+                </td>
+                <td class="col-md-3 text-right">
+                    <a href="@Host/report?id=@w.Site.ID">Report</a>
+                </td>
+                <td class="col-md-3 text-right">
+                    <a href="@Host/dashboard?id=@w.Site.ID">Visits</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    public List<WebsiteStats> Stats { get; set; } = [];
+    [Parameter]
+    public string Host { get; set; } = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        WebsiteManager manager = new(context);
+        VisitManager visitRepository = new(context);
+
+        foreach (var ws in manager.GetWebsites([RecordStatus.Active]))
+        {
+            Stats.Add(new WebsiteStats()
+                {
+                    ActivityCount = visitRepository.GetActivityCount(ws.ID),
+                    Site = ws,
+                    VisitCount = visitRepository.GetVisitCount(ws.ID)
+                });
+        }
+    }
+}

@@ -1,0 +1,162 @@
+﻿@page "/"
+@using VisitTracker.Models;
+@using VisitTracker.DataContext;
+@inject VisitTracker.DataContext.VisitTrackerDBContext context;
+@inject ILogger<Home> logger;
+
+<PageTitle>Home</PageTitle>
+
+<div class="row">
+    <div class="col-sm-2 col-md-3">
+        <Card Class="rounded-0">
+            <CardBody Class="text-center">
+                <CardTitle Class="fs-1">@WebsiteCount<br /> Websites</CardTitle>
+                <CardText>Websites registered with the system.</CardText>
+            </CardBody>
+        </Card>
+    </div>
+    <div class="col-sm-2 col-md-3">
+        <Card Class="rounded-0">
+            <CardBody Class="text-center">
+                <CardTitle Class="fs-1">@WebpageCount.ToString("#,##0")<br /> Webpages</CardTitle>
+                <CardText>Total webpages being tracked at present.</CardText>
+            </CardBody>
+        </Card>
+    </div>
+    <div class="col-sm-2 col-md-3">
+        <Card Class="rounded-0">
+            <CardBody Class="text-center">
+                <CardTitle Class="fs-1">@VisitCount.ToString("#,##0")<br /> Visits</CardTitle>
+                <CardText>Total visits tracked by system.</CardText>
+            </CardBody>
+        </Card>
+    </div>
+    <div class="col-sm-2 col-md-3">
+        <Card Class="rounded-0">
+            <CardBody Class="text-center">
+                <CardTitle Class="fs-1">@ActivityCount.ToString("#,##0")<br /> Activities</CardTitle>
+                <CardText>Total activities recorded by system.</CardText>
+            </CardBody>
+        </Card>
+    </div>
+</div>
+
+<div class="my-4">
+    <Grid @ref="grid"
+          TItem="WebsiteStats"
+          Class="table table-hover table-bordered"
+          DataProvider="WebsitesDataProvider"
+          FixedHeader="true"
+          Height="350"
+          Responsive="true"
+          Unit="Unit.Px">
+
+        <GridColumns>
+            <GridColumn TItem="WebsiteStats" HeaderText="Website" PropertyName="Site.Name">
+                <a href="http://@context.Site.Name" target="_blank">@context.Site.Name</a>
+            </GridColumn>
+            <GridColumn TItem="WebsiteStats" HeaderText="Visits" PropertyName="VisitCount">
+                @context.VisitCount.ToString("#,##0") Visits Tracked
+            </GridColumn>
+            <GridColumn TItem="WebsiteStats" HeaderText="Activities" PropertyName="ActivityCount">
+                @context.ActivityCount.ToString("#,##0") Recorded
+            </GridColumn>
+            <GridColumn TItem="WebsiteStats" HeaderText="" PropertyName="Site.Id">
+                <NavLink Match="@NavLinkMatch.All" href="@($"report/{context.Site.ID}")">Report</NavLink>
+            </GridColumn>
+            <GridColumn TItem="WebsiteStats" HeaderText="" PropertyName="Site.Id">
+                <NavLink Match="@NavLinkMatch.All" href="@($"visits/{context.Site.ID}")">Visits</NavLink>
+            </GridColumn>
+        </GridColumns>
+    </Grid>
+</div>
+@code {
+
+    WebsiteManager websiteRepository;
+    VisitManager visitRepository;
+    WebpageManager webpageRepository;
+
+    [Inject] protected PreloadService PreloadService { get; set; } = default!;
+
+    BlazorBootstrap.Grid<WebsiteStats> grid = default!;
+    public List<WebsiteStats> Stats { get; set; } = [];
+    public int VisitCount { get; set; }
+    public int ActivityCount { get; set; }
+    public int WebsiteCount { get; set; }
+    public int WebpageCount { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        PreloadService.Show(SpinnerColor.Light, "Loading data...");
+        try
+        {
+            foreach (var ws in websiteRepository.GetWebsites())
+            {
+                Stats.Add(new WebsiteStats()
+                    {
+                        ActivityCount = visitRepository.GetActivityCount(ws.ID),
+                        Site = ws,
+                        VisitCount = visitRepository.GetVisitCount(ws.ID)
+                    });
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Home > Loading Stats");
+        }
+        
+        PreloadService.Hide();
+
+        
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        websiteRepository = new(context);
+        visitRepository = new(context);
+        webpageRepository = new(context);
+
+        logger.LogInformation($"Serilog Working - {DateTime.Now}");
+        try
+        {
+            WebsiteCount = websiteRepository.GetWebsites().Count();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Home > Loading Website Count");
+        }
+        try
+        {
+            WebpageCount = webpageRepository.GetWebpageCount();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Home > Loading Webpage Count");
+        }
+        try
+        {
+            VisitCount = visitRepository.GetVisitCount();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Home > Loading Visit Count");
+        }
+        try
+        {
+            ActivityCount = visitRepository.GetActivityCount();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Home > Loading Activity Count");
+        }
+        
+    }
+
+    private async Task<GridDataProviderResult<WebsiteStats>> WebsitesDataProvider(GridDataProviderRequest<WebsiteStats> request)
+    {
+        return await Task.FromResult(request.ApplyTo(Stats));
+    }
+
+}

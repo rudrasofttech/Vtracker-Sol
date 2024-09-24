@@ -236,8 +236,8 @@ namespace VTracker.DAL
         public List<Tuple<Visit, Webpage>> GetVisitAndWebpageByWebsite(int websiteId, DateTime? start, DateTime? end)
         {
             var list = context.VisitPages.Where(t => t.visit.Website.ID == websiteId
-            && (start.HasValue && t.DateCreated >= start.Value)
-            && (end.HasValue && t.DateCreated <= end.Value)).Select(t => new { V = t.visit, WP = t.webpage }).Distinct();
+            && (start.HasValue && (t.DateCreated.Year >= start.Value.Year && t.DateCreated.Month >= start.Value.Month && t.DateCreated.Day >= start.Value.Day))
+            && (end.HasValue && (t.DateCreated.Year <= end.Value.Year && t.DateCreated.Month <= end.Value.Month && t.DateCreated.Day <= end.Value.Day))).Select(t => new { V = t.visit, WP = t.webpage }).Distinct();
 
             List<Tuple<Visit, Webpage>> result = new List<Tuple<Visit, Webpage>>();
             foreach(var i in list)
