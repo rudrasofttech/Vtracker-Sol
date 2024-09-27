@@ -332,3 +332,7 @@ __pycache__/
 /VTracker2
 /VisitTracker.Blazor/wwwroot/logs
 /VisitTracker.Web/appsettings.json
+/VisitTracker.Web/appsettings.Development.json
+/VTracker/Web.config
+/VTracker/Web.Debug.config
+/VTracker/Web.Release.config
