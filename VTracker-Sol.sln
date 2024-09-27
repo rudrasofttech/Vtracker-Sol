@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VTracker", "VTracker\VTracker.csproj", "{E00DCECD-5726-4FC3-9F26-6561B79E6192}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VTracker-Obselete", "VTracker\VTracker-Obselete.csproj", "{E00DCECD-5726-4FC3-9F26-6561B79E6192}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisitTracker.Models", "VisitTracker.Models\VisitTracker.Models.csproj", "{6C43B518-D1E2-44F1-9331-812D03245E8C}"
 EndProject
