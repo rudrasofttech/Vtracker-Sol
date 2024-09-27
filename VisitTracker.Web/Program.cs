@@ -34,8 +34,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-//Add support to logging request with SERILOG
-app.UseSerilogRequestLogging();
 app.UseRouting();
 
 app.UseAuthorization();

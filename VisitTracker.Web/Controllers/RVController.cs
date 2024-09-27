@@ -1,18 +1,21 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using VisitTracker.DataContext;
 using VisitTracker.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace VisitTracker.Web.Controllers
 {
-    public class RVController(VisitTrackerDBContext _context, IWebHostEnvironment _webHostEnvironment) : Controller
+    public class RVController(VisitTrackerDBContext _context, IWebHostEnvironment _webHostEnvironment, IConfiguration config, ILogger<RVController> _logger) : Controller
     {
         private readonly WebsiteManager websiteRepository = new(_context);
         private readonly VisitManager visitRepository = new(_context);
         private readonly WebpageManager webpageRepository = new(_context);
         private readonly IWebHostEnvironment webHostEnvironment = _webHostEnvironment;
+        private readonly IPLocationWorker iPLocationWorker = new(config, _context);
+        private readonly ILogger<RVController> logger = _logger;
         //private readonly VisitTrackerDBContext context = _context;
 
         /// <summary>
@@ -95,94 +98,118 @@ namespace VisitTracker.Web.Controllers
         /// <param name="occ">Old Client Cookie</param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult fr(int wid, Guid cc, string referer, string path, string wvri, string r, string b,
+        public async Task<ActionResult> fr(int wid, Guid cc, string referer, string path, string wvri, string r, string b,
             int sw, int sh, int st, int sl, string occ)
         {
             VisitPage? vp = null;
-
-            //get the website 
-            var w = websiteRepository.GetWebsiteByID(wid);
-
-            if (w != null)
+            try
             {
+                //get the website 
+                var w = websiteRepository.GetWebsiteByID(wid);
 
-                Visit? v = visitRepository.GetVisitByCC(cc);
-                var u = new Uri(path);
+                if (w != null)
+                {
 
-                Webpage? wp = webpageRepository.GetWebpage(w.ID, u.AbsolutePath.Trim(), u.Query.Trim());
-                if (wp == null)
-                {
-                    wp = new Webpage()
+                    Visit? v = visitRepository.GetVisitByCC(cc);
+                    var u = new Uri(path);
+
+                    Webpage? wp = webpageRepository.GetWebpage(w.ID, u.AbsolutePath.Trim(), u.Query.Trim());
+                    if (wp == null)
                     {
-                        DateCreated = DateTime.UtcNow,
-                        Path = u.AbsolutePath.Trim(),
-                        QueryString = u.Query.Trim(),
-                        Status = RecordStatus.Active,
-                        Website = w
-                    };
-                    webpageRepository.InsertWebpage(wp);
-                    webpageRepository.Save();
-                }
-                //if visit is not found than create a new visit
-                if (v == null)
-                {
-                    int? oldVisitID = null;
-                    if (!string.IsNullOrEmpty(occ))
-                    {
-                        if (Guid.TryParse(occ, out Guid oldcc))
+                        wp = new Webpage()
                         {
-                            var oldVisit = visitRepository.GetVisitByCC(oldcc);
-                            if (oldVisit != null)
+                            DateCreated = DateTime.UtcNow,
+                            Path = u.AbsolutePath.Trim(),
+                            QueryString = u.Query.Trim(),
+                            Status = RecordStatus.Active,
+                            Website = w
+                        };
+                        webpageRepository.InsertWebpage(wp);
+                        webpageRepository.Save();
+                    }
+                    //if visit is not found than create a new visit
+                    if (v == null)
+                    {
+                        int? oldVisitID = null;
+                        if (!string.IsNullOrEmpty(occ))
+                        {
+                            if (Guid.TryParse(occ, out Guid oldcc))
                             {
-                                oldVisitID = oldVisit.ID;
+                                var oldVisit = visitRepository.GetVisitByCC(oldcc);
+                                if (oldVisit != null)
+                                {
+                                    oldVisitID = oldVisit.ID;
+                                }
                             }
                         }
+                        var result = new IP2LocationResult();
+                        try
+                        {
+                            if (Request.HttpContext.Connection.RemoteIpAddress != null)
+                                result = await iPLocationWorker.GetLocationAsync(Request.HttpContext.Connection.RemoteIpAddress.ToString());
+
+                        }
+                        catch (Exception ex)
+                        {
+                            result = new IP2LocationResult();
+                            logger.LogError(ex, "RVController > fr > GetLocation");
+                        }
+
+                        v = new Visit()
+                        {
+                            CountryAbbr = !string.IsNullOrEmpty(result.Country_Code) ? result.Country_Code : string.Empty,
+                            CityName = !string.IsNullOrEmpty(result.City_Name) ? result.City_Name : string.Empty,
+                            CountryName = !string.IsNullOrEmpty(result.Country_Name) ? result.Country_Name : string.Empty,
+                            IsProxy = result.Is_Proxy,
+                            Latitude = result.Latitude.HasValue ? result.Latitude.Value.ToString() : string.Empty,
+                            Longitude = result.Longitude.HasValue ? result.Longitude.Value.ToString() : string.Empty,
+                            RegionName = result.Region_Name,
+                            ZipCode = result.Zip_Code,
+                            DateCreated = DateTime.UtcNow,
+                            DateModified = null,
+                            IPAddress = Request.HttpContext.Connection.RemoteIpAddress != null ? Request.HttpContext.Connection.RemoteIpAddress.ToString() : string.Empty,
+                            LastPingDate = DateTime.UtcNow,
+                            Referer = !string.IsNullOrEmpty(referer) ? referer : string.Empty,
+                            Status = RecordStatus.Active,
+                            WebsiteVisitorReferenceID = !string.IsNullOrEmpty(wvri) ? wvri : string.Empty,
+                            ClientCookie = cc,
+                            Website = w,
+                            BrowserName = !string.IsNullOrEmpty(b) ? b : string.Empty,
+                            ScreenHeight = sh,
+                            ScreenWidth = sw,
+                            LastVisitID = oldVisitID
+                        };
+                        visitRepository.InsertVisit(v);
+                        visitRepository.Save();
                     }
-                    v = new Visit()
+                    if (v != null)
                     {
-                        CountryAbbr = "",
-                        DateCreated = DateTime.UtcNow,
-                        DateModified = null,
-                        IPAddress = Request.HttpContext.Connection.RemoteIpAddress != null ? Request.HttpContext.Connection.RemoteIpAddress.ToString() : string.Empty,
-                        LastPingDate = DateTime.UtcNow,
-                        Referer =!string.IsNullOrEmpty(referer) ? referer : string.Empty,
-                        Status = RecordStatus.Active,
-                        WebsiteVisitorReferenceID = !string.IsNullOrEmpty(wvri) ? wvri : string.Empty ,
-                        ClientCookie = cc,
-                        Website = w,
-                        BrowserName = !string.IsNullOrEmpty(b) ? b : string.Empty,
-                        ScreenHeight = sh,
-                        ScreenWidth = sw,
-                        LastVisitID = oldVisitID
-                    };
-                    visitRepository.InsertVisit(v);
-                    visitRepository.Save();
-                }
-                if (v != null)
-                {
-                    vp = visitRepository.GetLastVisitedPageofVisit(v.ID);
-                }
-                //if visitpage is not found or visitpage does not match with webpage in current context
-                //than create a new visitpage obj
-                if (vp == null || vp.webpage.ID != wp.ID)
-                {
-                    vp = new VisitPage()
+                        vp = visitRepository.GetLastVisitedPageofVisit(v.ID);
+                    }
+                    //if visitpage is not found or visitpage does not match with webpage in current context
+                    //than create a new visitpage obj
+                    if (vp == null || vp.webpage.ID != wp.ID)
                     {
-                        LastPingDate = DateTime.UtcNow,
-                        visit = v,
-                        webpage = wp,
-                        DateCreated = DateTime.UtcNow,
-                        BrowserWidth = null,
-                        BrowserHeight = null,
-                        ScrollLeft = sl,
-                        ScrollTop = st
-                    };
-                    visitRepository.InsertVisitPage(vp);
-                    visitRepository.Save();
-                }
+                        vp = new VisitPage()
+                        {
+                            LastPingDate = DateTime.UtcNow,
+                            visit = v,
+                            webpage = wp,
+                            DateCreated = DateTime.UtcNow,
+                            BrowserWidth = null,
+                            BrowserHeight = null,
+                            ScrollLeft = sl,
+                            ScrollTop = st
+                        };
+                        visitRepository.InsertVisitPage(vp);
+                        visitRepository.Save();
+                    }
 
+                }
+            }catch(Exception exception)
+            {
+                logger.LogError(exception, "RVController > fr");
             }
-
             return base.File("~/images/trans.png", "image/png");
         }
 

@@ -15,6 +15,7 @@ namespace VisitTracker.DataContext
         public DbSet<Webpage> Webpages { get; set; }
         public DbSet<VisitPage> Pages { get; set; }
         public DbSet<Website> Websites { get; set; }
+        public DbSet<IP2Location> IP2Locations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,6 +25,7 @@ namespace VisitTracker.DataContext
             modelBuilder.Entity<Webpage>().ToTable("Webpage");
             modelBuilder.Entity<VisitPage>().ToTable("VisitPage");
             modelBuilder.Entity<Website>().ToTable("Website");
+            modelBuilder.Entity<IP2Location>().ToTable("IP2Location");
         }
     }
 }
