@@ -337,3 +337,4 @@ __pycache__/
 /VTracker/Web.Debug.config
 /VTracker/Web.Release.config
 /VisitTracker.Web/appsettings.Development.json
+/VisitTracker.Web/wwwroot/logs
