@@ -55,5 +55,16 @@ namespace VisitTracker.DataContext
             return context.Webpages.Include(t => t.Website).Where(t => t.Website.ID == websiteId
             && t.Path == path.ToLower() && t.QueryString == query.ToLower()).FirstOrDefault();
         }
+
+        public int GetVisitCount(int websiteId, string path)
+        {
+            if(context.VisitCounts.Any(t => t.WebsiteId == websiteId && t.Path == path)) {
+                return context.VisitCounts.First(t => t.WebsiteId == websiteId && t.Path == path).VisitCount;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
 }

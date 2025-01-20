@@ -16,6 +16,7 @@ namespace VisitTracker.DataContext
         public DbSet<VisitPage> Pages { get; set; }
         public DbSet<Website> Websites { get; set; }
         public DbSet<IP2Location> IP2Locations { get; set; }
+        public DbSet<VisitCountView> VisitCounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +27,7 @@ namespace VisitTracker.DataContext
             modelBuilder.Entity<VisitPage>().ToTable("VisitPage");
             modelBuilder.Entity<Website>().ToTable("Website");
             modelBuilder.Entity<IP2Location>().ToTable("IP2Location");
+            modelBuilder.Entity<VisitCountView>().ToView("VisitCountView").HasNoKey();
         }
     }
 }
