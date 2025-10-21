@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VisitTracker.Models;
 
 namespace VisitTracker.DataContext
@@ -16,6 +11,11 @@ namespace VisitTracker.DataContext
         {
             var w = context.Websites.Find(websiteId);
             context.Websites.Remove(w);
+        }
+
+        public Website? GetWebsiteByName(string name)
+        {
+            return context.Websites.FirstOrDefault(w => w.Name == name);
         }
 
         public Website? GetWebsiteByID(int websiteId)

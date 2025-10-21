@@ -17,6 +17,8 @@ namespace VisitTracker.Models
         public DateTime? DateModified { get; set; }
         public RecordStatus Status { get; set; }
 
+        public Guid? OwnerId { get; set; }
+
         public virtual ICollection<Webpage> Webpages { get; set; }
     }
 }
