@@ -10,13 +10,13 @@ namespace VisitTracker.Web.Controllers
 {
     
     
-    public class DataController(VisitTrackerDBContext _context, IWebHostEnvironment _webHostEnvironment, IConfiguration config, ILogger<DataController> _logger) : Controller
+    public class DataController(VisitTrackerDBContext _context, /*IWebHostEnvironment _webHostEnvironment, IConfiguration config,*/ ILogger<DataController> _logger) : Controller
     {
         private readonly WebsiteManager websiteRepository = new(_context);
-        private readonly VisitManager visitRepository = new(_context);
+        //private readonly VisitManager visitRepository = new(_context);
         private readonly WebpageManager webpageRepository = new(_context);
-        private readonly IWebHostEnvironment webHostEnvironment = _webHostEnvironment;
-        private readonly IPLocationWorker iPLocationWorker = new(config, _context);
+        //private readonly IWebHostEnvironment webHostEnvironment = _webHostEnvironment;
+        //private readonly IPLocationWorker iPLocationWorker = new(config, _context);
         private readonly ILogger<DataController> logger = _logger;
 
         [HttpGet]
