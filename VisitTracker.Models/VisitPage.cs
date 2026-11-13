@@ -16,15 +16,10 @@ namespace VisitTracker.Models
 
         public int? BrowserWidth { get; set; }
         public int? BrowserHeight { get; set; }
-        /// <summary>
-        /// Initial vertical scroll  position when page is loaded
-        /// </summary>
         public int? ScrollTop { get; set; }
-
-        /// <summary>
-        /// Initial Horizontal scroll  position when page is loaded
-        /// </summary>
         public int? ScrollLeft { get; set; }
 
+        public byte? MaxScrollPct { get; set; }
+        public int? DocumentHeight { get; set; }
     }
 }

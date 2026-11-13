@@ -8,6 +8,15 @@
 @section Head {
     <link rel="stylesheet" href="//cdn.datatables.net/2.1.3/css/dataTables.dataTables.min.css" />
     <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" />
+    <style>
+        .ct-series.series-all .ct-line, .ct-series.series-all .ct-point { stroke: #e74c3c !important; }
+        .ct-series.series-new .ct-line, .ct-series.series-new .ct-point { stroke: #ff7f7f !important; }
+        .ct-series.series-return .ct-line, .ct-series.series-return .ct-point { stroke: #f1c40f !important; }
+
+        .legend-all { color: #e74c3c; font-weight: 600; }
+        .legend-new { color: #ff7f7f; font-weight: 600; }
+        .legend-return { color: #f1c40f; font-weight: 600; }
+    </style>
 }
 <div class="sticky-top p-2 text-center bg-white">
     <h1>
@@ -22,18 +31,31 @@
             <input name="end" type="date" class="form-control" value="@Model.DisplayInfo.End.ToString("yyyy-MM-dd")" />
         </div>
         <div class="col-12">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" name="bots" value="1" @(Model.IncludeBots ? "checked" : "") />
+                Include bots
+            </label>
+        </div>
+        <div class="col-12">
             <button type="submit" class="btn btn-primary">Change</button>
         </div>
     </form>
+
+    @if (!Model.IncludeBots && Model.HiddenBotVisits > 0)
+    {
+        <div class="text-muted">@Model.HiddenBotVisits bot visits hidden</div>
+    }
 </div>
+
 <div class="my-4">
     <div id="chartVisit" class="ct-chart ct-perfect-fourth" style="max-height:250px;"></div>
     <div>
-        <span class="text-info me-2 fw-bold">All</span>
-        <span class="text-danger me-2 fw-bold">Return</span>
-        <span class="text-warning me-2 fw-bold">New</span>
+        <span class="legend-all me-2">All</span>
+        <span class="legend-return me-2">Return</span>
+        <span class="legend-new me-2">New</span>
     </div>
 </div>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
@@ -65,32 +87,35 @@
         </div>
         <div class="col-md-6">
             <div class="p-2">
-                <h4 class="title">Visit Referer</h4>
-                @* <p class="mb-2">In @Model.DisplayInfo.VisitChartDescription</p> *@
+                <h4 class="title">Visit Referrer (Grouped)</h4>
                 <table class="table table-striped" id="reftable">
                     <thead>
-                        <tr>
-                            <th style="width:80%">Referer</th>
-                            <th style="width:20%">Count</th>
-                        </tr>
+                    <tr>
+                        <th style="width:80%">Referrer Group</th>
+                        <th style="width:20%">Count</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach (RefererData item in Model.DisplayInfo.RefererList.OrderByDescending(t => t.Count))
-                        {
-                            <tr>
-                                @if (string.IsNullOrEmpty(item.Referer))
-                                {
-                                    <td>Empty</td>
-                                }
-                                else
-                                {
-                                    <td>
-                                        @Html.Raw(item.Referer)
-                                    </td>
-                                }
-                                <td style="width:20%">@item.Count</td>
-                            </tr>
-                        }
+                    @foreach (RefererData item in Model.DisplayInfo.RefererList.OrderByDescending(t => t.Count))
+                    {
+                        <tr>
+                            <td>
+                                <details>
+                                    <summary>@item.Referer</summary>
+                                    @if (Model.ReferrerDetails.TryGetValue(item.Referer, out var hosts) && hosts.Count > 0)
+                                    {
+                                        <ul class="mb-0">
+                                            @foreach (var host in hosts)
+                                            {
+                                                <li>@host</li>
+                                            }
+                                        </ul>
+                                    }
+                                </details>
+                            </td>
+                            <td style="width:20%">@item.Count</td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
             </div>
@@ -138,53 +163,33 @@
         </div>
     </div>
 </div>
+
 @section Scripts {
     <script src="//cdn.datatables.net/2.1.3/js/dataTables.min.js"></script>
     <script>
-        let vptable = new DataTable('#vptable', {
-            order: [[1, 'desc']]
-        });
-        let reftable = new DataTable('#reftable', {
-            order: [[1, 'desc']]
-        });
-        let ssdtable = new DataTable('#ssdtable', {
-            order: [[1, 'desc']]
-        });
+        let vptable = new DataTable('#vptable', { order: [[1, 'desc']] });
+        let reftable = new DataTable('#reftable', { order: [[1, 'desc']] });
+        let ssdtable = new DataTable('#ssdtable', { order: [[1, 'desc']] });
     </script>
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <script>
         var dataVisits = {
-            labels: [@Html.Raw(xvaluevisit) ],
+            labels: [@Html.Raw(xvaluevisit)],
             series: [
-                [@Html.Raw(yvaluevisit)],
-                [@Html.Raw(ynewvaluevisit)],
-                [@Html.Raw(yreturnvaluevisit)]
+                { className: 'series-all', data: [@Html.Raw(yvaluevisit)] },
+                { className: 'series-new', data: [@Html.Raw(ynewvaluevisit)] },
+                { className: 'series-return', data: [@Html.Raw(yreturnvaluevisit)] }
             ]
         };
 
-
         var options = {
             seriesBarDistance: 10,
-            axisX: {
-                showGrid: false
-            },
+            axisX: { showGrid: false },
             height: "245px",
-            axisY: {
-                onlyInteger: true
-            }
+            axisY: { onlyInteger: true }
         };
 
-        var responsiveLH = [
-            ['screen and (max-width: 640px)', {
-                axisX: {
-                    labelInterpolationFnc: function (value) {
-                        return value[0];
-                    }
-                }
-            }]
-        ];
-
-        Chartist.Line('#chartVisit', dataVisits, options, responsiveLH);
+        Chartist.Line('#chartVisit', dataVisits, options);
 
         var dataPreferences = {
             labels: [@Html.Raw(browserlabel)],
@@ -193,60 +198,44 @@
 
         var optionsPreferences = {
             axisX: {
-                labelInterpolationFnc: function (value, index) {
-                    return value;
-                }
+                labelInterpolationFnc: function (value) { return value; }
             }
         };
         new Chartist.Bar('#chartPreferences', dataPreferences, optionsPreferences);
     </script>
 }
 @{
-
     StringBuilder builder = new StringBuilder();
     StringBuilder buildery = new StringBuilder();
     foreach (var point in Model.DisplayInfo.VisitsData)
     {
-        builder.Append("'");
-        builder.Append(point.X);
-        builder.Append("',");
-
-        buildery.Append(point.Y);
-        buildery.Append(",");
+        builder.Append("'").Append(point.X).Append("',");
+        buildery.Append(point.Y).Append(",");
     }
-
-    xvaluevisit = builder.ToString().TrimEnd(",".ToCharArray());
-    yvaluevisit = buildery.ToString().TrimEnd(",".ToCharArray());
+    xvaluevisit = builder.ToString().TrimEnd(',');
+    yvaluevisit = buildery.ToString().TrimEnd(',');
     builder.Clear();
     buildery.Clear();
 
     foreach (var point in Model.DisplayInfo.ReturnVisitsData)
     {
-        buildery.Append(point.Y);
-        buildery.Append(",");
+        buildery.Append(point.Y).Append(",");
     }
-    yreturnvaluevisit = buildery.ToString().TrimEnd(",".ToCharArray());
+    yreturnvaluevisit = buildery.ToString().TrimEnd(',');
     buildery.Clear();
+
     foreach (var point in Model.DisplayInfo.NewVisitsData)
     {
-        buildery.Append(point.Y);
-        buildery.Append(",");
+        buildery.Append(point.Y).Append(",");
     }
-    ynewvaluevisit = buildery.ToString().TrimEnd(",".ToCharArray());
+    ynewvaluevisit = buildery.ToString().TrimEnd(',');
     buildery.Clear();
+
     foreach (var point in Model.DisplayInfo.BrowserData)
     {
-        builder.Append("'");
-        builder.Append(point.Label);
-        builder.Append("',");
-
-        buildery.Append(point.Percentage);
-        buildery.Append(",");
+        builder.Append("'").Append(point.Label).Append("',");
+        buildery.Append(point.Percentage).Append(",");
     }
-
-    browserlabel = builder.ToString().TrimEnd(",".ToCharArray());
-    browserpoint = buildery.ToString().TrimEnd(",".ToCharArray());
-
-    builder.Clear();
-    buildery.Clear();
+    browserlabel = builder.ToString().TrimEnd(',');
+    browserpoint = buildery.ToString().TrimEnd(',');
 }

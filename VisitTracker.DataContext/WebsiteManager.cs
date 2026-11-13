@@ -25,13 +25,12 @@ namespace VisitTracker.DataContext
 
         public IEnumerable<Website> GetWebsites(List<RecordStatus> statuses)
         {
-            return context.Websites.ToList().Where(t => statuses.Contains(t.Status));
+            return context.Websites.Where(t => statuses.Contains(t.Status));
         }
 
         public int GetWebsiteCount(List<RecordStatus> statuses)
         {
-            var query = context.Websites.ToList();
-            return query.Count(t => statuses.Contains(t.Status));
+            return context.Websites.Count(t => statuses.Contains(t.Status));
         }
 
         public void InsertWebsite(Website w)

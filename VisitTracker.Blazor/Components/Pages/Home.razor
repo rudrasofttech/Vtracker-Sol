@@ -88,10 +88,18 @@
     protected override void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
+
+        if (!firstRender)
+        {
+            return;
+        }
+
         PreloadService.Show(SpinnerColor.Light, "Loading data...");
         try
         {
-            foreach (var ws in websiteRepository.GetWebsites())
+            var activeStatuses = new List<RecordStatus> { RecordStatus.Active };
+
+            foreach (var ws in websiteRepository.GetWebsites(activeStatuses))
             {
                 Stats.Add(new WebsiteStats()
                     {
@@ -105,10 +113,9 @@
         {
             logger.LogError(ex, "Home > Loading Stats");
         }
-        
-        PreloadService.Hide();
 
-        
+        PreloadService.Hide();
+        StateHasChanged();
     }
 
     protected override void OnInitialized()
@@ -119,9 +126,11 @@
         webpageRepository = new(context);
 
         logger.LogInformation($"Serilog Working - {DateTime.Now}");
+        var activeStatuses = new List<RecordStatus> { RecordStatus.Active };
+
         try
         {
-            WebsiteCount = websiteRepository.GetWebsites().Count();
+            WebsiteCount = websiteRepository.GetWebsiteCount(activeStatuses);
         }
         catch (Exception ex)
         {
@@ -129,7 +138,7 @@
         }
         try
         {
-            WebpageCount = webpageRepository.GetWebpageCount();
+            WebpageCount = webpageRepository.GetWebpageCount(activeStatuses);
         }
         catch (Exception ex)
         {
@@ -151,7 +160,7 @@
         {
             logger.LogError(ex, "Home > Loading Activity Count");
         }
-        
+
     }
 
     private async Task<GridDataProviderResult<WebsiteStats>> WebsitesDataProvider(GridDataProviderRequest<WebsiteStats> request)

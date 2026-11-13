@@ -1,6 +1,8 @@
 ﻿@using VisitTracker.Models;
 @using VisitTracker.DataContext;
+@using VisitTracker.Web.Services
 @inject VisitTracker.DataContext.VisitTrackerDBContext context;
+@inject HomePageStatsService HomePageStatsService
 
 @Count.ToString("#,##0")
 
@@ -10,7 +12,6 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        WebpageManager manager = new(context);
-        Count = manager.GetWebpageCount([RecordStatus.Active]);
+        Count = HomePageStatsService.GetSnapshot().WebpageCount;
     }
 }

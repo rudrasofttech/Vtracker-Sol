@@ -1,6 +1,6 @@
-﻿@using VisitTracker.Models;
-@using VisitTracker.DataContext;
-@inject VisitTracker.DataContext.VisitTrackerDBContext context;
+﻿@using VisitTracker.Models
+@using VisitTracker.Web.Services
+@inject HomePageStatsService HomePageStatsService
 
 <table class="w-100 table">
     <thead>
@@ -38,23 +38,13 @@
 
 @code {
     public List<WebsiteStats> Stats { get; set; } = [];
+
     [Parameter]
     public string Host { get; set; } = string.Empty;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        WebsiteManager manager = new(context);
-        VisitManager visitRepository = new(context);
-
-        foreach (var ws in manager.GetWebsites([RecordStatus.Active]))
-        {
-            Stats.Add(new WebsiteStats()
-                {
-                    ActivityCount = visitRepository.GetActivityCount(ws.ID),
-                    Site = ws,
-                    VisitCount = visitRepository.GetVisitCount(ws.ID)
-                });
-        }
+        Stats = HomePageStatsService.GetSnapshot().Stats;
     }
 }

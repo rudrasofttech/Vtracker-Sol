@@ -17,13 +17,18 @@ namespace VisitTracker.Models
         public DateTime DateCreated { get; set; }
         public int? MouseClickX { get; set; }
         public int? MouseClickY { get; set; }
+
         [MaxLength(50)]
         public string ClickTagName { get; set; }
-        /// <summary>
-        /// This will store tag id or cssclass or innertext, depending upon what is found
-        /// </summary>
+
         [MaxLength(200)]
         public string ClickTagId { get; set; }
+
+        [MaxLength(500)]
+        public string? ClickHref { get; set; }
+
+        [MaxLength(100)]
+        public string? ClickText { get; set; }
 
         public int? SecondsPassed { get; set; }
     }

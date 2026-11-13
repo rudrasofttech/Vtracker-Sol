@@ -10,14 +10,19 @@ namespace VisitTracker.Models
     public class Website
     {
         public int ID { get; set; }
+
         [Required, MaxLength(50)]
         public string Name { get; set; } = string.Empty;
+
         public int? ClientID { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
         public RecordStatus Status { get; set; }
 
         public Guid? OwnerId { get; set; }
+
+        [MaxLength(64)]
+        public string TimeZone { get; set; } = "India Standard Time";
 
         public virtual ICollection<Webpage> Webpages { get; set; }
     }

@@ -11,13 +11,17 @@ namespace VisitTracker.Models
     {
         [Key]
         public int ID { get; set; }
+
         [Required, MaxLength(20)]
         public string IPAddress { get; set; } = string.Empty;
+
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
         public DateTime? DateModified { get; set; }
         public RecordStatus Status { get; set; }
+
         [Required(AllowEmptyStrings = true), MaxLength(5)]
         public string CountryAbbr { get; set; } = string.Empty;
+
         [Required(AllowEmptyStrings = true)]
         public string Referer { get; set; }
 
@@ -25,18 +29,34 @@ namespace VisitTracker.Models
         public required string WebsiteVisitorReferenceID { get; set; } = string.Empty;
 
         public Guid ClientCookie { get; set; }
-
         public DateTime LastPingDate { get; set; }
+
         [Required(AllowEmptyStrings = true), MaxLength(50)]
         public string? BrowserName { get; set; } = string.Empty;
 
         public int? ScreenWidth { get; set; }
         public int? ScreenHeight { get; set; }
-
         public int? LastVisitID { get; set; }
+
+        public Guid? VisitorId { get; set; }
+
+        [MaxLength(400)]
+        public string? UserAgent { get; set; }
+
+        public bool IsBot { get; set; }
+
+        [MaxLength(100)]
+        public string? UtmSource { get; set; }
+
+        [MaxLength(100)]
+        public string? UtmMedium { get; set; }
+
+        [MaxLength(100)]
+        public string? UtmCampaign { get; set; }
 
         public virtual ICollection<VisitPage> VisitPages { get; set; }
         public virtual Website Website { get; set; }
+
         public string? CountryName { get; set; } = string.Empty;
         public string? RegionName { get; set; } = string.Empty;
         public string? CityName { get; set; } = string.Empty;

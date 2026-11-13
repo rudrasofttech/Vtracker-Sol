@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using VisitTracker.Models;
 
 namespace VisitTracker.DataContext
@@ -11,8 +8,6 @@ namespace VisitTracker.DataContext
     public class WebpageManager(VisitTrackerDBContext _context)
     {
         private VisitTrackerDBContext context = _context;
-
-        
 
         public IEnumerable<Webpage> GetWebpages(int? websiteId)
         {
@@ -31,12 +26,12 @@ namespace VisitTracker.DataContext
 
         public int GetWebpageCount(List<RecordStatus> statuses)
         {
-            return context.Webpages.ToList().Count(t => statuses.Contains(t.Status));
+            return context.Webpages.Count(t => statuses.Contains(t.Status));
         }
 
         public void DeleteWebpage(int Id)
         {
-            var w = context.Webpages.First(t => t.ID ==  Id);
+            var w = context.Webpages.First(t => t.ID == Id);
             context.Webpages.Remove(w);
         }
 
@@ -52,19 +47,25 @@ namespace VisitTracker.DataContext
 
         public Webpage? GetWebpage(int websiteId, string path, string query)
         {
-            return context.Webpages.Include(t => t.Website).Where(t => t.Website.ID == websiteId
-            && t.Path == path.ToLower() && t.QueryString == query.ToLower()).FirstOrDefault();
+            var normalizedPath = (path ?? string.Empty).ToLowerInvariant();
+            var normalizedQuery = (query ?? string.Empty).ToLowerInvariant();
+            var hashInput = $"{normalizedPath}?{normalizedQuery}";
+            var pathHash = SHA256.HashData(Encoding.UTF8.GetBytes(hashInput));
+
+            return context.Webpages
+                .Include(t => t.Website)
+                .Where(t => t.Website.ID == websiteId && t.PathHash != null && t.PathHash == pathHash)
+                .FirstOrDefault(t => t.Path == normalizedPath && t.QueryString == normalizedQuery);
         }
 
         public int GetVisitCount(int websiteId, string path)
         {
-            if(context.VisitCounts.Any(t => t.WebsiteId == websiteId && t.Path == path)) {
+            if (context.VisitCounts.Any(t => t.WebsiteId == websiteId && t.Path == path))
+            {
                 return context.VisitCounts.First(t => t.WebsiteId == websiteId && t.Path == path).VisitCount;
             }
-            else
-            {
-                return 0;
-            }
+
+            return 0;
         }
     }
 }

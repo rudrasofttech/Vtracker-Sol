@@ -1,6 +1,7 @@
 var vt_guid = '';
 var cookieName = "visittrackercurrent";
 var oldCookieName = "visittrackerold";
+var visitorIdStorageKey = "visittrackervisitorid";
 var VTStorage = /** @class */ (function () {
     function VTStorage(cname, pcname) {
         this.name = cname;
@@ -40,8 +41,6 @@ var VTStorage = /** @class */ (function () {
             localStorage.setItem(this.permanentName, value);
             localStorage.setItem(this.permanentName + "time", date.getTime().toString());
         }
-        else {
-        }
     };
     VTStorage.prototype.getCookie = function (cName) {
         var nameEQ = cName + "=";
@@ -66,7 +65,7 @@ var VTStorage = /** @class */ (function () {
     VTStorage.prototype.getPermanent = function () {
         if (this.localStorageSupported()) {
             if (localStorage[this.permanentName + "time"]) {
-                var d = localStorage[this.permanentName + "time"];
+                var d = Number(localStorage[this.permanentName + "time"]);
                 var n = Date.now();
                 var elapsed = (n - d) / (1000 * 60);
                 if (elapsed < 720) {
@@ -78,18 +77,31 @@ var VTStorage = /** @class */ (function () {
                 }
             }
         }
+        return null;
+    };
+    VTStorage.prototype.setVisitorId = function (value) {
+        if (this.localStorageSupported()) {
+            localStorage.setItem(visitorIdStorageKey, value);
+        }
         else {
-            return null;
+            this.setCookie(visitorIdStorageKey, value, 60 * 24 * 365 * 10);
+        }
+    };
+    VTStorage.prototype.getVisitorId = function () {
+        if (this.localStorageSupported()) {
+            return localStorage.getItem(visitorIdStorageKey);
+        }
+        else {
+            return this.getCookie(visitorIdStorageKey);
         }
     };
     VTStorage.prototype.eraseCookie = function (cName) {
-        document.cookie = cName + '=; Max-Age=-99999999;';
+        document.cookie = cName + '=; Max-Age=-99999999; path=/';
     };
     VTStorage.prototype.erasePermanent = function () {
         if (this.localStorageSupported()) {
             localStorage.removeItem(this.permanentName);
-        }
-        else {
+            localStorage.removeItem(this.permanentName + "time");
         }
     };
     VTStorage.prototype.eraseVolatile = function () {
@@ -105,15 +117,85 @@ var VTStorage = /** @class */ (function () {
 var VisitTracker = /** @class */ (function () {
     function VisitTracker() {
         this.sbnoted = false;
-        //this.windowFocused = true;
         this.focusedSeconds = 0;
         this.tick = 0;
         this.d = new Date();
         this.xhr = new Image();
         this.url = vt_root + "rv/";
-        this.mousewheelevt = (/Firefox/i.test(navigator.userAgent)) ? "DOMMouseScroll" : "mousewheel";
         this.cookie = new VTStorage(cookieName, oldCookieName);
+        this.pulseTimer = null;
+        this.focusTimer = null;
+        this.scrollThrottleTimer = null;
+        this.maxScrollPct = 0;
+        this.docHeight = 0;
     }
+    VisitTracker.prototype.createVisitorId = function () {
+        try {
+            if (window.crypto && "randomUUID" in window.crypto) {
+                return window.crypto.randomUUID();
+            }
+        }
+        catch (err) { }
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0;
+            var v = c == "x" ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    };
+    VisitTracker.prototype.getOrCreateVisitorId = function () {
+        var vid = this.cookie.getVisitorId();
+        if (vid) {
+            return vid;
+        }
+        vid = this.createVisitorId();
+        this.cookie.setVisitorId(vid);
+        return vid;
+    };
+    VisitTracker.prototype.getDocumentHeight = function () {
+        var body = document.body;
+        var html = document.documentElement;
+        return Math.max(body ? body.scrollHeight : 0, body ? body.offsetHeight : 0, html ? html.clientHeight : 0, html ? html.scrollHeight : 0, html ? html.offsetHeight : 0);
+    };
+    VisitTracker.prototype.updateScrollMetrics = function () {
+        var top = window.pageYOffset || document.documentElement.scrollTop || 0;
+        var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+        var docHeight = this.getDocumentHeight();
+        this.docHeight = docHeight;
+        if (docHeight > 0) {
+            var pct = Math.round(((top + viewportHeight) / docHeight) * 100);
+            if (pct < 0)
+                pct = 0;
+            if (pct > 100)
+                pct = 100;
+            if (pct > this.maxScrollPct) {
+                this.maxScrollPct = pct;
+            }
+        }
+        if ((docHeight - 150) <= (viewportHeight + top) && !this.sbnoted) {
+            var sbimg = new Image();
+            try {
+                sbimg.src = this.url + "sb/" + this.tick
+                    + "?cc=" + encodeURIComponent(this.getVisitID())
+                    + "&path=" + encodeURIComponent(window.location.href);
+                this.tick++;
+                this.sbnoted = true;
+            }
+            catch (_a) { }
+        }
+        else if ((docHeight - 150) > (viewportHeight + top)) {
+            this.sbnoted = false;
+        }
+    };
+    VisitTracker.prototype.onScroll = function () {
+        var _this = this;
+        if (this.scrollThrottleTimer) {
+            return;
+        }
+        this.scrollThrottleTimer = setTimeout(function () {
+            _this.scrollThrottleTimer = null;
+            _this.updateScrollMetrics();
+        }, 250);
+    };
     VisitTracker.prototype.sendPulse = function () {
         var bwidth = -1;
         var bheight = -1;
@@ -122,44 +204,82 @@ var VisitTracker = /** @class */ (function () {
             bheight = window.innerHeight || document.body.clientHeight;
         }
         catch (err) { }
-        var top = window.pageYOffset || document.documentElement.scrollTop, left = window.pageXOffset || document.documentElement.scrollLeft;
+        var top = window.pageYOffset || document.documentElement.scrollTop || 0;
+        var left = window.pageXOffset || document.documentElement.scrollLeft || 0;
+        this.updateScrollMetrics();
         var transimg = new Image();
-        transimg.src = this.url + "index/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href) + "&wvri=" + vt_wvri + "&a=pulse&w=" + bwidth + "&h=" + bheight + "&st=" + top + "&sl=" + left;
+        transimg.src = this.url + "index/" + this.tick
+            + "?cc=" + encodeURIComponent(this.getVisitID())
+            + "&path=" + encodeURIComponent(window.location.href)
+            + "&wvri=" + encodeURIComponent(vt_wvri)
+            + "&a=" + encodeURIComponent("pulse")
+            + "&w=" + bwidth
+            + "&h=" + bheight
+            + "&st=" + top
+            + "&sl=" + left
+            + "&ms=" + this.maxScrollPct
+            + "&dh=" + this.docHeight;
     };
-    VisitTracker.prototype.documentWideClick = function (x, y, tag, tagid) {
+    VisitTracker.prototype.startPulse = function () {
+        var _this = this;
+        if (this.pulseTimer != null) {
+            return;
+        }
+        this.pulseTimer = setInterval(function () {
+            _this.tick++;
+            _this.sendPulse();
+        }, 15000);
+    };
+    VisitTracker.prototype.stopPulse = function () {
+        if (this.pulseTimer != null) {
+            clearInterval(this.pulseTimer);
+            this.pulseTimer = null;
+        }
+    };
+    VisitTracker.prototype.documentWideClick = function (x, y, tag, tagid, href, txt) {
         var clickimg = new Image();
         try {
-            clickimg.src = this.url + "rc/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href) + "&x=" + x + "&y=" + y + "&tag=" + tag + "&tagid=" + encodeURI(tagid);
+            clickimg.src = this.url + "rc/" + this.tick
+                + "?cc=" + encodeURIComponent(this.getVisitID())
+                + "&path=" + encodeURIComponent(window.location.href)
+                + "&x=" + x
+                + "&y=" + y
+                + "&tag=" + encodeURIComponent(tag || "")
+                + "&tagid=" + encodeURIComponent(tagid || "")
+                + "&href=" + encodeURIComponent(href || "")
+                + "&txt=" + encodeURIComponent(txt || "");
             this.tick++;
         }
         catch (_a) { }
     };
     VisitTracker.prototype.windowBlur = function () {
-        //this.windowFocused = false;
         var wbimg = new Image();
         try {
-            wbimg.src = this.url + "wf/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href) + "&s=" + this.focusedSeconds;
+            wbimg.src = this.url + "wb/" + this.tick
+                + "?cc=" + encodeURIComponent(this.getVisitID())
+                + "&path=" + encodeURIComponent(window.location.href)
+                + "&s=" + this.focusedSeconds;
             this.focusedSeconds = 0;
             this.tick++;
         }
         catch (_a) { }
     };
     VisitTracker.prototype.windowFocus = function () {
-        //this.windowFocused = true;
-        var wbimg = new Image();
+        var wfimg = new Image();
         try {
-            wbimg.src = this.url + "wb/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href) + "&s=" + this.focusedSeconds;
+            wfimg.src = this.url + "wf/" + this.tick
+                + "?cc=" + encodeURIComponent(this.getVisitID())
+                + "&path=" + encodeURIComponent(window.location.href)
+                + "&s=" + this.focusedSeconds;
             this.focusedSeconds = 0;
             this.tick++;
         }
         catch (_a) { }
     };
     VisitTracker.prototype.firstRequest = function () {
-        //get existing visit id
         var oldcc = this.getPermanentVisitID();
-        //set new visit id
         this.setVisit();
-        var referer = encodeURIComponent(document.referrer);
+        var referer = document.referrer || "";
         var path = window.location.href;
         var browser = "";
         try {
@@ -168,6 +288,7 @@ var VisitTracker = /** @class */ (function () {
         catch (err) {
             browser = "";
         }
+        var visitorId = this.getOrCreateVisitorId();
         var screenwidth = -1;
         var screenheight = -1;
         try {
@@ -175,8 +296,21 @@ var VisitTracker = /** @class */ (function () {
             screenheight = screen.height;
         }
         catch (err) { }
-        var top = window.pageYOffset || document.documentElement.scrollTop, left = window.pageXOffset || document.documentElement.scrollLeft;
-        this.xhr.src = this.url + "fr?wid=" + vt_website_id + "&referer=" + encodeURI(referer) + "&path=" + encodeURI(path) + "&wvri=" + vt_wvri + "&cc=" + this.getVisitID() + "&r=" + this.tick + "&b=" + browser + "&sw=" + screenwidth + "&sh=" + screenheight + "&st=" + top + "&sl=" + left + "&occ=" + oldcc;
+        var top = window.pageYOffset || document.documentElement.scrollTop || 0;
+        var left = window.pageXOffset || document.documentElement.scrollLeft || 0;
+        this.xhr.src = this.url + "fr?wid=" + encodeURIComponent(vt_website_id)
+            + "&referer=" + encodeURIComponent(referer)
+            + "&path=" + encodeURIComponent(path)
+            + "&wvri=" + encodeURIComponent(vt_wvri)
+            + "&cc=" + encodeURIComponent(this.getVisitID())
+            + "&r=" + this.tick
+            + "&b=" + encodeURIComponent(browser)
+            + "&sw=" + screenwidth
+            + "&sh=" + screenheight
+            + "&st=" + top
+            + "&sl=" + left
+            + "&occ=" + encodeURIComponent(oldcc)
+            + "&vid=" + encodeURIComponent(visitorId);
     };
     VisitTracker.prototype.getVisitID = function () {
         var x = this.cookie.getVolatile();
@@ -187,9 +321,7 @@ var VisitTracker = /** @class */ (function () {
     };
     VisitTracker.prototype.setVisit = function () {
         var x = this.cookie.getVolatile();
-        if (x) {
-        }
-        else {
+        if (!x) {
             this.cookie.setVolatile(vt_guid);
         }
     };
@@ -202,120 +334,41 @@ var VisitTracker = /** @class */ (function () {
     };
     VisitTracker.prototype.setPermanentVisit = function (value) {
         var x = this.cookie.getPermanent();
-        if (x) {
-        }
-        else {
-            //set permanent cookie to expire in 12 hours
+        if (!x) {
             this.cookie.setPermanent(value);
         }
     };
-    VisitTracker.prototype.scroller = function (evt) {
-        //Guess the delta.
-        var delta = 0;
-        if (!evt)
-            evt = window.event;
-        if (evt.wheelDelta) {
-            delta = evt.wheelDelta / 120;
-        }
-        else if (evt.detail) {
-            delta = -evt.detail / 3;
-        }
-        var pageHeight = document.documentElement.offsetHeight, windowHeight = window.innerHeight, scrollPosition = window.scrollY || window.pageYOffset || document.body.scrollTop + (document.documentElement && document.documentElement.scrollTop || 0);
-        if ((pageHeight - 150) <= (windowHeight + scrollPosition) && !this.sbnoted) {
-            var sbimg = new Image();
-            try {
-                sbimg.src = this.url + "sb/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href);
-                this.tick++;
-                this.sbnoted = true;
-            }
-            catch (_a) { }
-        }
-        else if ((pageHeight - 150) > (windowHeight + scrollPosition)) {
-            this.sbnoted = false;
-        }
-        //var body = document.body,
-        //    html = document.documentElement;
-        //var height = Math.max(body.scrollHeight, body.offsetHeight,
-        //    html.clientHeight, html.scrollHeight, html.offsetHeight);
-        //var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        //if (scrollTop >= (height - 100) && !this.sbnoted) {
-        //    var sbimg = new Image();
-        //    try {
-        //        sbimg.src = this.url + "sb/" + this.tick + "?cc=" + this.getVisitID() + "&path=" + encodeURI(window.location.href);
-        //        this.tick++;
-        //        this.sbnoted = true;
-        //    }
-        //    catch{ }
-        //} else if (scrollTop < (height - 150)) {
-        //    this.sbnoted = false;
-        //}
-    };
     VisitTracker.prototype.getBrowserDetail = function () {
-        var nVer = navigator.appVersion;
-        var nAgt = navigator.userAgent;
-        var browserName = navigator.appName;
-        var fullVersion = '' + parseFloat(navigator.appVersion);
-        var majorVersion = parseInt(navigator.appVersion, 10);
-        var nameOffset, verOffset, ix;
-        // In Opera 15+, the true version is after "OPR/" 
-        if ((verOffset = nAgt.indexOf("OPR/")) != -1) {
-            browserName = "Opera";
-            fullVersion = nAgt.substring(verOffset + 4);
-        }
-        // In older Opera, the true version is after "Opera" or after "Version"
-        else if ((verOffset = nAgt.indexOf("Opera")) != -1) {
-            browserName = "Opera";
-            fullVersion = nAgt.substring(verOffset + 6);
-            if ((verOffset = nAgt.indexOf("Version")) != -1)
-                fullVersion = nAgt.substring(verOffset + 8);
-        }
-        // In MSIE, the true version is after "MSIE" in userAgent
-        else if ((verOffset = nAgt.indexOf("MSIE")) != -1) {
-            browserName = "Microsoft Internet Explorer";
-            fullVersion = nAgt.substring(verOffset + 5);
-        }
-        // In Edge, the true version is after "MSIE" in userAgent
-        else if ((verOffset = nAgt.indexOf("Edge")) != -1) {
-            browserName = "Edge";
-            fullVersion = nAgt.substring(verOffset + 5);
-        }
-        // In Chrome, the true version is after "Chrome" 
-        else if ((verOffset = nAgt.indexOf("Chrome")) != -1) {
-            browserName = "Chrome";
-            fullVersion = nAgt.substring(verOffset + 7);
-        }
-        // In Safari, the true version is after "Safari" or after "Version" 
-        else if ((verOffset = nAgt.indexOf("Safari")) != -1) {
-            browserName = "Safari";
-            fullVersion = nAgt.substring(verOffset + 7);
-            if ((verOffset = nAgt.indexOf("Version")) != -1)
-                fullVersion = nAgt.substring(verOffset + 8);
-        }
-        // In Firefox, the true version is after "Firefox" 
-        else if ((verOffset = nAgt.indexOf("Firefox")) != -1) {
-            browserName = "Firefox";
-            fullVersion = nAgt.substring(verOffset + 8);
-        }
-        // In most other browsers, "name/version" is at the end of userAgent 
-        else if ((nameOffset = nAgt.lastIndexOf(' ') + 1) <
-            (verOffset = nAgt.lastIndexOf('/'))) {
-            browserName = nAgt.substring(nameOffset, verOffset);
-            fullVersion = nAgt.substring(verOffset + 1);
-            if (browserName.toLowerCase() == browserName.toUpperCase()) {
-                browserName = navigator.appName;
+        var ua = navigator.userAgent || "";
+        if (ua.indexOf("HeadlessChrome") >= 0)
+            return "Headless Chrome";
+        if (ua.indexOf("Edg/") >= 0)
+            return "Edge";
+        if (ua.indexOf("OPR/") >= 0)
+            return "Opera";
+        if (ua.indexOf("SamsungBrowser") >= 0)
+            return "Samsung Internet";
+        if (ua.indexOf("CriOS") >= 0)
+            return "Chrome";
+        if (ua.indexOf("FxiOS") >= 0)
+            return "Firefox";
+        if (ua.indexOf("Chrome") >= 0)
+            return "Chrome";
+        if (ua.indexOf("Safari") >= 0)
+            return "Safari";
+        if (ua.indexOf("Firefox") >= 0)
+            return "Firefox";
+        return "";
+    };
+    VisitTracker.prototype.findClosestAnchor = function (target) {
+        var node = target;
+        while (node) {
+            if (node.tagName && node.tagName.toLowerCase() === "a") {
+                return node;
             }
+            node = node.parentElement;
         }
-        // trim the fullVersion string at semicolon/space if present
-        if ((ix = fullVersion.indexOf(";")) != -1)
-            fullVersion = fullVersion.substring(0, ix);
-        if ((ix = fullVersion.indexOf(" ")) != -1)
-            fullVersion = fullVersion.substring(0, ix);
-        majorVersion = parseInt('' + fullVersion, 10);
-        if (isNaN(majorVersion)) {
-            fullVersion = '' + parseFloat(navigator.appVersion);
-            majorVersion = parseInt(navigator.appVersion, 10);
-        }
-        return browserName + " " + fullVersion;
+        return null;
     };
     return VisitTracker;
 }());
@@ -324,35 +377,66 @@ vtobj.xhr.onload = function () {
     if (vtobj.getPermanentVisitID() == "") {
         vtobj.setPermanentVisit(vtobj.getVisitID());
     }
-    //send pulse
-    setInterval(function () {
-        vtobj.tick++;
-        vtobj.sendPulse();
-    }, 5000);
-    setInterval(function () { vtobj.focusedSeconds += 1; }, 1000);
+    vtobj.updateScrollMetrics();
+    if (document.visibilityState !== "hidden") {
+        vtobj.startPulse();
+    }
+    if (vtobj.focusTimer == null) {
+        vtobj.focusTimer = setInterval(function () { vtobj.focusedSeconds += 1; }, 1000);
+    }
     document.addEventListener("click", function (event) {
-        var tag = "", tagid = "";
-        if (event.target !== null) {
-            tag = event.target.tagName;
-            if (event.target.getAttribute("id")) {
-                tagid = "#" + event.target.getAttribute("id");
+        var tag = "";
+        var tagid = "";
+        var href = "";
+        var txt = "";
+        var target = event.target;
+        var anchor = vtobj.findClosestAnchor(target);
+        if (anchor != null) {
+            tag = anchor.tagName || "A";
+            if (anchor.getAttribute("id")) {
+                tagid = "#" + anchor.getAttribute("id");
+            }
+            href = (anchor.getAttribute("href") || anchor.href || "").trim();
+            if (href.length > 500) {
+                href = href.substring(0, 500);
+            }
+            txt = (anchor.innerText || anchor.textContent || "").trim();
+            if (txt.length > 100) {
+                txt = txt.substring(0, 100);
             }
         }
-        vtobj.documentWideClick(event.pageX, event.pageY, tag, tagid);
-    });
-    window.addEventListener('blur', function (e) {
-        if (document.activeElement == document.querySelector('iframe')) {
+        else if (target !== null) {
+            tag = target.tagName;
+            if (target.getAttribute("id")) {
+                tagid = "#" + target.getAttribute("id");
+            }
         }
-        else {
-            vtobj.windowBlur();
-        }
+        vtobj.documentWideClick(event.pageX, event.pageY, tag, tagid, href, txt);
     });
-    window.addEventListener('focus', function (e) {
+    window.addEventListener("blur", function () {
+        if (document.activeElement == document.querySelector("iframe")) {
+            return;
+        }
+        vtobj.windowBlur();
+    });
+    window.addEventListener("focus", function () {
         vtobj.windowFocus();
     });
-    if (document.addEventListener) {
-        document.addEventListener(vtobj.mousewheelevt, function (e) { vtobj.scroller(e); }, false);
-    }
+    document.addEventListener("visibilitychange", function () {
+        if (document.visibilityState === "hidden") {
+            vtobj.stopPulse();
+        }
+        else {
+            vtobj.startPulse();
+        }
+    });
+    window.addEventListener("pagehide", function () {
+        vtobj.tick++;
+        vtobj.sendPulse();
+    });
+    window.addEventListener("scroll", function () {
+        vtobj.onScroll();
+    }, { passive: true });
 };
 vtobj.firstRequest();
 //# sourceMappingURL=vt.js.map

@@ -1,5 +1,5 @@
-﻿@using VisitTracker.DataContext;
-@inject VisitTracker.DataContext.VisitTrackerDBContext context;
+﻿@using VisitTracker.Web.Services
+@inject HomePageStatsService HomePageStatsService
 
 @Count.ToString("#,##0")
 
@@ -9,7 +9,6 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        VisitManager visitRepository = new(context);
-        Count = visitRepository.GetVisitCount();
+        Count = HomePageStatsService.GetSnapshot().VisitCount;
     }
 }

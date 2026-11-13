@@ -28,6 +28,19 @@ namespace VisitTracker.DataContext
             modelBuilder.Entity<Website>().ToTable("Website");
             modelBuilder.Entity<IP2Location>().ToTable("IP2Location");
             modelBuilder.Entity<VisitCountView>().ToView("VisitCountView").HasNoKey();
+
+            modelBuilder.Entity<Webpage>()
+                .Property(p => p.PathHash)
+                .HasColumnType("binary(32)")
+                .HasComputedColumnSql("CAST(HASHBYTES('SHA2_256', LOWER([Path]) + '?' + LOWER([QueryString])) AS binary(32))", true);
+
+            modelBuilder.Entity<Visit>()
+                .Property(v => v.IsBot)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<Website>()
+                .Property(w => w.TimeZone)
+                .HasDefaultValue("India Standard Time");
         }
     }
 }
