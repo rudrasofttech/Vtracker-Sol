@@ -1,0 +1,19 @@
+@model VisitTracker.Web.Helpers.VisitSummary
+@{
+    static string Css(string badge) => badge switch
+    {
+        "WhatsApp tap" or "Call tap" or "Email tap" => "b-contact",
+        "Reached bottom" => "b-bottom",
+        "Rage taps" => "b-rage",
+        "Left quickly" => "b-quick",
+        _ => ""
+    };
+}
+@if (Model.Returning)
+{
+    <span class="badge-act">Returning</span>
+}
+@foreach (var b in Model.Badges)
+{
+    <span class="badge-act @Css(b)">@b</span>
+}

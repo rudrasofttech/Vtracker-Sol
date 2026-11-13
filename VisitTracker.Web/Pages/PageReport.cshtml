@@ -1,135 +1,347 @@
-﻿@page
-@using System.Text
-@using VisitTracker.Models
-@model VisitTracker.Web.Pages.PageReportModel
-
+@page
+@using System.Globalization
+@using VisitTracker.Web.Helpers
+@using VisitTracker.Web.Pages
+@model PageReportModel
 @{
-    string xvaluevisit = "", yvaluevisit = "", yreturnvaluevisit = "", ynewvaluevisit = "", browserlabel = "", browserpoint = "";
-    StringBuilder builder = new StringBuilder();
-    StringBuilder buildery = new StringBuilder();
+    ViewData["Title"] = (string.IsNullOrEmpty(Model.PageKey) ? "Page" : Model.PageKey) + " · " + Model.WebsiteName;
+}
+@functions {
+    static string Inv(double v) => v.ToString("0.##", CultureInfo.InvariantCulture);
 
-    foreach (var point in Model.DisplayInfo.VisitsData)
+    void Bars(IReadOnlyList<ReportShareRow> rows, string emptyText)
     {
-        builder.Append("'").Append(point.X).Append("',");
-        buildery.Append(point.Y).Append(",");
+        if (rows.Count == 0)
+        {
+            <p class="text-muted small mb-0">@emptyText</p>
+            return;
+        }
+
+        var max = Math.Max(1, rows.Max(r => r.Count));
+        <div class="bars">
+            @foreach (var r in rows)
+            {
+                <div class="bar-row">
+                    <div class="bar-label" title="@r.Name">@r.Name</div>
+                    <div class="bar-track"><div class="bar-fill" style="width:@Inv(r.Count * 100.0 / max)%"></div></div>
+                    <div class="bar-count">@r.Count.ToString("N0") <span class="text-muted">@r.Pct.ToString("0")%</span></div>
+                </div>
+            }
+        </div>
     }
 
-    xvaluevisit = builder.ToString().TrimEnd(',');
-    yvaluevisit = buildery.ToString().TrimEnd(',');
-    builder.Clear();
-    buildery.Clear();
-
-    foreach (var point in Model.DisplayInfo.ReturnVisitsData)
+    void Kpi(string label, string value, string? hint = null)
     {
-        buildery.Append(point.Y).Append(",");
+        <div class="kpi" title="@hint">
+            <div class="kpi-label">@label</div>
+            <div class="kpi-value">@value</div>
+        </div>
     }
-    yreturnvaluevisit = buildery.ToString().TrimEnd(',');
-    buildery.Clear();
-
-    foreach (var point in Model.DisplayInfo.NewVisitsData)
-    {
-        buildery.Append(point.Y).Append(",");
-    }
-    ynewvaluevisit = buildery.ToString().TrimEnd(',');
-    buildery.Clear();
-
-    foreach (var point in Model.DisplayInfo.BrowserData)
-    {
-        builder.Append("'").Append(point.Label).Append("',");
-        buildery.Append(point.Percentage).Append(",");
-    }
-
-    browserlabel = builder.ToString().TrimEnd(',');
-    browserpoint = buildery.ToString().TrimEnd(',');
 }
 @section Head {
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" />
-    <style>
-        .ct-series.series-all .ct-line, .ct-series.series-all .ct-point { stroke: #e74c3c !important; }
-        .ct-series.series-new .ct-line, .ct-series.series-new .ct-point { stroke: #ff7f7f !important; }
-        .ct-series.series-return .ct-line, .ct-series.series-return .ct-point { stroke: #f1c40f !important; }
-        .legend-all { color: #e74c3c; font-weight: 600; }
-        .legend-new { color: #ff7f7f; font-weight: 600; }
-        .legend-return { color: #f1c40f; font-weight: 600; }
-    </style>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="@Url.Content("~/css/report.css")" />
 }
 
-<div class="container-fluid">
-    <h1 class="fs-3">@Model.DisplayInfo.Path</h1>
-    <p class="mb-2">@Model.DisplayInfo.VisitChartDescription</p>
+<div class="report">
+    <div class="report-header py-3 mb-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
+            <div>
+                <div class="crumbs">
+                    <a href="@Model.RangeUrl("/Report")">@Model.WebsiteName report</a> › Page behaviour
+                </div>
+                <h1>@(string.IsNullOrEmpty(Model.PageKey) ? "Page not specified" : Model.PageKey)</h1>
+                <div class="text-muted">
+                    @Model.RangeDescription
+                    @if (!string.IsNullOrEmpty(Model.PageUrl))
+                    {
+                        <span> · <a href="@Model.PageUrl" target="_blank" rel="noopener">Open page</a></span>
+                        <span> · <a href="@Model.RangeUrl("/Visits", ("lp", Model.PageKey))">Visits that landed here</a></span>
+                    }
+                </div>
+            </div>
+            @await Html.PartialAsync("_RangePicker", Model.Picker(("path", Model.Path ?? "")))
+        </div>
+    </div>
 
-    <form method="get" class="row row-cols-lg-auto g-2 align-items-center mb-3">
-        <input type="hidden" name="id" value="@Model.Id" />
-        <input type="hidden" name="path" value="@Model.Path" />
-        <div class="col-12">
-            <input name="start" type="date" class="form-control" value="@Model.DisplayInfo.Start.ToString("yyyy-MM-dd")" />
-        </div>
-        <div class="col-12">
-            <input name="end" type="date" class="form-control" value="@Model.DisplayInfo.End.ToString("yyyy-MM-dd")" />
-        </div>
-        <div class="col-12">
-            <label class="form-check-label">
-                <input class="form-check-input" type="checkbox" name="bots" value="1" @(Model.IncludeBots ? "checked" : "") />
-                Include bots
-            </label>
-        </div>
-        <div class="col-12">
-            <button class="btn btn-primary" type="submit">Change</button>
-        </div>
-    </form>
-
-    @if (!Model.IncludeBots && Model.HiddenBotVisits > 0)
+    @if (!Model.PageFound)
     {
-        <div class="text-muted mb-2">@Model.HiddenBotVisits bot visits hidden</div>
-    }
-
-    <div class="my-4">
-        <div id="chartVisit" class="ct-chart ct-perfect-fourth" style="max-height:250px;"></div>
-        <div>
-            <span class="legend-all me-2">All</span>
-            <span class="legend-return me-2">Return</span>
-            <span class="legend-new me-2">New</span>
+        <div class="panel text-center py-5">
+            <h2>No views of this page in this range</h2>
+            <p class="text-muted mb-0">Choose a longer range, or open a page from the Pages table in the report.</p>
         </div>
-    </div>
+    }
+    else
+    {
+        <section class="kpis mb-1">
+            @{ Kpi("Views", Model.Views.ToString("N0")); }
+            @{ Kpi("Visitors", Model.Visitors.ToString("N0")); }
+            @{ Kpi("Entries", Model.Entries.ToString("N0"), "Visits that started on this page"); }
+            @{ Kpi("Avg. time on page", VisitAnalytics.Duration(Model.AvgSeconds)); }
+            @{ Kpi("Avg. scroll", Model.AvgScroll.HasValue ? Model.AvgScroll.Value.ToString("0") + "%" : "–", "Furthest point scrolled, as a share of the page height"); }
+            @{ Kpi("Exit rate", Model.ExitPct.ToString("0") + "%", "Share of views after which the visitor left the site"); }
+        </section>
+        <p class="small text-muted mb-4">
+            @if (!Model.IncludeBots && Model.HiddenBotVisits > 0)
+            {
+                <span>@Model.HiddenBotVisits.ToString("N0") bot visits to this page are hidden.</span>
+            }
+        </p>
 
-    <div class="p-2">
-        <h4 class="title">Browsers</h4>
-        <div id="chartPreferences" class="ct-chart ct-perfect-fourth" style="max-height:250px;"></div>
-    </div>
+        <div class="row g-4 mb-4">
+            <div class="col-lg-5">
+                <section class="panel">
+                    <h2>Scroll reach</h2>
+                    <p class="panel-note">Share of views that scrolled at least this far. A big drop between two steps shows where visitors lose interest.</p>
+                    @if (Model.ScrollReach.Count == 0)
+                    {
+                        <p class="text-muted small mb-0">Scroll depth isn't recorded for views in this range yet. It's collected for visits since the tracker update.</p>
+                    }
+                    else
+                    {
+                        foreach (var r in Model.ScrollReach)
+                        {
+                            <div class="reach-row">
+                                <div>@r.Label</div>
+                                <div class="reach-track"><div class="reach-fill" style="width:@Inv(r.Pct)%"></div></div>
+                                <div class="num">@r.Pct.ToString("0")%</div>
+                            </div>
+                        }
+                        <p class="small text-muted mt-2 mb-0">Based on @Model.ViewsWithScroll.ToString("N0") of @Model.Views.ToString("N0") views.</p>
+                    }
+                </section>
+            </div>
+            <div class="col-lg-7">
+                <section class="panel">
+                    <h2>Where visitors go</h2>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h3>Came from</h3>
+                            @{ Bars(Model.CameFrom, "No data."); }
+                        </div>
+                        <div class="col-md-6">
+                            <h3>Went to next</h3>
+                            @{ Bars(Model.WentTo, "No data."); }
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-xl-7">
+                <section class="panel">
+                    <h2>Click map</h2>
+                    @if (Model.ClickMaps.Count == 0)
+                    {
+                        <p class="text-muted small mb-0">No clicks with a position were recorded on this page in this range.</p>
+                    }
+                    else
+                    {
+                        <p class="panel-note">
+                            Each dot is a tap or click; darker areas got more. The dashed line marks what's visible without scrolling.
+                            The live page is shown behind the dots without its scripts, so some images or menus may be missing.
+                            If it stays blank, the site doesn't allow being shown inside other pages; turn it off to see the dots alone.
+                        </p>
+                        <div class="clickmap-tools">
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Device">
+                                @foreach (var map in Model.ClickMaps)
+                                {
+                                    <button type="button" class="btn btn-outline-secondary" data-device="@map.Device">@map.Device (@map.Clicks.ToString("N0"))</button>
+                                }
+                            </div>
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" id="showLive" checked />
+                                Show live page behind
+                            </label>
+                        </div>
+                        <div class="clickmap-scroll" id="clickmapScroll">
+                            <div class="clickmap-stage" id="clickmapStage">
+                                <iframe id="clickmapFrame" title="Page preview" sandbox="allow-same-origin" loading="lazy" referrerpolicy="no-referrer"></iframe>
+                                <canvas id="clickmapCanvas"></canvas>
+                                <div class="fold" id="clickmapFold"><span>Fold</span></div>
+                            </div>
+                        </div>
+                    }
+                </section>
+            </div>
+            <div class="col-xl-5">
+                <section class="panel">
+                    <h2>Most clicked on this page</h2>
+                    <p class="panel-note">@Model.TotalClicks.ToString("N0") clicks in this range.</p>
+                    @if (Model.TopElements.Count == 0)
+                    {
+                        <p class="text-muted small mb-0">No clicks recorded.</p>
+                    }
+                    else
+                    {
+                        <table class="table table-sm table-report mb-0">
+                            <thead><tr><th>Element</th><th class="num">Clicks</th><th class="num">Visits</th></tr></thead>
+                            <tbody>
+                                @foreach (var e in Model.TopElements)
+                                {
+                                    <tr>
+                                        <td class="page-cell" title="@e.Label"><span class="kind me-1">@e.Kind</span>@e.Label</td>
+                                        <td class="num">@e.Clicks.ToString("N0")</td>
+                                        <td class="num">@e.Visits.ToString("N0")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </section>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-lg-6">
+                <section class="panel">
+                    <h2>Rage clicks</h2>
+                    <p class="panel-note">Three or more quick taps in the same spot. Usually something looked clickable, loaded slowly or didn't respond.</p>
+                    @if (Model.RageClicks.Count == 0)
+                    {
+                        <p class="text-muted small mb-0">None in this range.</p>
+                    }
+                    else
+                    {
+                        <table class="table table-sm table-report mb-0">
+                            <thead><tr><th>Element</th><th class="num">Bursts</th><th class="num">Visits</th><th></th></tr></thead>
+                            <tbody>
+                                @foreach (var f in Model.RageClicks)
+                                {
+                                    <tr>
+                                        <td class="page-cell" title="@f.Label">@f.Label</td>
+                                        <td class="num">@f.Count.ToString("N0")</td>
+                                        <td class="num">@f.Visits.ToString("N0")</td>
+                                        <td class="text-nowrap"><a href="@Model.RangeUrl("/Visits", ("open", f.ExampleRef))">Example</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </section>
+            </div>
+            <div class="col-lg-6">
+                <section class="panel">
+                    <h2>Taps on things that aren't links</h2>
+                    <p class="panel-note">
+                        Taps on images, text and other elements with no link. If many visitors tap the same thing, they expect it to do something:
+                        consider making it a link, or making it look less clickable. Elements opened by the site's own scripts (like an image zoom) also appear here.
+                    </p>
+                    @if (Model.DeadClicks.Count == 0)
+                    {
+                        <p class="text-muted small mb-0">None in this range.</p>
+                    }
+                    else
+                    {
+                        <table class="table table-sm table-report mb-0">
+                            <thead><tr><th>Element</th><th class="num">Taps</th><th class="num">Visits</th><th></th></tr></thead>
+                            <tbody>
+                                @foreach (var f in Model.DeadClicks)
+                                {
+                                    <tr>
+                                        <td class="page-cell" title="@f.Label">@f.Label</td>
+                                        <td class="num">@f.Count.ToString("N0")</td>
+                                        <td class="num">@f.Visits.ToString("N0")</td>
+                                        <td class="text-nowrap"><a href="@Model.RangeUrl("/Visits", ("open", f.ExampleRef))">Example</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </section>
+            </div>
+        </div>
+    }
 </div>
 
 @section Scripts {
-    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <script>
-        var dataVisits = {
-            labels: [@Html.Raw(xvaluevisit)],
-            series: [
-                { className: 'series-all', data: [@Html.Raw(yvaluevisit)] },
-                { className: 'series-new', data: [@Html.Raw(ynewvaluevisit)] },
-                { className: 'series-return', data: [@Html.Raw(yreturnvaluevisit)] }
-            ]
-        };
+        (function () {
+            var maps = @Json.Serialize(Model.ClickMaps);
+            var pageUrl = @Json.Serialize(Model.PageUrl);
+            if (!maps || maps.length === 0) return;
 
-        var options = {
-            seriesBarDistance: 10,
-            axisX: { showGrid: false },
-            height: "245px",
-            axisY: { onlyInteger: true }
-        };
+            var scroller = document.getElementById('clickmapScroll');
+            var stage = document.getElementById('clickmapStage');
+            var frame = document.getElementById('clickmapFrame');
+            var canvas = document.getElementById('clickmapCanvas');
+            var fold = document.getElementById('clickmapFold');
+            var showLive = document.getElementById('showLive');
+            var buttons = document.querySelectorAll('[data-device]');
+            var current = maps[0];
 
-        Chartist.Line('#chartVisit', dataVisits, options);
+            function render() {
+                var map = current;
+                var displayWidth = Math.min(scroller.clientWidth - 2, map.width);
+                var s = displayWidth / map.width;
+                var displayHeight = Math.round(map.height * s);
 
-        var dataPreferences = {
-            labels: [@Html.Raw(browserlabel)],
-            series: [[@Html.Raw(browserpoint)]]
-        };
+                stage.style.width = displayWidth + 'px';
+                stage.style.height = displayHeight + 'px';
 
-        var optionsPreferences = {
-            axisX: {
-                labelInterpolationFnc: function (value) { return value; }
+                if (showLive.checked) {
+                    frame.style.display = '';
+                    frame.style.width = map.width + 'px';
+                    frame.style.height = map.height + 'px';
+                    frame.style.transform = 'scale(' + s + ')';
+                    if (frame.dataset.loadedWidth !== String(map.width)) {
+                        frame.src = pageUrl;
+                        frame.dataset.loadedWidth = String(map.width);
+                    }
+                } else {
+                    frame.style.display = 'none';
+                }
+
+                // Canvas size is limited by browsers, so keep the pixel ratio modest on tall pages.
+                var dpr = Math.min(window.devicePixelRatio || 1, 2, 30000 / Math.max(1, displayHeight));
+                canvas.width = Math.round(displayWidth * dpr);
+                canvas.height = Math.round(displayHeight * dpr);
+                canvas.style.width = displayWidth + 'px';
+                canvas.style.height = displayHeight + 'px';
+
+                var ctx = canvas.getContext('2d');
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                ctx.clearRect(0, 0, displayWidth, displayHeight);
+
+                var radius = Math.max(8, 16 * s);
+                map.points.forEach(function (p) {
+                    var x = p[0] * displayWidth;
+                    var y = p[1] * s;
+                    var g = ctx.createRadialGradient(x, y, 0, x, y, radius);
+                    g.addColorStop(0, 'rgba(231, 76, 60, 0.55)');
+                    g.addColorStop(1, 'rgba(231, 76, 60, 0)');
+                    ctx.fillStyle = g;
+                    ctx.beginPath();
+                    ctx.arc(x, y, radius, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                fold.style.top = Math.round(map.fold * s) + 'px';
+
+                buttons.forEach(function (b) {
+                    var active = b.dataset.device === map.device;
+                    b.classList.toggle('active', active);
+                    b.setAttribute('aria-pressed', active ? 'true' : 'false');
+                });
             }
-        };
 
-        new Chartist.Bar('#chartPreferences', dataPreferences, optionsPreferences);
+            buttons.forEach(function (b) {
+                b.addEventListener('click', function () {
+                    current = maps.filter(function (m) { return m.device === b.dataset.device; })[0] || current;
+                    frame.dataset.loadedWidth = '';
+                    render();
+                });
+            });
+            showLive.addEventListener('change', render);
+
+            var resizeTimer;
+            window.addEventListener('resize', function () {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(render, 150);
+            });
+
+            render();
+        })();
     </script>
 }

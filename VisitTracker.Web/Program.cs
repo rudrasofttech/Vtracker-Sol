@@ -18,7 +18,7 @@ builder.Services.AddBlazorBootstrap();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<HomePageStatsService>();
 builder.Services.AddDbContext<VisitTrackerDBContext>(options => 
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sql => sql.UseCompatibilityLevel(120)));
 builder.Services.AddHsts(options =>
 {
     options.Preload = true;

@@ -1,0 +1,51 @@
+@model VisitTracker.Web.Pages.RangePickerModel
+@using VisitTracker.Web.Pages
+
+<form id="rangeForm" class="d-flex flex-wrap align-items-center gap-2" method="get">
+    <input type="hidden" name="id" value="@Model.Id" />
+    @foreach (var h in Model.Hidden)
+    {
+        <input type="hidden" name="@h.Key" value="@h.Value" />
+    }
+    <label class="visually-hidden" for="rangeSelect">Date range</label>
+    <select id="rangeSelect" name="range" class="form-select form-select-sm w-auto">
+        @foreach (var option in ReportPageBase.RangeOptions)
+        {
+            <option value="@option.Key" selected="@(option.Key == Model.SelectedRange)">@option.Label</option>
+        }
+    </select>
+    <label class="visually-hidden" for="startDate">From</label>
+    <input id="startDate" name="start" type="date" class="form-control form-control-sm w-auto" value="@Model.Start.ToString("yyyy-MM-dd")" />
+    <label class="visually-hidden" for="endDate">To</label>
+    <input id="endDate" name="end" type="date" class="form-control form-control-sm w-auto" value="@Model.EndInclusive.ToString("yyyy-MM-dd")" />
+    <label class="form-check-label small">
+        <input class="form-check-input" type="checkbox" name="bots" value="1" @(Model.IncludeBots ? "checked" : "") />
+        Include bots
+    </label>
+    <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+</form>
+
+<script>
+    (function () {
+        // A preset applies immediately; editing a date switches the dropdown to "Custom range".
+        var form = document.getElementById('rangeForm');
+        var select = document.getElementById('rangeSelect');
+        var dates = [document.getElementById('startDate'), document.getElementById('endDate')];
+
+        function disableDatesForPreset() {
+            if (select.value !== 'custom') {
+                dates.forEach(function (d) { d.disabled = true; });
+            }
+        }
+
+        select.addEventListener('change', function () {
+            if (select.value === 'custom') { dates[0].focus(); return; }
+            disableDatesForPreset();
+            form.submit();
+        });
+        dates.forEach(function (d) {
+            d.addEventListener('change', function () { select.value = 'custom'; });
+        });
+        form.addEventListener('submit', disableDatesForPreset);
+    })();
+</script>

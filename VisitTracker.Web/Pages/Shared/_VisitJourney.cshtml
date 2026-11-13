@@ -1,0 +1,82 @@
+@model VisitTracker.Web.Helpers.VisitJourney
+@using VisitTracker.Web.Helpers
+@{
+    var s = Model.Summary;
+    static string Offset(double seconds)
+    {
+        var t = TimeSpan.FromSeconds(Math.Max(0, seconds));
+        return t.TotalHours >= 1 ? $"{(int)t.TotalHours}:{t.Minutes:00}:{t.Seconds:00}" : $"{t.Minutes}:{t.Seconds:00}";
+    }
+}
+<div class="journey">
+    <dl class="journey-meta">
+        <div><dt>Started</dt><dd>@s.LocalStart.ToString("ddd d MMM yyyy, h:mm:ss tt")</dd></div>
+        <div><dt>Length</dt><dd>@VisitAnalytics.Duration(s.Seconds) · @(s.Pages == 1 ? "1 page" : s.Pages + " pages")</dd></div>
+        <div><dt>Source</dt><dd>@s.Channel</dd></div>
+        <div><dt>Came from</dt><dd>@Model.ReferrerText</dd></div>
+        @if (Model.Campaign != null)
+        {
+            <div><dt>Campaign</dt><dd>@Model.Campaign</dd></div>
+        }
+        <div><dt>Visitor</dt><dd>@Model.VisitNumberText</dd></div>
+        <div><dt>Device</dt><dd>@s.Device · @s.OperatingSystem · @s.Browser</dd></div>
+        <div><dt>Screen</dt><dd>@Model.ScreenText</dd></div>
+        <div><dt>Location</dt><dd>@s.Location</dd></div>
+        <div><dt>Reference</dt><dd><code>@s.Ref</code></dd></div>
+    </dl>
+
+    @if (Model.Pages.Count == 0)
+    {
+        <p class="text-muted small mb-0">No page views were recorded for this visit.</p>
+    }
+    else
+    {
+        <ol class="tl">
+            @foreach (var pg in Model.Pages)
+            {
+                <li class="tl-page">
+                    <div class="tl-page-head">
+                        <a class="path" href="@pg.LiveUrl" target="_blank" rel="noopener">@pg.Page</a>
+                        <span class="meta">at @Offset(pg.OffsetSeconds) · stayed @VisitAnalytics.Duration(pg.Seconds)</span>
+                        @if (pg.Scroll.HasValue)
+                        {
+                            <span class="meta" title="Furthest point scrolled">
+                                <span class="scrollbar"><span style="width:@(pg.Scroll.Value)%"></span></span>scrolled @(pg.Scroll.Value)%
+                            </span>
+                        }
+                        <a class="meta" href="@pg.BehaviourUrl">Page behaviour</a>
+                    </div>
+
+                    @if (pg.Events.Count > 0)
+                    {
+                        <ul class="tl-events">
+                            @foreach (var e in pg.Events)
+                            {
+                                <li class="tl-event k-@e.Kind @(e.Warning ? "warn" : "")">
+                                    <span class="t">@Offset(e.OffsetSeconds)</span>
+                                    <span class="dot"></span>
+                                    <span>
+                                        <span class="title">@e.Title</span>
+                                        @if (!string.IsNullOrEmpty(e.Detail))
+                                        {
+                                            <span class="detail d-block">@e.Detail</span>
+                                        }
+                                    </span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else if (pg.Seconds < 5)
+                    {
+                        <div class="tl-exit">No actions recorded.</div>
+                    }
+
+                    @if (pg.IsExit)
+                    {
+                        <div class="tl-exit">Left the site from this page.</div>
+                    }
+                </li>
+            }
+        </ol>
+    }
+</div>

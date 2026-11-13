@@ -1,0 +1,191 @@
+@page
+@using VisitTracker.Web.Helpers
+@using VisitTracker.Web.Pages
+@model VisitsModel
+@{
+    ViewData["Title"] = "Visits · " + Model.WebsiteName;
+    var first = Model.TotalMatching == 0 ? 0 : (Model.PageNumber - 1) * VisitsModel.PageSize + 1;
+    var last = Math.Min(Model.PageNumber * VisitsModel.PageSize, Model.TotalMatching);
+}
+@section Head {
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="@Url.Content("~/css/report.css")" />
+}
+
+<div class="report">
+    <div class="report-header py-3 mb-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
+            <div>
+                <div class="crumbs"><a href="@Model.RangeUrl("/Report")">@Model.WebsiteName report</a> ›</div>
+                <h1>Visits</h1>
+                <div class="text-muted">@Model.RangeDescription</div>
+            </div>
+            @await Html.PartialAsync("_RangePicker", Model.Picker())
+        </div>
+    </div>
+
+    <form method="get" class="filters d-flex flex-wrap align-items-center gap-2 mb-3">
+        @foreach (var q in Model.RangeQuery())
+        {
+            <input type="hidden" name="@q.Key" value="@q.Value" />
+        }
+        <select name="ch" class="form-select form-select-sm w-auto" aria-label="Source">
+            <option value="">All sources</option>
+            @foreach (var o in Model.ChannelOptions)
+            {
+                <option value="@o.Value" selected="@(string.Equals(o.Value, Model.ChannelFilter, StringComparison.OrdinalIgnoreCase))">@o.Label (@o.Count)</option>
+            }
+        </select>
+        <select name="lp" class="form-select form-select-sm w-auto" style="max-width:22rem" aria-label="Landing page">
+            <option value="">All landing pages</option>
+            @foreach (var o in Model.LandingOptions)
+            {
+                <option value="@o.Value" selected="@(string.Equals(o.Value, Model.LandingFilter, StringComparison.OrdinalIgnoreCase))">@o.Label (@o.Count)</option>
+            }
+        </select>
+        <select name="dev" class="form-select form-select-sm w-auto" aria-label="Device">
+            <option value="">All devices</option>
+            @foreach (var o in Model.DeviceOptions)
+            {
+                <option value="@o.Value" selected="@(string.Equals(o.Value, Model.DeviceFilter, StringComparison.OrdinalIgnoreCase))">@o.Label (@o.Count)</option>
+            }
+        </select>
+        <label class="form-check-label small">
+            <input class="form-check-input" type="checkbox" name="act" value="1" @(Model.ActionsOnly == 1 ? "checked" : "") />
+            Clicked a link
+        </label>
+        <label class="form-check-label small" title="More than one page, or at least 30 seconds">
+            <input class="form-check-input" type="checkbox" name="eng" value="1" @(Model.EngagedOnly == 1 ? "checked" : "") />
+            Engaged only
+        </label>
+        <button type="submit" class="btn btn-outline-primary btn-sm">Filter</button>
+        @if (Model.HasFilters)
+        {
+            <a class="small" href="@Model.RangeUrl("/Visits")">Clear filters</a>
+        }
+    </form>
+
+    @if (Model.OpenRef != null)
+    {
+        <section class="panel mb-4 p-0">
+            <div class="px-3 pt-3"><h2>Selected visit</h2></div>
+            <div class="journey-slot" data-ref="@Model.OpenRef" data-autoload="1"><p class="text-muted small px-3">Loading…</p></div>
+        </section>
+    }
+
+    <section class="panel">
+        <p class="small text-muted mb-2">
+            @if (Model.TotalMatching == 0)
+            {
+                <span>No visits match. @(Model.HasFilters ? "Try clearing the filters or choosing a longer range." : "Try a longer range.")</span>
+            }
+            else
+            {
+                <span>Showing @first–@last of @Model.TotalMatching.ToString("N0") visits@(Model.HasFilters ? $" (out of {Model.TotalInRange:N0} in this range)" : "")</span>
+            }
+            @if (!Model.IncludeBots && Model.HiddenBotVisits > 0)
+            {
+                <span> · @Model.HiddenBotVisits.ToString("N0") bot visits hidden</span>
+            }
+            <span> · Select a visit to see each page and action in order.</span>
+        </p>
+
+        @if (Model.Visits.Count > 0)
+        {
+            <div class="table-responsive">
+                <table class="table table-sm table-report mb-0" id="visitsTable">
+                    <thead>
+                        <tr>
+                            <th></th><th>Started</th><th>Source</th><th>Landing page</th>
+                            <th class="num">Pages</th><th class="num">Length</th><th>Device</th><th>Location</th><th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var v in Model.Visits)
+                        {
+                            <tr class="visit-row" data-ref="@v.Ref" tabindex="0" aria-expanded="false">
+                                <td><span class="chev">›</span></td>
+                                <td class="text-nowrap">@v.LocalStart.ToString("d MMM, h:mm tt")</td>
+                                <td class="text-nowrap" title="@v.Source">@v.Channel</td>
+                                <td class="page-cell" title="@v.Landing">@v.Landing</td>
+                                <td class="num">@v.Pages</td>
+                                <td class="num">@VisitAnalytics.Duration(v.Seconds)</td>
+                                <td class="text-nowrap">@v.Device · @v.Browser</td>
+                                <td class="text-nowrap">@v.Location</td>
+                                <td>@await Html.PartialAsync("_VisitBadges", v)</td>
+                            </tr>
+                            <tr class="journey-row d-none">
+                                <td colspan="9" class="journey-cell">
+                                    <div class="journey-slot" data-ref="@v.Ref"><p class="text-muted small px-3 py-2 mb-0">Loading…</p></div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (Model.TotalPages > 1)
+            {
+                <nav class="mt-3" aria-label="Visit pages">
+                    <ul class="pagination pagination-sm mb-0 flex-wrap">
+                        <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                            <a class="page-link" href="@Model.FilterUrl(Model.PageNumber - 1)">Newer</a>
+                        </li>
+                        @for (var i = Math.Max(1, Model.PageNumber - 3); i <= Math.Min(Model.TotalPages, Model.PageNumber + 3); i++)
+                        {
+                            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                                <a class="page-link" href="@Model.FilterUrl(i)">@i</a>
+                            </li>
+                        }
+                        <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+                            <a class="page-link" href="@Model.FilterUrl(Model.PageNumber + 1)">Older</a>
+                        </li>
+                    </ul>
+                </nav>
+            }
+        }
+    </section>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            function journeyUrl(ref) {
+                var u = new URL(window.location.href);
+                u.searchParams.set('handler', 'Journey');
+                u.searchParams.set('v', ref);
+                u.searchParams.delete('open');
+                return u.toString();
+            }
+
+            function load(slot) {
+                if (slot.dataset.loaded) return;
+                slot.dataset.loaded = '1';
+                fetch(journeyUrl(slot.dataset.ref), { headers: { 'Accept': 'text/html' } })
+                    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
+                    .then(function (html) { slot.innerHTML = html; })
+                    .catch(function () {
+                        slot.innerHTML = '<p class="text-danger small px-3 py-2 mb-0">This visit couldn\u2019t be loaded. It may have been removed.</p>';
+                        delete slot.dataset.loaded;
+                    });
+            }
+
+            function toggle(row) {
+                var detail = row.nextElementSibling;
+                var open = detail.classList.toggle('d-none') === false;
+                row.classList.toggle('open', open);
+                row.setAttribute('aria-expanded', open ? 'true' : 'false');
+                if (open) load(detail.querySelector('.journey-slot'));
+            }
+
+            document.querySelectorAll('.visit-row').forEach(function (row) {
+                row.addEventListener('click', function () { toggle(row); });
+                row.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(row); }
+                });
+            });
+
+            document.querySelectorAll('.journey-slot[data-autoload]').forEach(load);
+        })();
+    </script>
+}

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using VisitTracker.DataContext;
 using VisitTracker.Models;
@@ -7,332 +6,360 @@ using VisitTracker.Web.Helpers;
 
 namespace VisitTracker.Web.Pages
 {
-    public class ReportModel(VisitTrackerDBContext _context, IWebHostEnvironment _webHostEnvironment, ILogger<ReportModel> _logger) : PageModel
+    public sealed record ReportKpis(int Visits, int Visitors, int PageViews, double PagesPerVisit, double AvgSeconds, double BouncePct, double ReturningPct)
     {
-        private readonly VisitTrackerDBContext context = _context;
-        private readonly WebsiteManager websiteRepository = new(_context);
-        private readonly WebpageManager webpageRepository = new(_context);
-        private readonly ILogger<ReportModel> logger = _logger;
+        public static readonly ReportKpis Empty = new(0, 0, 0, 0, 0, 0, 0);
+    }
 
-        [FromQuery(Name = "id")]
-        public int Id { get; set; }
+    public sealed record ReportChartPoint(string Label, int Visits, int New, int Returning, int Previous);
 
-        [FromQuery(Name = "start")]
-        public DateTime? Start { get; set; }
+    public sealed record ReportShareRow(string Name, int Count, double Pct);
 
-        [FromQuery(Name = "end")]
-        public DateTime? End { get; set; }
+    public sealed record ReportReferrerRow(string Group, int Count, double Pct, IReadOnlyList<string> Hosts);
 
-        [FromQuery(Name = "bots")]
-        public int? Bots { get; set; }
+    public sealed record ReportPageStat(string Page, string Url, int Views, int Visitors, int Entries, double AvgSeconds, double? AvgScroll, double ExitPct);
 
-        public bool IncludeBots => Bots == 1;
-        public int HiddenBotVisits { get; set; }
+    public sealed record ReportClickStat(string Kind, string Target, string Text, int Clicks);
 
-        public WebsiteDisplayPublic DisplayInfo { get; set; } = new(0, DateTime.UtcNow, DateTime.UtcNow);
+    public class ReportModel(VisitTrackerDBContext db, ILogger<ReportModel> logger) : ReportPageBase(db)
+    {
+        public static readonly string[] WeekdayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-        public Dictionary<string, List<string>> ReferrerDetails { get; set; } = [];
+        public string PreviousDescription { get; private set; } = string.Empty;
 
-        public void OnGet()
+        public ReportKpis Current { get; private set; } = ReportKpis.Empty;
+        public ReportKpis Previous { get; private set; } = ReportKpis.Empty;
+        public List<ReportChartPoint> Series { get; private set; } = [];
+
+        public List<ReportShareRow> Channels { get; private set; } = [];
+        public List<ReportReferrerRow> Referrers { get; private set; } = [];
+        public List<ReportShareRow> Campaigns { get; private set; } = [];
+        public List<ReportPageStat> Pages { get; private set; } = [];
+        public List<ReportClickStat> Clicks { get; private set; } = [];
+        public List<VisitSummary> RecentVisits { get; private set; } = [];
+        public List<ReportShareRow> Devices { get; private set; } = [];
+        public List<ReportShareRow> OperatingSystems { get; private set; } = [];
+        public List<ReportShareRow> Browsers { get; private set; } = [];
+        public List<ReportShareRow> Countries { get; private set; } = [];
+        public List<ReportShareRow> Regions { get; private set; } = [];
+        public List<ReportShareRow> Cities { get; private set; } = [];
+
+        /// <summary>[weekday Mon..Sun][hour 0..23] visit counts in the website's time zone.</summary>
+        public int[][] Heatmap { get; private set; } = Enumerable.Range(0, 7).Select(_ => new int[24]).ToArray();
+        public int HeatmapMax { get; private set; }
+
+        public int HiddenBotVisits { get; private set; }
+        public int ProxyVisits { get; private set; }
+        public double UserAgentCoveragePct { get; private set; }
+        public double ScrollCoveragePct { get; private set; }
+
+        public bool HasData => Current.Visits > 0;
+
+        public IActionResult OnGet()
         {
+            if (LoadWebsite() == null)
+            {
+                logger.LogWarning("Report > website {Id} not found", Id);
+                return NotFound();
+            }
+
+            InitRange();
+
+            // Previous period of the same length, cut off at the same point in time,
+            // so "Today" at 3 PM is compared with yesterday until 3 PM.
+            var span = LocalEnd - LocalStart;
+            var effectiveEnd = LocalEnd < NowLocal ? LocalEnd : NowLocal;
+            var compareSpan = effectiveEnd > LocalStart ? effectiveEnd - LocalStart : span;
+            var prevStart = LocalStart - span;
+            var prevEnd = prevStart + compareSpan;
+            PreviousDescription = Describe(prevStart, prevEnd, Bucket);
+
             try
             {
-                var website = websiteRepository.GetWebsiteByID(Id);
-                if (website == null)
+                var allVisits = ReportData.Visits(Db, Id, UtcStart, UtcEnd);
+                HiddenBotVisits = IncludeBots ? 0 : allVisits.Count(v => v.IsBot);
+                var visits = IncludeBots ? allVisits : allVisits.Where(v => !v.IsBot).ToList();
+
+                var visitById = visits.ToDictionary(v => v.ID);
+                var pageViews = ReportData.PageViews(Db, Id, UtcStart, UtcEnd)
+                    .Where(p => visitById.ContainsKey(p.VisitID))
+                    .ToList();
+                var pagesByVisit = pageViews
+                    .GroupBy(p => p.VisitID)
+                    .ToDictionary(g => g.Key, g => g.OrderBy(p => p.DateCreated).ThenBy(p => p.ID).ToList());
+
+                Current = ComputeKpis(visits, id => pagesByVisit.TryGetValue(id, out var list) ? list.Count : 0);
+
+                var prevVisits = ReportData.Visits(Db, Id, ToUtc(prevStart), ToUtc(prevEnd))
+                    .Where(v => IncludeBots || !v.IsBot)
+                    .ToList();
+                var prevPageCounts = ReportData.PageCounts(Db, Id, ToUtc(prevStart), ToUtc(prevEnd));
+                Previous = ComputeKpis(prevVisits, id => prevPageCounts.TryGetValue(id, out var c) ? c : 0);
+
+                BuildSeries(visits, prevVisits, span);
+
+                if (visits.Count > 0)
                 {
-                    return;
+                    BuildSources(visits, pagesByVisit);
+                    BuildPages(pageViews, pagesByVisit, visitById);
+                    BuildAudience(visits);
+                    BuildHeatmap(visits);
+                    BuildRecentVisits(visits, pagesByVisit);
+
+                    ProxyVisits = visits.Count(v => v.IsProxy == true);
+                    UserAgentCoveragePct = VisitAnalytics.Pct(visits.Count(v => !string.IsNullOrWhiteSpace(v.UserAgent)), visits.Count);
+                    ScrollCoveragePct = VisitAnalytics.Pct(pageViews.Count(p => p.MaxScrollPct.HasValue), pageViews.Count);
                 }
 
-                var tz = ResolveTimeZone(website.TimeZone);
-                var localStart = Start?.Date ?? DateTime.UtcNow.Date.AddDays(-15);
-                var localEndDate = End?.Date ?? DateTime.UtcNow.Date;
-                var localEndExclusive = localEndDate.AddDays(1);
-
-                var utcStart = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(localStart, DateTimeKind.Unspecified), tz);
-                var utcEndExclusive = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(localEndExclusive, DateTimeKind.Unspecified), tz);
-
-                DisplayInfo = new(Id, localStart, localEndExclusive.AddSeconds(-1))
-                {
-                    WebsiteName = website.Name
-                };
-
-                var visitQuery = context.Visits.AsNoTracking()
-                    .Where(v =>
-                        EF.Property<int>(v, "WebsiteID") == Id &&
-                        v.DateCreated >= utcStart &&
-                        v.DateCreated < utcEndExclusive);
-
-                var totalInRange = visitQuery.Count();
-                var totalBotsInRange = visitQuery.Count(v => v.IsBot);
-
-                if (!IncludeBots)
-                {
-                    visitQuery = visitQuery.Where(v => !v.IsBot);
-                }
-
-                HiddenBotVisits = IncludeBots ? 0 : totalBotsInRange;
-                DisplayInfo.VisitCount = visitQuery.Count();
-
-                // Bucketing source: hourly UTC grouped in SQL
-                var hourly = visitQuery
-                    .GroupBy(v => new { v.DateCreated.Year, v.DateCreated.Month, v.DateCreated.Day, v.DateCreated.Hour })
-                    .Select(g => new
-                    {
-                        g.Key.Year,
-                        g.Key.Month,
-                        g.Key.Day,
-                        g.Key.Hour,
-                        All = g.Count(),
-                        New = g.Sum(v => v.LastVisitID.HasValue ? 0 : 1),
-                        Return = g.Sum(v => v.LastVisitID.HasValue ? 1 : 0)
-                    })
-                    .ToList()
-                    .ToDictionary(
-                        x => new DateTime(x.Year, x.Month, x.Day, x.Hour, 0, 0, DateTimeKind.Utc),
-                        x => (x.All, x.New, x.Return));
-
-                BuildTimeSeries(hourly, tz, localStart, localEndDate);
-
-                // Browsers
-                var browserRaw = visitQuery
-                    .GroupBy(v => v.BrowserName ?? string.Empty)
-                    .Select(g => new { Name = g.Key, Count = g.Count() })
-                    .ToList();
-
-                DisplayInfo.BrowserData = BuildBrowserChart(browserRaw, x => x.Name, x => x.Count);
-
-                // Screen sizes
-                DisplayInfo.ScreenSizes = visitQuery
-                    .Where(v => v.ScreenWidth.HasValue && v.ScreenHeight.HasValue)
-                    .GroupBy(v => new { v.ScreenWidth, v.ScreenHeight })
-                    .Select(g => new ScreenSizeData
-                    {
-                        Screen = g.Key.ScreenWidth + " X " + g.Key.ScreenHeight,
-                        Count = g.Count()
-                    })
-                    .OrderByDescending(x => x.Count)
-                    .ToList();
-
-                // Top pages
-                DisplayInfo.MPages = context.VisitPages.AsNoTracking()
-                    .Where(vp =>
-                        EF.Property<int>(vp.visit, "WebsiteID") == Id &&
-                        vp.DateCreated >= utcStart &&
-                        vp.DateCreated < utcEndExclusive &&
-                        (IncludeBots || !vp.visit.IsBot))
-                    .GroupBy(vp => new { vp.webpage.Path, vp.webpage.QueryString })
-                    .Select(g => new WebpageVisits
-                    {
-                        Page = string.IsNullOrEmpty(g.Key.QueryString) ? g.Key.Path : g.Key.Path + g.Key.QueryString,
-                        AbsoluteUrl = "https://" + website.Name + (string.IsNullOrEmpty(g.Key.QueryString) ? g.Key.Path : g.Key.Path + g.Key.QueryString),
-                        Count = g.Count()
-                    })
-                    .OrderByDescending(x => x.Count)
-                    .ToList();
-
-                // Referrers grouped + expandable raw hosts
-                var refRows = visitQuery
-                    .GroupBy(v => v.Referer ?? string.Empty)
-                    .Select(g => new { Ref = g.Key, Count = g.Count() })
-                    .ToList();
-
-                var grouped = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-                var rawByGroup = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
-
-                foreach (var row in refRows)
-                {
-                    var (group, rawHost) = ReferrerGrouper.Group(row.Ref);
-                    if (!grouped.ContainsKey(group))
-                    {
-                        grouped[group] = 0;
-                        rawByGroup[group] = [];
-                    }
-
-                    grouped[group] += row.Count;
-                    if (!string.IsNullOrWhiteSpace(rawHost))
-                    {
-                        rawByGroup[group].Add(rawHost);
-                    }
-                }
-
-                DisplayInfo.RefererList = grouped
-                    .Select(x => new RefererData { Referer = x.Key, Count = x.Value })
-                    .OrderByDescending(x => x.Count)
-                    .ToList();
-
-                ReferrerDetails = rawByGroup.ToDictionary(k => k.Key, v => v.Value.OrderBy(x => x).ToList());
+                BuildClicks();
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Report > OnGet");
             }
+
+            return Page();
         }
 
-        private static TimeZoneInfo ResolveTimeZone(string? id)
+        // ---------- Summary numbers ----------
+
+        private static ReportKpis ComputeKpis(List<VisitRow> visits, Func<int, int> pageCount)
         {
-            try
+            if (visits.Count == 0) return ReportKpis.Empty;
+
+            int pageViews = 0, bounces = 0;
+            double seconds = 0;
+
+            foreach (var v in visits)
             {
-                if (!string.IsNullOrWhiteSpace(id))
-                {
-                    return TimeZoneInfo.FindSystemTimeZoneById(id);
-                }
-            }
-            catch
-            {
+                var pages = pageCount(v.ID);
+                pageViews += pages;
+                seconds += v.Seconds;
+                if (pages <= 1 && v.Seconds < 10) bounces++;
             }
 
-            return TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            return new ReportKpis(
+                Visits: visits.Count,
+                Visitors: visits.Select(v => v.VisitorKey).Distinct().Count(),
+                PageViews: pageViews,
+                PagesPerVisit: (double)pageViews / visits.Count,
+                AvgSeconds: seconds / visits.Count,
+                BouncePct: VisitAnalytics.Pct(bounces, visits.Count),
+                ReturningPct: VisitAnalytics.Pct(visits.Count(v => v.LastVisitID.HasValue), visits.Count));
         }
 
-        private void BuildTimeSeries(
-            Dictionary<DateTime, (int All, int New, int Return)> hourlyUtc,
-            TimeZoneInfo tz,
-            DateTime localStart,
-            DateTime localEndDate)
-        {
-            var endExclusive = localEndDate.AddDays(1);
-            var todayLocal = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tz).Date;
-            var marksToday = localStart.Date <= todayLocal && localEndDate.Date >= todayLocal;
+        // ---------- Trend chart ----------
 
-            switch (DisplayInfo.Range)
+        private void BuildSeries(List<VisitRow> visits, List<VisitRow> prevVisits, TimeSpan span)
+        {
+            var currentHour = new DateTime(NowLocal.Year, NowLocal.Month, NowLocal.Day, NowLocal.Hour, 0, 0);
+            var starts = new List<DateTime>();
+
+            switch (Bucket)
             {
                 case ReportDateRangeCustomType.Day:
-                    {
-                        var cursor = localStart;
-                        while (cursor < endExclusive)
-                        {
-                            var next = cursor.AddHours(1);
-                            var agg = AggregateHours(hourlyUtc, tz, cursor, next);
-                            var label = cursor.ToString("h:mm tt");
-                            if (marksToday && cursor.Date == todayLocal && next > TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tz))
-                            {
-                                label += " (today partial)";
-                            }
-
-                            AddPoint(label, agg);
-                            cursor = next;
-                        }
-
-                        break;
-                    }
+                    var plotEnd = LocalEnd > currentHour.AddHours(1) ? currentHour.AddHours(1) : LocalEnd;
+                    for (var t = LocalStart; t < plotEnd; t = t.AddHours(1)) starts.Add(t);
+                    break;
                 case ReportDateRangeCustomType.Days:
-                    {
-                        var cursor = localStart.Date;
-                        while (cursor < endExclusive)
-                        {
-                            var next = cursor.AddDays(1);
-                            var agg = AggregateHours(hourlyUtc, tz, cursor, next);
-                            var label = cursor.ToString("MM/d");
-                            if (marksToday && cursor.Date == todayLocal)
-                            {
-                                label += " (today partial)";
-                            }
-
-                            AddPoint(label, agg);
-                            cursor = next;
-                        }
-
-                        break;
-                    }
-                case ReportDateRangeCustomType.Months:
-                    {
-                        var cursor = localStart.Date;
-                        while (cursor < endExclusive)
-                        {
-                            var next = cursor.AddDays(15);
-                            if (next > endExclusive)
-                            {
-                                next = endExclusive;
-                            }
-
-                            var agg = AggregateHours(hourlyUtc, tz, cursor, next);
-                            var label = cursor.ToString("yyyy-M-d");
-                            if (marksToday && cursor <= todayLocal && todayLocal < next)
-                            {
-                                label += " (today partial)";
-                            }
-
-                            AddPoint(label, agg);
-                            cursor = next;
-                        }
-
-                        break;
-                    }
-            }
-        }
-
-        private static (int All, int New, int Return) AggregateHours(
-            Dictionary<DateTime, (int All, int New, int Return)> hourlyUtc,
-            TimeZoneInfo tz,
-            DateTime localStartInclusive,
-            DateTime localEndExclusive)
-        {
-            var all = 0;
-            var @new = 0;
-            var ret = 0;
-
-            var h = localStartInclusive;
-            while (h < localEndExclusive)
-            {
-                var utc = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(h, DateTimeKind.Unspecified), tz);
-                var key = new DateTime(utc.Year, utc.Month, utc.Day, utc.Hour, 0, 0, DateTimeKind.Utc);
-                if (hourlyUtc.TryGetValue(key, out var bucket))
-                {
-                    all += bucket.All;
-                    @new += bucket.New;
-                    ret += bucket.Return;
-                }
-
-                h = h.AddHours(1);
+                    for (var t = LocalStart.Date; t < LocalEnd; t = t.AddDays(1)) starts.Add(t);
+                    break;
+                default:
+                    for (var t = LocalStart.Date; t < LocalEnd; t = t.AddDays(15)) starts.Add(t);
+                    break;
             }
 
-            return (all, @new, ret);
-        }
+            var n = starts.Count;
+            var all = new int[n];
+            var fresh = new int[n];
+            var returning = new int[n];
+            var previous = new int[n];
 
-        private void AddPoint(string label, (int All, int New, int Return) agg)
-        {
-            DisplayInfo.VisitsData.Add(new VisitCountChartPoint { X = label, Y = agg.All });
-            DisplayInfo.NewVisitsData.Add(new VisitCountChartPoint { X = label, Y = agg.New });
-            DisplayInfo.ReturnVisitsData.Add(new VisitCountChartPoint { X = label, Y = agg.Return });
-        }
-
-        private static List<PieChartPoint> BuildBrowserChart<T>(
-            IEnumerable<T> browserRows,
-            Func<T, string> nameSelector,
-            Func<T, int> countSelector)
-        {
-            var counters = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
+            int IndexOf(DateTime local) => Bucket switch
             {
-                ["Chrome"] = 0,
-                ["Firefox"] = 0,
-                ["Safari"] = 0,
-                ["Opera"] = 0,
-                ["Edge"] = 0,
-                ["Samsung Internet"] = 0,
-                ["Headless Chrome"] = 0,
-                ["IE"] = 0,
-                ["Other"] = 0
+                ReportDateRangeCustomType.Day => (int)Math.Floor((local - LocalStart).TotalHours),
+                ReportDateRangeCustomType.Days => (local.Date - LocalStart.Date).Days,
+                _ => (local.Date - LocalStart.Date).Days / 15
             };
 
-            foreach (var row in browserRows)
+            foreach (var v in visits)
             {
-                var name = (nameSelector(row) ?? string.Empty).Trim();
-                var count = countSelector(row);
-
-                if (name.StartsWith("Headless Chrome", StringComparison.OrdinalIgnoreCase)) counters["Headless Chrome"] += count;
-                else if (name.StartsWith("Edge", StringComparison.OrdinalIgnoreCase)) counters["Edge"] += count;
-                else if (name.StartsWith("Samsung Internet", StringComparison.OrdinalIgnoreCase)) counters["Samsung Internet"] += count;
-                else if (name.StartsWith("Opera", StringComparison.OrdinalIgnoreCase)) counters["Opera"] += count;
-                else if (name.StartsWith("Chrome", StringComparison.OrdinalIgnoreCase)) counters["Chrome"] += count;
-                else if (name.StartsWith("Safari", StringComparison.OrdinalIgnoreCase)) counters["Safari"] += count;
-                else if (name.StartsWith("Firefox", StringComparison.OrdinalIgnoreCase)) counters["Firefox"] += count;
-                else if (name.StartsWith("Microsoft Internet Explorer", StringComparison.OrdinalIgnoreCase)) counters["IE"] += count;
-                else counters["Other"] += count;
+                var i = IndexOf(ToLocal(v.DateCreated));
+                if (i < 0 || i >= n) continue;
+                all[i]++;
+                if (v.LastVisitID.HasValue) returning[i]++; else fresh[i]++;
             }
 
-            return counters
-                .Select(x => new PieChartPoint { Label = x.Key, Percentage = x.Value })
+            foreach (var v in prevVisits)
+            {
+                var i = IndexOf(ToLocal(v.DateCreated) + span);
+                if (i >= 0 && i < n) previous[i]++;
+            }
+
+            var multiDay = LocalStart.Date != LocalEnd.AddTicks(-1).Date;
+            var today = NowLocal.Date;
+
+            Series = starts.Select((t, i) =>
+            {
+                string label = Bucket switch
+                {
+                    ReportDateRangeCustomType.Day => t.ToString(multiDay ? "ddd h tt" : "h tt") + (t == currentHour ? " (now)" : ""),
+                    ReportDateRangeCustomType.Days => t.ToString("d MMM") + (t == today ? " (today)" : ""),
+                    _ => t.ToString("d MMM yyyy")
+                };
+                return new ReportChartPoint(label, all[i], fresh[i], returning[i], previous[i]);
+            }).ToList();
+        }
+
+        // ---------- Traffic sources ----------
+
+        private void BuildSources(List<VisitRow> visits, Dictionary<int, List<PageViewRow>> pagesByVisit)
+        {
+            var total = visits.Count;
+            var channels = new List<string>(total);
+            var referrerCounts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            var referrerHosts = new Dictionary<string, SortedSet<string>>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var v in visits)
+            {
+                var landingQuery = pagesByVisit.TryGetValue(v.ID, out var pages) && pages.Count > 0 ? pages[0].Query : null;
+                var (group, host) = ReferrerGrouper.Group(v.Referer, SiteHost);
+                channels.Add(VisitAnalytics.Channel(group, v.UtmSource, v.UtmMedium, v.UserAgent, landingQuery));
+
+                referrerCounts[group] = referrerCounts.GetValueOrDefault(group) + 1;
+                if (!referrerHosts.TryGetValue(group, out var hosts))
+                {
+                    hosts = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
+                    referrerHosts[group] = hosts;
+                }
+                if (!string.IsNullOrWhiteSpace(host)) hosts.Add(host);
+            }
+
+            Channels = Share(channels, c => c, total, 20);
+
+            Referrers = referrerCounts
+                .Select(x => new ReportReferrerRow(x.Key, x.Value, VisitAnalytics.Pct(x.Value, total), referrerHosts[x.Key].ToList()))
+                .OrderByDescending(x => x.Count)
+                .ToList();
+
+            Campaigns = Share(
+                visits.Where(v => !string.IsNullOrWhiteSpace(v.UtmCampaign) || !string.IsNullOrWhiteSpace(v.UtmSource)),
+                v => $"{(string.IsNullOrWhiteSpace(v.UtmCampaign) ? "(no campaign name)" : v.UtmCampaign)} ({v.UtmSource ?? "?"} / {v.UtmMedium ?? "?"})",
+                total, 15);
+        }
+
+        // ---------- Pages ----------
+
+        private void BuildPages(List<PageViewRow> pageViews, Dictionary<int, List<PageViewRow>> pagesByVisit, Dictionary<int, VisitRow> visitById)
+        {
+            var entries = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            var exits = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var list in pagesByVisit.Values)
+            {
+                entries[list[0].Key] = entries.GetValueOrDefault(list[0].Key) + 1;
+                exits[list[^1].Key] = exits.GetValueOrDefault(list[^1].Key) + 1;
+            }
+
+            Pages = pageViews
+                .GroupBy(p => p.Key, StringComparer.OrdinalIgnoreCase)
+                .Select(g =>
+                {
+                    var views = g.Count();
+                    var scrolls = g.Where(p => p.MaxScrollPct.HasValue).Select(p => (double)p.MaxScrollPct!.Value).ToList();
+                    return new ReportPageStat(
+                        Page: g.Key,
+                        Url: "https://" + SiteHost + g.Key,
+                        Views: views,
+                        Visitors: g.Select(p => visitById[p.VisitID].VisitorKey).Distinct().Count(),
+                        Entries: entries.GetValueOrDefault(g.Key),
+                        AvgSeconds: g.Average(p => p.Seconds),
+                        AvgScroll: scrolls.Count > 0 ? scrolls.Average() : null,
+                        ExitPct: VisitAnalytics.Pct(exits.GetValueOrDefault(g.Key), views));
+                })
+                .OrderByDescending(p => p.Views)
                 .ToList();
         }
+
+        // ---------- Recent visits ----------
+
+        private void BuildRecentVisits(List<VisitRow> visits, Dictionary<int, List<PageViewRow>> pagesByVisit)
+        {
+            var recent = visits.OrderByDescending(v => v.DateCreated).Take(10).ToList();
+            var activities = ReportData.ActivitiesForVisits(Db, recent.Select(v => v.ID).ToList())
+                .GroupBy(a => a.VisitID)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            RecentVisits = recent
+                .Select(v => VisitJourneys.Summarize(
+                    v,
+                    pagesByVisit.GetValueOrDefault(v.ID) ?? [],
+                    activities.GetValueOrDefault(v.ID) ?? [],
+                    SiteHost,
+                    ToLocal))
+                .ToList();
+        }
+
+        // ---------- Clicks ----------
+
+        private void BuildClicks()
+        {
+            var raw = Db.Set<VisitActivity>().AsNoTracking()
+                .Where(a => a.Activity == ActivityName.Click
+                    && EF.Property<int>(a.visit, "WebsiteID") == Id
+                    && a.visit.DateCreated >= UtcStart && a.visit.DateCreated < UtcEnd
+                    && (IncludeBots || !a.visit.IsBot)
+                    && a.ClickHref != null && a.ClickHref != "")
+                .GroupBy(a => new { a.ClickHref, a.ClickText })
+                .Select(g => new { Href = g.Key.ClickHref, Text = g.Key.ClickText, Count = g.Count() })
+                .ToList();
+
+            Clicks = raw
+                .Select(r => (Target: VisitAnalytics.ClassifyClick(r.Href!, SiteHost), r.Text, r.Count))
+                .Where(r => r.Target.Kind != "In-page")
+                .GroupBy(r => r.Target)
+                .Select(g => new ReportClickStat(
+                    g.Key.Kind,
+                    g.Key.Target,
+                    g.Where(x => !string.IsNullOrWhiteSpace(x.Text))
+                     .OrderByDescending(x => x.Count)
+                     .Select(x => x.Text!.Trim())
+                     .FirstOrDefault() ?? string.Empty,
+                    g.Sum(x => x.Count)))
+                .OrderByDescending(c => c.Clicks)
+                .Take(50)
+                .ToList();
+        }
+
+        // ---------- Audience ----------
+
+        private void BuildAudience(List<VisitRow> visits)
+        {
+            var total = visits.Count;
+            Devices = Share(visits, v => VisitAnalytics.DeviceType(v.ScreenWidth, v.ScreenHeight, v.UserAgent), total, 5);
+            OperatingSystems = Share(visits, v => VisitAnalytics.OperatingSystem(v.UserAgent), total, 8);
+            Browsers = Share(visits, v => VisitAnalytics.Browser(v.UserAgent, v.BrowserName), total, 10);
+            Countries = Share(visits, v => VisitAnalytics.Blank(v.CountryName), total, 10);
+            Regions = Share(visits, v => VisitAnalytics.Blank(v.RegionName), total, 15);
+            Cities = Share(visits, v => VisitAnalytics.Blank(v.CityName), total, 15);
+        }
+
+        private void BuildHeatmap(List<VisitRow> visits)
+        {
+            foreach (var v in visits)
+            {
+                var local = ToLocal(v.DateCreated);
+                var day = ((int)local.DayOfWeek + 6) % 7; // Monday = 0
+                Heatmap[day][local.Hour]++;
+            }
+            HeatmapMax = Heatmap.SelectMany(r => r).DefaultIfEmpty(0).Max();
+        }
+
+        private static List<ReportShareRow> Share<T>(IEnumerable<T> items, Func<T, string> key, int total, int take) =>
+            items.GroupBy(key, StringComparer.OrdinalIgnoreCase)
+                .Select(g => new ReportShareRow(g.Key, g.Count(), VisitAnalytics.Pct(g.Count(), total)))
+                .OrderByDescending(r => r.Count)
+                .Take(take)
+                .ToList();
     }
 }
