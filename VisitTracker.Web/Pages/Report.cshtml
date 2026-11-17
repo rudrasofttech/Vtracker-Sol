@@ -363,6 +363,28 @@
             </div>
         </div>
     }
+
+    @{ var embedBase = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}"; }
+    <details class="panel mb-4">
+        <summary class="fw-semibold">Show view counts on @Model.WebsiteName</summary>
+        <div class="mt-3 small">
+            <p class="mb-2">Add this script once, before the closing <code>&lt;/body&gt;</code> tag of the site's template:</p>
+            <pre class="bg-light p-2 rounded"><code>&lt;script src="@embedBase/embed/views.js" data-site="@Model.Id" defer&gt;&lt;/script&gt;</code></pre>
+            <p class="mb-2">Then place a counter wherever it should appear. On a blog post, it counts the current page:</p>
+            <pre class="bg-light p-2 rounded"><code>&lt;span data-webstats="views"&gt;&lt;/span&gt;                          → 1,234 views
+&lt;span data-webstats="visitors" data-period="30d"&gt;&lt;/span&gt;     → 312 visitors (last 30 days)
+&lt;span data-webstats="views" data-label="Read {n} times"&gt;&lt;/span&gt;</code></pre>
+            <p class="mb-2">On a list of posts, give each counter its post's path. All counters on the page load in one request:</p>
+            <pre class="bg-light p-2 rounded"><code>&lt;span data-webstats="views" data-path="/blog/my-first-post"&gt;&lt;/span&gt;</code></pre>
+            <p class="mb-2">Where scripts aren't allowed, use the badge image:</p>
+            <pre class="bg-light p-2 rounded"><code>&lt;img src="@embedBase/embed/views.svg?site=@Model.Id&amp;path=/blog/my-first-post" alt="views"&gt;</code></pre>
+            <p class="text-muted mb-0">
+                Options: <code>data-webstats</code> views or visitors · <code>data-period</code> all or 30d ·
+                <code>data-format="short"</code> for 1.2K · <code>data-label</code> with <code>{n}</code> for the number.
+                Bots are excluded and tracking parameters ignored. Counts refresh every 5 minutes and only load on pages of @Model.WebsiteName.
+            </p>
+        </div>
+    </details>
 </div>
 
 @section Scripts {
