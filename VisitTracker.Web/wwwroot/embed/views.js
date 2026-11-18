@@ -15,6 +15,8 @@
  *   data-label     text template, e.g. "Read {n} times"; default "{n} views" / "{n} visitors"
  *
  * Call WebStatsEmbed.refresh() after adding placeholders dynamically (infinite scroll, SPA navigation).
+ * Each filled placeholder gets data-webstats-value="<number>", and document fires "webstats:updated"
+ * after every batch, so host pages can sort or highlight by count.
  */
 (function () {
     'use strict';
@@ -29,7 +31,9 @@
     try { base = new URL(script.src, location.href).origin; } catch (e) { return; }
 
     var SELECTOR = '[data-webstats],[data-webstats-views],[data-webstats-visitors]';
-    var CHUNK = 50;
+    // IIS rejects query strings over 2048 characters by default, so requests are split by length.
+    var MAX_URL = 1800;
+    var MAX_PATHS = 50;
 
     function metricOf(el) {
         var m = (el.getAttribute('data-webstats') || '').toLowerCase();
@@ -78,6 +82,7 @@
             if (!count) return;
             var metric = metricOf(el);
             el.textContent = text(count[metric] || 0, el, metric);
+            el.setAttribute('data-webstats-value', String(count[metric] || 0));
             el.setAttribute('data-webstats-done', '1');
         });
     }
@@ -93,28 +98,49 @@
         var periods = unique(elements.map(periodOf));
         var requests = [];
 
-        for (var i = 0; i < paths.length; i += CHUNK) {
-            var chunk = paths.slice(i, i + CHUNK);
-            var url = base + '/api/stats/views?site=' + encodeURIComponent(site)
-                + periods.map(function (p) { return '&period=' + p; }).join('')
-                + chunk.map(function (p) { return '&path=' + encodeURIComponent(p); }).join('');
+        var prefix = base + '/api/stats/views?site=' + encodeURIComponent(site)
+            + periods.map(function (p) { return '&period=' + p; }).join('');
 
+        function send(query) {
             requests.push(
-                fetch(url, { credentials: 'omit' })
+                fetch(prefix + query, { credentials: 'omit' })
                     .then(function (r) { return r.ok ? r.json() : null; })
                     .then(function (data) { if (data && data.stats) fill(elements, data.stats); })
                     .catch(function () { /* leave the placeholder's own text in place */ })
             );
         }
 
-        return Promise.all(requests);
+        var query = '', count = 0;
+        paths.forEach(function (p) {
+            var part = '&path=' + encodeURIComponent(p);
+            if (count > 0 && (prefix.length + query.length + part.length > MAX_URL || count >= MAX_PATHS)) {
+                send(query);
+                query = '';
+                count = 0;
+            }
+            query += part;
+            count++;
+        });
+        if (count > 0) send(query);
+
+        return Promise.all(requests).then(function () {
+            // Lets the host page react once counts are in (e.g. sort a table by views).
+            try { document.dispatchEvent(new CustomEvent('webstats:updated')); } catch (e) { }
+        });
     }
 
-    window.WebStatsEmbed = { refresh: refresh };
+    var initial = null;
+    function start() { initial = refresh(); }
+
+    window.WebStatsEmbed = {
+        refresh: refresh,
+        /** Promise that resolves when the first batch of counts has been filled in. */
+        ready: function () { return initial || Promise.resolve(); }
+    };
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function () { refresh(); });
+        document.addEventListener('DOMContentLoaded', start);
     } else {
-        refresh();
+        start();
     }
 })();

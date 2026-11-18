@@ -1,53 +1,263 @@
 ﻿@page
+@using System.Globalization
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "WebStats: see who visits your website and what they do";
+    var d = Model.Data;
+    var maxHour = Math.Max(1, d.Hourly.Max());
+    var demoId = d.DemoSiteId;
+    string Pct(int value) => (value * 100.0 / maxHour).ToString("0.#", CultureInfo.InvariantCulture);
+}
+@section Head {
+    <meta name="description" content="WebStats shows where your website visitors come from, which pages they read, how far they scroll and what they tap. One line of code, built in India by Rudra Softtech." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        .lp {
+            --ink: #1d2340;
+            --muted: #5b6275;
+            --line: #e3e6ee;
+            --surface: #f5f6fa;
+            --accent: #e74c3c;
+            --live: #16a34a;
+            font-family: "Instrument Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+            color: var(--ink);
+            max-width: 72rem;
+            margin: 0 auto;
+            padding: 0 1.25rem 4rem;
+        }
+        .lp h1, .lp h2, .lp h3 { font-family: inherit; color: var(--ink); }
+        .lp a { color: var(--ink); text-underline-offset: .2em; }
+        .lp a:hover { color: var(--accent); }
+        .lp a:focus-visible, .lp button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: .25rem; }
+
+        /* Hero */
+        .lp-hero { display: grid; gap: 2.5rem; align-items: center; padding: 3.5rem 0 4rem; }
+        @@media (min-width: 992px) { .lp-hero { grid-template-columns: 1.1fr .9fr; gap: 4rem; padding: 5rem 0; } }
+        .lp-hero h1 { font-size: clamp(2.1rem, 4.6vw, 3.5rem); font-weight: 600; line-height: 1.06; letter-spacing: -.025em; max-width: 15ch; margin: 0 0 1.25rem; }
+        .lp-lede { font-size: 1.15rem; line-height: 1.6; color: var(--muted); max-width: 34rem; margin: 0 0 2rem; }
+        .lp-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+        /* .lp a.lp-btn outranks the general ".lp a" link colours */
+        .lp a.lp-btn { display: inline-block; padding: .8rem 1.3rem; border-radius: .5rem; font-weight: 600; text-decoration: none; border: 2px solid var(--ink); color: var(--ink); background: transparent; }
+        .lp a.lp-btn:hover { color: var(--ink); background: var(--surface); }
+        .lp a.lp-btn-primary { background: var(--ink); color: #fff; }
+        .lp a.lp-btn-primary:hover { background: #2b3360; border-color: #2b3360; color: #fff; }
+
+        /* Live panel: the page's one bold element */
+        .lp-pulse { margin: 0; padding: 1.75rem; border: 1px solid var(--line); border-radius: 1rem; background: #fff; }
+        .lp-pulse figcaption { display: flex; align-items: center; gap: .5rem; font-weight: 500; color: var(--muted); }
+        .lp-live-dot { width: .6rem; height: .6rem; border-radius: 50%; background: var(--live); box-shadow: 0 0 0 0 rgba(22, 163, 74, .5); animation: lp-ping 2s infinite; }
+        @@keyframes lp-ping { 70% { box-shadow: 0 0 0 .5rem rgba(22, 163, 74, 0); } 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); } }
+        .lp-pulse-number { font-size: clamp(3rem, 7vw, 4.75rem); font-weight: 700; letter-spacing: -.03em; line-height: 1; margin: .5rem 0 1.5rem; font-variant-numeric: tabular-nums; }
+        .lp-bars { display: flex; align-items: flex-end; gap: 3px; height: 9rem; }
+        .lp-bars span { flex: 1; height: var(--h); min-height: 2px; background: var(--accent); opacity: .55; border-radius: 2px 2px 0 0; transform-origin: bottom; animation: lp-grow .9s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i) * 18ms); }
+        .lp-bars span:last-child { opacity: 1; }
+        .lp-bars span:hover { opacity: 1; }
+        @@keyframes lp-grow { from { transform: scaleY(0); } }
+        .lp-bars-axis { display: flex; justify-content: space-between; font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+        .lp-pulse-foot { margin: 1.25rem 0 0; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .95rem; }
+        @@media (prefers-reduced-motion: reduce) { .lp-bars span, .lp-live-dot { animation: none; } }
+
+        /* Sections */
+        .lp-section { padding: 3.5rem 0; border-top: 1px solid var(--line); }
+        .lp-section > h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); font-weight: 600; letter-spacing: -.015em; margin: 0 0 .5rem; }
+        .lp-section > .lp-intro { color: var(--muted); font-size: 1.05rem; max-width: 40rem; margin: 0 0 2.25rem; }
+
+        /* Features */
+        .lp-features { display: grid; gap: 2rem 3rem; }
+        @@media (min-width: 768px) { .lp-features { grid-template-columns: 1fr 1fr; } }
+        .lp-feature h3 { font-size: 1.2rem; font-weight: 600; margin: 0 0 .4rem; }
+        .lp-feature p { color: var(--muted); line-height: 1.6; margin: 0 0 .6rem; max-width: 32rem; }
+        .lp-feature a { font-weight: 600; }
+        .lp-feature code { background: var(--surface); padding: .15rem .35rem; border-radius: .25rem; font-size: .85em; color: var(--ink); }
+
+        /* Steps (a real sequence, so numbered) */
+        .lp-steps { list-style: none; counter-reset: step; padding: 0; margin: 0; display: grid; gap: 2rem; }
+        @@media (min-width: 992px) { .lp-steps { grid-template-columns: repeat(3, 1fr); } }
+        .lp-steps li { counter-increment: step; }
+        .lp-steps li::before { content: counter(step); display: block; font-size: 2.75rem; font-weight: 700; line-height: 1; color: var(--accent); margin-bottom: .75rem; }
+        .lp-steps h3 { font-size: 1.15rem; font-weight: 600; margin: 0 0 .4rem; }
+        .lp-steps p { color: var(--muted); line-height: 1.6; margin: 0; }
+        .lp-snippet { position: relative; margin-top: .75rem; }
+        .lp-snippet pre { background: var(--ink); color: #e8eaf3; padding: .9rem 1rem; border-radius: .5rem; font-size: .8rem; white-space: pre-wrap; word-break: break-all; margin: 0; }
+        .lp-copy { margin-top: .5rem; background: none; border: 1px solid var(--line); border-radius: .375rem; padding: .3rem .7rem; font: inherit; font-size: .85rem; color: var(--ink); cursor: pointer; }
+
+        /* Sites */
+        .lp-sites { list-style: none; padding: 0; margin: 0; columns: 1; column-gap: 3rem; }
+        @@media (min-width: 576px) { .lp-sites { columns: 2; } }
+        @@media (min-width: 992px) { .lp-sites { columns: 3; } }
+        .lp-sites li { break-inside: avoid; padding: .7rem 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+        .lp-site-main { min-width: 0; }
+        .lp-site-name { display: block; font-weight: 600; text-decoration: none; word-break: break-all; }
+        .lp-site-name:hover { text-decoration: underline; }
+        .lp-site-links { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: .2rem; font-size: .85rem; }
+        .lp-site-links a { color: var(--muted); }
+        .lp-site-links a:hover { color: var(--accent); }
+        .lp-site-meta { color: var(--muted); font-size: .85rem; white-space: nowrap; display: flex; align-items: center; gap: .4rem; }
+        .lp-site-meta .on { width: .45rem; height: .45rem; border-radius: 50%; background: var(--live); }
+        .lp-closing { margin-top: 2.5rem; color: var(--muted); }
+    </style>
 }
 
-<div class="container-fluid">
-    <div class="row row-cols-2 row-cols-md-4 g-4">
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Websites</h5>
-                    <p class="card-text fw-bold"><component type="typeof(VisitTracker.Web.Components.WebsiteCount)" render-mode="Static" /></p>
-                </div>
+<div class="lp">
+
+    <section class="lp-hero">
+        <div>
+            <h1>See who visits your website, and what they do there.</h1>
+            <p class="lp-lede">
+                WebStats shows where your visitors come from, which pages they read, how far they scroll and what they tap.
+                Add one line of code and see your first visits within minutes.
+            </p>
+            <div class="lp-actions">
+                @if (demoId.HasValue)
+                {
+                    <a class="lp-btn lp-btn-primary" href="@Url.Page("/Report", new { id = demoId })">Open the live demo</a>
+                }
+                <a class="lp-btn" href="@IndexModel.ContactUrl" rel="noopener">Add your website</a>
             </div>
         </div>
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Webpages</h5>
-                    <p class="card-text fw-bold"><component type="typeof(VisitTracker.Web.Components.WebpageCount)" render-mode="Static" /></p>
-                </div>
+
+        <figure class="lp-pulse">
+            <figcaption><span class="lp-live-dot" aria-hidden="true"></span>Visits in the last 24 hours</figcaption>
+            <div class="lp-pulse-number">@d.VisitsLast24h.ToString("N0")</div>
+            <div class="lp-bars" role="img" aria-label="Visits per hour over the last 24 hours, peaking at @maxHour in one hour">
+                @for (var i = 0; i < 24; i++)
+                {
+                    <span style="--h:@Pct(d.Hourly[i])%; --i:@i" title="@(d.HourLabels[i]): @d.Hourly[i] visits"></span>
+                }
             </div>
+            <div class="lp-bars-axis" aria-hidden="true"><span>24 hours ago</span><span>Now</span></div>
+            <p class="lp-pulse-foot">
+                Live from @d.Sites.Count websites using WebStats.
+                @d.TotalVisits.ToString("N0") visits recorded since @d.FirstYear, with bots left out.
+            </p>
+        </figure>
+    </section>
+
+    <section class="lp-section" aria-labelledby="features-title">
+        <h2 id="features-title">What you'll see</h2>
+        <p class="lp-intro">
+            Every report updates as visitors arrive.
+            @if (demoId.HasValue)
+            {
+                <span>Each link below opens the real report for @d.DemoHost.</span>
+            }
+        </p>
+
+        <div class="lp-features">
+            <article class="lp-feature">
+                <h3>Where your visitors come from</h3>
+                <p>Google search, Google Ads, Instagram and Facebook, WhatsApp shares and other websites, each counted separately, along with the city and device they used.</p>
+                @if (demoId.HasValue)
+                {
+                    <a href="@Url.Page("/Report", new { id = demoId })">See traffic sources</a>
+                }
+            </article>
+
+            <article class="lp-feature">
+                <h3>Every visit, step by step</h3>
+                <p>Open any visit to follow it: which pages were read in which order, how long each one held attention, and every link or button that was tapped.</p>
+                @if (demoId.HasValue)
+                {
+                    <a href="@Url.Page("/Visits", new { id = demoId })">Browse visits</a>
+                }
+            </article>
+
+            <article class="lp-feature">
+                <h3>How each page is really used</h3>
+                <p>A click map, how far down people scroll, where they go next and where they leave. It also spots taps on things that aren't links, so you know what to fix.</p>
+                @if (demoId.HasValue)
+                {
+                    <a href="@Url.Page("/PageReport", new { id = demoId, path = "https://" + d.DemoHost + "/" })">See a page in detail</a>
+                }
+            </article>
+
+            <article class="lp-feature">
+                <h3>View counts on your own pages</h3>
+                <p>Show "1,234 views" under each blog post or product by adding <code>&lt;span data-webstats="views"&gt;&lt;/span&gt;</code> where the number should appear.</p>
+            </article>
         </div>
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Visits</h5>
-                    <p class="card-text fw-bold"><component type="typeof(VisitTracker.Web.Components.VisitCount)" render-mode="Static" /></p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Activities</h5>
-                    <p class="card-text fw-bold"><component type="typeof(VisitTracker.Web.Components.ActivityCount)" render-mode="Static" /></p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="pt-3">
-        <h4>Websites</h4>
-        <p class="category">Best way to know what your visitors are doing on your website.</p>
-        <br />
-        <component type="typeof(VisitTracker.Web.Components.WebsiteList)" param-host="@Url.Content("~")" render-mode="Static" />
-    </div>
+    </section>
+
+    <section class="lp-section" aria-labelledby="start-title">
+        <h2 id="start-title">Add WebStats to your website</h2>
+        <p class="lp-intro">It works with any website: WordPress, Shopify, ASP.NET, PHP or plain HTML.</p>
+
+        <ol class="lp-steps">
+            <li>
+                <h3>Tell us your website</h3>
+                <p>Send us your website address and we'll set up tracking for it. Self-service sign-up is coming soon.</p>
+                <p class="mt-2"><a href="@IndexModel.ContactUrl" rel="noopener">Contact Rudra Softtech</a></p>
+            </li>
+            <li>
+                <h3>Paste one line of code</h3>
+                @if (string.IsNullOrWhiteSpace(IndexModel.TrackingSnippet))
+                {
+                    <p>We send you a single script tag. Paste it into your website's template, just before the closing <code>&lt;/body&gt;</code> tag.</p>
+                }
+                else
+                {
+                    <p>Paste this into your website's template, just before the closing <code>&lt;/body&gt;</code> tag. We'll give you your website's ID.</p>
+                    <div class="lp-snippet">
+                        <pre id="lpSnippet">@IndexModel.TrackingSnippet.Replace("{id}", "YOUR-ID")</pre>
+                        <button type="button" class="lp-copy" id="lpCopy">Copy code</button>
+                    </div>
+                }
+            </li>
+            <li>
+                <h3>Watch visits arrive</h3>
+                <p>Open your report and see visitors as they come in. Bot traffic is filtered out automatically.</p>
+            </li>
+        </ol>
+    </section>
+
+    @if (d.Sites.Count > 0)
+    {
+        <section class="lp-section" aria-labelledby="sites-title">
+            <h2 id="sites-title">Websites using WebStats</h2>
+            <p class="lp-intro">Every website currently tracking its visitors with WebStats. Open any of them to see its live report.</p>
+
+            <ul class="lp-sites">
+                @foreach (var s in d.Sites)
+                {
+                    <li>
+                        <div class="lp-site-main">
+                            <a class="lp-site-name" href="@Url.Page("/Report", new { id = s.Id })" title="Open the report for @s.Host">@s.Host</a>
+                            <span class="lp-site-links">
+                                <a href="@Url.Page("/Report", new { id = s.Id })">Report</a>
+                                <a href="@Url.Page("/Visits", new { id = s.Id })">Visits</a>
+                                <a href="https://@s.Host" target="_blank" rel="noopener nofollow" title="Open @s.Host in a new tab">Website</a>
+                            </span>
+                        </div>
+                        <span class="lp-site-meta">
+                            @if (s.ActiveThisWeek)
+                            {
+                                <span class="on" title="Visits recorded this week" aria-hidden="true"></span>
+                            }
+                            Since @s.SinceYear
+                        </span>
+                    </li>
+                }
+            </ul>
+
+            <p class="lp-closing">Want your website on this list? <a href="@IndexModel.ContactUrl" rel="noopener">Get in touch</a>.</p>
+        </section>
+    }
 </div>
 
 @section Scripts {
-    <script src="_framework/blazor.server.js"></script>
+    <script>
+        (function () {
+            var button = document.getElementById('lpCopy');
+            var snippet = document.getElementById('lpSnippet');
+            if (!button || !snippet || !navigator.clipboard) return;
+            button.addEventListener('click', function () {
+                navigator.clipboard.writeText(snippet.textContent).then(function () {
+                    button.textContent = 'Copied';
+                    setTimeout(function () { button.textContent = 'Copy code'; }, 2000);
+                });
+            });
+        })();
+    </script>
 }
-
