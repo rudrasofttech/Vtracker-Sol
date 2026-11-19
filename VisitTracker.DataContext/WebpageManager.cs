@@ -47,15 +47,31 @@ namespace VisitTracker.DataContext
 
         public Webpage? GetWebpage(int websiteId, string path, string query)
         {
-            var normalizedPath = (path ?? string.Empty).ToLowerInvariant();
-            var normalizedQuery = (query ?? string.Empty).ToLowerInvariant();
-            var hashInput = $"{normalizedPath}?{normalizedQuery}";
-            var pathHash = SHA256.HashData(Encoding.UTF8.GetBytes(hashInput));
+            path ??= string.Empty;
+            query ??= string.Empty;
 
-            return context.Webpages
+            // Must match the computed SQL column:
+            //   HASHBYTES('SHA2_256', LOWER([Path]) + '?' + LOWER([QueryString]))
+            // SQL Server hashes nvarchar as UTF-16, which is Encoding.Unicode in .NET.
+            var pathHash = SHA256.HashData(Encoding.Unicode.GetBytes(
+                $"{path.ToLowerInvariant()}?{query.ToLowerInvariant()}"));
+
+            var page = context.Webpages
                 .Include(t => t.Website)
-                .Where(t => t.Website.ID == websiteId && t.PathHash != null && t.PathHash == pathHash)
-                .FirstOrDefault(t => t.Path == normalizedPath && t.QueryString == normalizedQuery);
+                .Where(t => t.Website.ID == websiteId && t.PathHash == pathHash)
+                .OrderBy(t => t.ID)
+                .FirstOrDefault(t => t.Path == path && t.QueryString == query);
+
+            // Fallback: if the hash ever differs from SQL's (rare non-English letters where
+            // .NET and SQL Server lowercase differently), find the page by its address
+            // instead of creating a duplicate.
+            page ??= context.Webpages
+                .Include(t => t.Website)
+                .Where(t => t.Website.ID == websiteId && t.Path == path && t.QueryString == query)
+                .OrderBy(t => t.ID)
+                .FirstOrDefault();
+
+            return page;
         }
 
         public int GetVisitCount(int websiteId, string path)

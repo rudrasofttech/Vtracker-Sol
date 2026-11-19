@@ -6,8 +6,15 @@ using VisitTracker.Models;
 
 namespace VisitTracker.Web.Pages
 {
-    /// <summary>A website shown in the public "Websites using WebStats" list. No traffic numbers are exposed.</summary>
-    public sealed record ShowcaseSite(int Id, string Host, int SinceYear, bool ActiveThisWeek);
+    /// <summary>A website on the public home page. Featured sites also carry their numbers and a 30-day trend.</summary>
+    public sealed record ShowcaseSite(
+        int Id,
+        string Host,
+        int SinceYear,
+        bool ActiveThisWeek,
+        int TotalVisits,
+        int VisitsLast30Days,
+        int[] Daily);
 
     public sealed record LandingData(
         int VisitsLast24h,
@@ -15,27 +22,27 @@ namespace VisitTracker.Web.Pages
         string[] HourLabels,
         int TotalVisits,
         int FirstYear,
-        List<ShowcaseSite> Sites,
-        int? DemoSiteId,
-        string? DemoHost)
+        List<ShowcaseSite> Featured,
+        List<ShowcaseSite> Others)
     {
-        public static readonly LandingData Empty = new(0, new int[24], new string[24], 0, DateTime.UtcNow.Year, [], null, null);
+        public int SiteCount => Featured.Count + Others.Count;
+        public static readonly LandingData Empty = new(0, new int[24], new string[24], 0, DateTime.UtcNow.Year, [], []);
     }
 
     /// <summary>Public home page: explains WebStats to people who might want to use it.</summary>
     public class IndexModel(ILogger<IndexModel> logger, VisitTrackerDBContext db, IMemoryCache cache) : PageModel
     {
-        /// <summary>The website whose report is used as the public live demo (falls back to the busiest listed site).</summary>
-        public const string DemoSiteName = "rudrasofttech.com";
+        /// <summary>How many of the busiest websites get a featured panel with their numbers.</summary>
+        public const int FeaturedCount = 3;
 
         /// <summary>Where "Add your website" goes until self-service sign-up exists.</summary>
         public const string ContactUrl = "https://www.rudrasofttech.com";
 
         /// <summary>
-        /// The tracking code a site owner pastes, with {id} for their website ID.
-        /// Leave empty to show a sentence instead of a code sample.
+        /// The code a site owner pastes, with {id} for their website ID.
+        /// Leave empty to describe it in words instead of showing a code sample.
         /// </summary>
-        public const string TrackingSnippet = "";
+        public const string InstallSnippet = "";
 
         public LandingData Data { get; private set; } = LandingData.Empty;
 
@@ -43,7 +50,7 @@ namespace VisitTracker.Web.Pages
         {
             try
             {
-                Data = cache.GetOrCreate("landing:v1", entry =>
+                Data = cache.GetOrCreate("landing:v2", entry =>
                 {
                     entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
                     return Load();
@@ -67,8 +74,8 @@ namespace VisitTracker.Web.Pages
                 .Select(w => new { w.ID, w.Name })
                 .ToList();
 
-            // One grouped query for all sites: total, first and last human visit.
-            var perSite = db.Visits.AsNoTracking()
+            // All-time numbers per site (bots excluded): total, first and last visit.
+            var allTime = db.Visits.AsNoTracking()
                 .Where(v => !v.IsBot)
                 .GroupBy(v => EF.Property<int>(v, "WebsiteID"))
                 .Select(g => new
@@ -80,32 +87,51 @@ namespace VisitTracker.Web.Pages
                 })
                 .ToDictionary(x => x.Id);
 
-            // Only sites that had visits in the last 30 days count as "using WebStats".
+            // Visits per site in the last 30 days, which decides the order.
+            var recent = db.Visits.AsNoTracking()
+                .Where(v => !v.IsBot && v.DateCreated >= since30d)
+                .GroupBy(v => EF.Property<int>(v, "WebsiteID"))
+                .Select(g => new { Id = g.Key, Count = g.Count() })
+                .ToDictionary(x => x.Id, x => x.Count);
+
+            // A site is listed when it had visits in the last 30 days.
             var listed = websites
-                .Where(w => perSite.TryGetValue(w.ID, out var s) && s.Last >= since30d)
-                .OrderByDescending(w => perSite[w.ID].Total)
+                .Where(w => recent.ContainsKey(w.ID) && allTime.ContainsKey(w.ID))
+                .OrderByDescending(w => recent[w.ID])
+                .ThenByDescending(w => allTime[w.ID].Total)
                 .ToList();
 
-            var sites = listed
-                .Select(w => new ShowcaseSite(
-                    w.ID,
-                    w.Name.Trim().ToLowerInvariant(),
-                    perSite[w.ID].First.Year,
-                    perSite[w.ID].Last >= since7d))
+            ShowcaseSite ToSite(int id, string name, int[] daily) => new(
+                id,
+                name.Trim().ToLowerInvariant(),
+                allTime[id].First.Year,
+                allTime[id].Last >= since7d,
+                allTime[id].Total,
+                recent[id],
+                daily);
+
+            var featured = listed
+                .Take(FeaturedCount)
+                .Select(w => ToSite(w.ID, w.Name, DailyVisits(w.ID, since30d)))
+                .ToList();
+
+            var others = listed
+                .Skip(FeaturedCount)
+                .Select(w => ToSite(w.ID, w.Name, []))
                 .ToList();
 
             var activeIds = websites.Select(w => w.ID).ToHashSet();
-            var totalVisits = perSite.Values.Where(s => activeIds.Contains(s.Id)).Sum(s => s.Total);
-            var firstYear = perSite.Values.Where(s => activeIds.Contains(s.Id)).Select(s => s.First.Year).DefaultIfEmpty(now.Year).Min();
+            var totalVisits = allTime.Values.Where(s => activeIds.Contains(s.Id)).Sum(s => s.Total);
+            var firstYear = allTime.Values.Where(s => activeIds.Contains(s.Id)).Select(s => s.First.Year).DefaultIfEmpty(now.Year).Min();
 
             // Last 24 hours, hour by hour, across every site.
-            var recent = db.Visits.AsNoTracking()
+            var lastDay = db.Visits.AsNoTracking()
                 .Where(v => !v.IsBot && v.DateCreated >= since24h)
                 .Select(v => v.DateCreated)
                 .ToList();
 
             var hourly = new int[24];
-            foreach (var created in recent)
+            foreach (var created in lastDay)
             {
                 var i = (int)Math.Floor((created - since24h).TotalHours);
                 hourly[Math.Clamp(i, 0, 23)]++;
@@ -113,25 +139,24 @@ namespace VisitTracker.Web.Pages
 
             var ist = ResolveIndiaTime();
             var labels = Enumerable.Range(0, 24)
-                .Select(i =>
-                {
-                    var start = TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(since24h.AddHours(i), DateTimeKind.Utc), ist);
-                    return start.ToString("h tt");
-                })
+                .Select(i => TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(since24h.AddHours(i), DateTimeKind.Utc), ist).ToString("h tt"))
                 .ToArray();
 
-            var demo = listed.FirstOrDefault(w => w.Name.Trim().Equals(DemoSiteName, StringComparison.OrdinalIgnoreCase))
-                ?? listed.FirstOrDefault();
+            return new LandingData(lastDay.Count, hourly, labels, totalVisits, firstYear, featured, others);
+        }
 
-            return new LandingData(
-                VisitsLast24h: recent.Count,
-                Hourly: hourly,
-                HourLabels: labels,
-                TotalVisits: totalVisits,
-                FirstYear: firstYear,
-                Sites: sites,
-                DemoSiteId: demo?.ID,
-                DemoHost: demo?.Name.Trim().ToLowerInvariant());
+        /// <summary>Visits per day for one site over the last 30 days (oldest first).</summary>
+        private int[] DailyVisits(int websiteId, DateTime sinceUtc)
+        {
+            var start = sinceUtc.Date;
+            var counts = db.Visits.AsNoTracking()
+                .Where(v => !v.IsBot && EF.Property<int>(v, "WebsiteID") == websiteId && v.DateCreated >= start)
+                .GroupBy(v => v.DateCreated.Date)
+                .Select(g => new { Day = g.Key, Count = g.Count() })
+                .ToDictionary(x => x.Day, x => x.Count);
+
+            var days = (DateTime.UtcNow.Date - start).Days + 1;
+            return Enumerable.Range(0, days).Select(i => counts.GetValueOrDefault(start.AddDays(i))).ToArray();
         }
 
         private static TimeZoneInfo ResolveIndiaTime()

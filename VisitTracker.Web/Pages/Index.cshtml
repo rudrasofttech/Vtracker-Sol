@@ -1,15 +1,14 @@
-﻿@page
+@page
 @using System.Globalization
 @model IndexModel
 @{
-    ViewData["Title"] = "WebStats: see who visits your website and what they do";
+    ViewData["Title"] = "WebStats: understand how people find and use your website";
     var d = Model.Data;
     var maxHour = Math.Max(1, d.Hourly.Max());
-    var demoId = d.DemoSiteId;
-    string Pct(int value) => (value * 100.0 / maxHour).ToString("0.#", CultureInfo.InvariantCulture);
+    string Pct(int value, int max) => (value * 100.0 / Math.Max(1, max)).ToString("0.#", CultureInfo.InvariantCulture);
 }
 @section Head {
-    <meta name="description" content="WebStats shows where your website visitors come from, which pages they read, how far they scroll and what they tap. One line of code, built in India by Rudra Softtech." />
+    <meta name="description" content="WebStats shows which pages people read, where they come from and where they lose interest, so you know what to improve. One line of code, built in India by Rudra Softtech." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -97,6 +96,27 @@
         .lp-site-meta { color: var(--muted); font-size: .85rem; white-space: nowrap; display: flex; align-items: center; gap: .4rem; }
         .lp-site-meta .on { width: .45rem; height: .45rem; border-radius: 50%; background: var(--live); }
         .lp-closing { margin-top: 2.5rem; color: var(--muted); }
+
+        /* Featured websites */
+        .lp-featured { display: grid; gap: 1.5rem; margin-bottom: 3rem; }
+        @@media (min-width: 992px) { .lp-featured { grid-template-columns: repeat(3, 1fr); } }
+        .lp-site-card { border: 1px solid var(--line); border-radius: 1rem; padding: 1.5rem; background: #fff; display: flex; flex-direction: column; }
+        .lp-site-card h3 { font-size: 1.15rem; font-weight: 600; margin: 0; word-break: break-all; }
+        .lp-site-card h3 a { text-decoration: none; }
+        .lp-site-card h3 a:hover { text-decoration: underline; }
+        .lp-site-since { color: var(--muted); font-size: .85rem; margin: .2rem 0 1.25rem; display: flex; align-items: center; gap: .4rem; }
+        .lp-site-since .on { width: .45rem; height: .45rem; border-radius: 50%; background: var(--live); }
+        .lp-site-number { font-size: 2.4rem; font-weight: 700; letter-spacing: -.02em; line-height: 1; font-variant-numeric: tabular-nums; }
+        .lp-site-label { color: var(--muted); font-size: .9rem; margin-top: .3rem; }
+        .lp-mini-bars { display: flex; align-items: flex-end; gap: 2px; height: 3.5rem; margin: 1.25rem 0 .4rem; }
+        .lp-mini-bars span { flex: 1; height: var(--h); min-height: 2px; background: var(--accent); opacity: .5; border-radius: 1px 1px 0 0; }
+        .lp-mini-bars span:last-child { opacity: 1; }
+        .lp-mini-axis { display: flex; justify-content: space-between; font-size: .75rem; color: var(--muted); }
+        .lp-site-total { margin: 1rem 0 1.25rem; padding-top: .9rem; border-top: 1px solid var(--line); font-size: .9rem; color: var(--muted); }
+        .lp-site-total strong { color: var(--ink); font-weight: 600; }
+        .lp-site-actions { margin-top: auto; display: flex; flex-wrap: wrap; gap: 1rem; font-size: .9rem; font-weight: 600; }
+        .lp-others-title { font-size: 1.15rem; font-weight: 600; margin: 0 0 1rem; }
+        .lp-privacy { margin: 2.5rem 0 0; padding: 1rem 1.25rem; background: var(--surface); border-radius: .75rem; color: var(--muted); max-width: 46rem; }
     </style>
 }
 
@@ -104,15 +124,15 @@
 
     <section class="lp-hero">
         <div>
-            <h1>See who visits your website, and what they do there.</h1>
+            <h1>Understand how people find and use your website.</h1>
             <p class="lp-lede">
-                WebStats shows where your visitors come from, which pages they read, how far they scroll and what they tap.
-                Add one line of code and see your first visits within minutes.
+                WebStats shows which pages people read, where they come from and where they lose interest,
+                so you know what to improve. Add one line of code and your first report is ready in minutes.
             </p>
             <div class="lp-actions">
-                @if (demoId.HasValue)
+                @if (d.SiteCount > 0)
                 {
-                    <a class="lp-btn lp-btn-primary" href="@Url.Page("/Report", new { id = demoId })">Open the live demo</a>
+                    <a class="lp-btn lp-btn-primary" href="#websites">See live reports</a>
                 }
                 <a class="lp-btn" href="@IndexModel.ContactUrl" rel="noopener">Add your website</a>
             </div>
@@ -121,78 +141,132 @@
         <figure class="lp-pulse">
             <figcaption><span class="lp-live-dot" aria-hidden="true"></span>Visits in the last 24 hours</figcaption>
             <div class="lp-pulse-number">@d.VisitsLast24h.ToString("N0")</div>
-            <div class="lp-bars" role="img" aria-label="Visits per hour over the last 24 hours, peaking at @maxHour in one hour">
+            <div class="lp-bars" role="img" aria-label="Visits per hour over the last 24 hours, up to @maxHour in one hour">
                 @for (var i = 0; i < 24; i++)
                 {
-                    <span style="--h:@Pct(d.Hourly[i])%; --i:@i" title="@(d.HourLabels[i]): @d.Hourly[i] visits"></span>
+                    <span style="--h:@Pct(d.Hourly[i], maxHour)%; --i:@i" title="@(d.HourLabels[i]): @d.Hourly[i] visits"></span>
                 }
             </div>
             <div class="lp-bars-axis" aria-hidden="true"><span>24 hours ago</span><span>Now</span></div>
             <p class="lp-pulse-foot">
-                Live from @d.Sites.Count websites using WebStats.
-                @d.TotalVisits.ToString("N0") visits recorded since @d.FirstYear, with bots left out.
+                Across @d.SiteCount websites using WebStats.
+                @d.TotalVisits.ToString("N0") visits counted since @d.FirstYear, not including bots.
             </p>
         </figure>
     </section>
 
     <section class="lp-section" aria-labelledby="features-title">
-        <h2 id="features-title">What you'll see</h2>
-        <p class="lp-intro">
-            Every report updates as visitors arrive.
-            @if (demoId.HasValue)
-            {
-                <span>Each link below opens the real report for @d.DemoHost.</span>
-            }
-        </p>
+        <h2 id="features-title">What your report shows</h2>
+        <p class="lp-intro">Open any of the websites below to explore a real report with live numbers.</p>
 
         <div class="lp-features">
             <article class="lp-feature">
                 <h3>Where your visitors come from</h3>
-                <p>Google search, Google Ads, Instagram and Facebook, WhatsApp shares and other websites, each counted separately, along with the city and device they used.</p>
-                @if (demoId.HasValue)
-                {
-                    <a href="@Url.Page("/Report", new { id = demoId })">See traffic sources</a>
-                }
+                <p>Google search, ads, Instagram and Facebook, WhatsApp shares and other websites, along with the cities and devices people use.</p>
             </article>
-
             <article class="lp-feature">
-                <h3>Every visit, step by step</h3>
-                <p>Open any visit to follow it: which pages were read in which order, how long each one held attention, and every link or button that was tapped.</p>
-                @if (demoId.HasValue)
-                {
-                    <a href="@Url.Page("/Visits", new { id = demoId })">Browse visits</a>
-                }
+                <h3>How a visit unfolds</h3>
+                <p>Follow a visit from page to page: what was read, for how long, and which links and buttons were used along the way.</p>
             </article>
-
             <article class="lp-feature">
-                <h3>How each page is really used</h3>
-                <p>A click map, how far down people scroll, where they go next and where they leave. It also spots taps on things that aren't links, so you know what to fix.</p>
-                @if (demoId.HasValue)
-                {
-                    <a href="@Url.Page("/PageReport", new { id = demoId, path = "https://" + d.DemoHost + "/" })">See a page in detail</a>
-                }
+                <h3>How each page performs</h3>
+                <p>See where people click, how far down they read and where they move on, including taps on things that aren't links, so you know what to fix.</p>
             </article>
-
             <article class="lp-feature">
                 <h3>View counts on your own pages</h3>
                 <p>Show "1,234 views" under each blog post or product by adding <code>&lt;span data-webstats="views"&gt;&lt;/span&gt;</code> where the number should appear.</p>
             </article>
         </div>
+
+        <p class="lp-privacy">Reports show numbers and patterns, never names, email addresses or IP addresses. Visits from bots and search engine crawlers are left out automatically.</p>
     </section>
 
+    @if (d.SiteCount > 0)
+    {
+        <section class="lp-section" id="websites" aria-labelledby="sites-title">
+            <h2 id="sites-title">Websites using WebStats</h2>
+            <p class="lp-intro">The busiest websites this month. Open a report to see their real numbers.</p>
+
+            <div class="lp-featured">
+                @foreach (var s in d.Featured)
+                {
+                    var maxDay = s.Daily.Length == 0 ? 1 : Math.Max(1, s.Daily.Max());
+                    <article class="lp-site-card">
+                        <h3><a href="@Url.Page("/Report", new { id = s.Id })">@s.Host</a></h3>
+                        <div class="lp-site-since">
+                            @if (s.ActiveThisWeek)
+                            {
+                                <span class="on" title="Visits this week" aria-hidden="true"></span>
+                            }
+                            Using WebStats since @s.SinceYear
+                        </div>
+
+                        <div class="lp-site-number">@s.VisitsLast30Days.ToString("N0")</div>
+                        <div class="lp-site-label">visits in the last 30 days</div>
+
+                        <div class="lp-mini-bars" role="img" aria-label="Visits per day over the last 30 days for @s.Host">
+                            @for (var i = 0; i < s.Daily.Length; i++)
+                            {
+                                <span style="--h:@Pct(s.Daily[i], maxDay)%" title="@s.Daily[i] visits"></span>
+                            }
+                        </div>
+                        <div class="lp-mini-axis" aria-hidden="true"><span>30 days ago</span><span>Today</span></div>
+
+                        <p class="lp-site-total"><strong>@s.TotalVisits.ToString("N0")</strong> visits since @s.SinceYear</p>
+
+                        <div class="lp-site-actions">
+                            <a href="@Url.Page("/Report", new { id = s.Id })">Open report</a>
+                            <a href="@Url.Page("/Visits", new { id = s.Id })">Browse visits</a>
+                            <a href="https://@s.Host" target="_blank" rel="noopener nofollow">Visit website</a>
+                        </div>
+                    </article>
+                }
+            </div>
+
+            @if (d.Others.Count > 0)
+            {
+                <h3 class="lp-others-title">Also using WebStats</h3>
+                <ul class="lp-sites">
+                    @foreach (var s in d.Others)
+                    {
+                        <li>
+                            <div class="lp-site-main">
+                                <a class="lp-site-name" href="@Url.Page("/Report", new { id = s.Id })">@s.Host</a>
+                                <span class="lp-site-links">
+                                    <a href="@Url.Page("/Report", new { id = s.Id })">Report</a>
+                                    <a href="@Url.Page("/Visits", new { id = s.Id })">Visits</a>
+                                    <a href="https://@s.Host" target="_blank" rel="noopener nofollow">Website</a>
+                                </span>
+                            </div>
+                            <span class="lp-site-meta" title="Visits in the last 30 days">
+                                @if (s.ActiveThisWeek)
+                                {
+                                    <span class="on" aria-hidden="true"></span>
+                                }
+                                @s.VisitsLast30Days.ToString("N0") this month
+                            </span>
+                        </li>
+                    }
+                </ul>
+            }
+
+            <p class="lp-closing">Want your website here? <a href="@IndexModel.ContactUrl" rel="noopener">Get in touch</a>.</p>
+        </section>
+    }
+
     <section class="lp-section" aria-labelledby="start-title">
-        <h2 id="start-title">Add WebStats to your website</h2>
+        <h2 id="start-title">Get started</h2>
         <p class="lp-intro">It works with any website: WordPress, Shopify, ASP.NET, PHP or plain HTML.</p>
 
         <ol class="lp-steps">
             <li>
                 <h3>Tell us your website</h3>
-                <p>Send us your website address and we'll set up tracking for it. Self-service sign-up is coming soon.</p>
+                <p>Send us your website address and we'll set up your report. Self-service sign-up is coming soon.</p>
                 <p class="mt-2"><a href="@IndexModel.ContactUrl" rel="noopener">Contact Rudra Softtech</a></p>
             </li>
             <li>
-                <h3>Paste one line of code</h3>
-                @if (string.IsNullOrWhiteSpace(IndexModel.TrackingSnippet))
+                <h3>Add one line of code</h3>
+                @if (string.IsNullOrWhiteSpace(IndexModel.InstallSnippet))
                 {
                     <p>We send you a single script tag. Paste it into your website's template, just before the closing <code>&lt;/body&gt;</code> tag.</p>
                 }
@@ -200,50 +274,17 @@
                 {
                     <p>Paste this into your website's template, just before the closing <code>&lt;/body&gt;</code> tag. We'll give you your website's ID.</p>
                     <div class="lp-snippet">
-                        <pre id="lpSnippet">@IndexModel.TrackingSnippet.Replace("{id}", "YOUR-ID")</pre>
+                        <pre id="lpSnippet">@IndexModel.InstallSnippet.Replace("{id}", "YOUR-ID")</pre>
                         <button type="button" class="lp-copy" id="lpCopy">Copy code</button>
                     </div>
                 }
             </li>
             <li>
-                <h3>Watch visits arrive</h3>
-                <p>Open your report and see visitors as they come in. Bot traffic is filtered out automatically.</p>
+                <h3>See your first report</h3>
+                <p>Open your report and watch the numbers come in. Visits from bots are left out automatically.</p>
             </li>
         </ol>
     </section>
-
-    @if (d.Sites.Count > 0)
-    {
-        <section class="lp-section" aria-labelledby="sites-title">
-            <h2 id="sites-title">Websites using WebStats</h2>
-            <p class="lp-intro">Every website currently tracking its visitors with WebStats. Open any of them to see its live report.</p>
-
-            <ul class="lp-sites">
-                @foreach (var s in d.Sites)
-                {
-                    <li>
-                        <div class="lp-site-main">
-                            <a class="lp-site-name" href="@Url.Page("/Report", new { id = s.Id })" title="Open the report for @s.Host">@s.Host</a>
-                            <span class="lp-site-links">
-                                <a href="@Url.Page("/Report", new { id = s.Id })">Report</a>
-                                <a href="@Url.Page("/Visits", new { id = s.Id })">Visits</a>
-                                <a href="https://@s.Host" target="_blank" rel="noopener nofollow" title="Open @s.Host in a new tab">Website</a>
-                            </span>
-                        </div>
-                        <span class="lp-site-meta">
-                            @if (s.ActiveThisWeek)
-                            {
-                                <span class="on" title="Visits recorded this week" aria-hidden="true"></span>
-                            }
-                            Since @s.SinceYear
-                        </span>
-                    </li>
-                }
-            </ul>
-
-            <p class="lp-closing">Want your website on this list? <a href="@IndexModel.ContactUrl" rel="noopener">Get in touch</a>.</p>
-        </section>
-    }
 </div>
 
 @section Scripts {

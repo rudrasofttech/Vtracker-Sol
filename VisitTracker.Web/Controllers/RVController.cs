@@ -330,34 +330,31 @@ namespace VisitTracker.Web.Controllers
 
         private bool TryResolve(Guid cc, string path, out Visit visit, out Webpage webpage, out VisitPage visitPage)
         {
-            visit = null!;
-            webpage = null!;
-            visitPage = null!;
+            visit = null!; webpage = null!; visitPage = null!;
 
-            if (cc == Guid.Empty || !UrlNormalizer.TryNormalize(path, out var normalized))
-            {
-                return false;
-            }
+            if (cc == Guid.Empty) { logger.LogWarning("TryResolve: empty cc"); return false; }
+            if (!UrlNormalizer.TryNormalize(path, out var normalized)) { logger.LogWarning("TryResolve: cannot normalize {Path}", path); return false; }
 
             visit = visitRepository.GetVisitByCC(cc);
-            if (visit == null)
-            {
-                return false;
-            }
+            if (visit == null) { logger.LogWarning("TryResolve: no visit for cc {Cc}", cc); return false; }
 
-            webpage = webpageRepository.GetWebpage(visit.Website.ID, normalized.Path, normalized.QueryString);
-            if (webpage == null)
-            {
-                return false;
-            }
+            var visitId = visit.ID;
+            var websiteId = context.Visits.AsNoTracking()
+                .Where(v => v.ID == visitId)
+                .Select(v => EF.Property<int>(v, "WebsiteID"))
+                .First();
+
+            webpage = webpageRepository.GetWebpage(websiteId, normalized.Path, normalized.QueryString);
+            if (webpage == null) { logger.LogWarning("TryResolve: no webpage {Path}{Query} for site {Site}", normalized.Path, normalized.QueryString, websiteId); return false; }
 
             visitPage = visitRepository.GetLastVisitedPageofVisit(visit.ID);
             if (visitPage == null || visitPage.webpage.ID != webpage.ID)
             {
                 visitPage = visitRepository.GetVisitPageByVisitAndWebpage(visit.ID, webpage.ID);
             }
+            if (visitPage == null) { logger.LogWarning("TryResolve: no visit page for visit {Visit} webpage {Page}", visit.ID, webpage.ID); return false; }
 
-            return visitPage != null;
+            return true;
         }
 
         private void UpdateLastPing(int visitId, int visitPageId, int? browserWidth = null, int? browserHeight = null, int? maxScrollPct = null, int? documentHeight = null)
